@@ -5,10 +5,14 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -44,30 +48,49 @@ public class TelBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            var message = update.getMessage().getText();
-            if (message.contains("\\dl_")) {
-
-                var bookId = message.split("_")[1];
-
-            } else {
-                scraperService.fetchBookModels(message, 1)
-                        .thenAccept(this::sendBooksListMessage);
-            }
-
-        } else if (update.hasCallbackQuery()) {
-
+        if (update.hasInlineQuery()) {
+            handleInlineQuery(update.getInlineQuery());
         }
 
     }
 
-    private void sendBooksListMessage(List<BookModel> bookModels) {
+    private void handleInlineQuery(InlineQuery inlineQuery) {
+        var query = inlineQuery.getQuery();
+        scraperService.fetchBookModels(query, 1)
+                .thenAccept(bookModels -> sendBooksListMessage(bookModels, inlineQuery));
+    }
 
-//        var
+    private void sendBooksListMessage(List<BookModel> bookModels, InlineQuery inlineQuery) {
+        var answer = new AnswerInlineQuery();
+        answer.setInlineQueryId(inlineQuery.getId());
+        answer.setResults(convertBooksToInlineResult(bookModels));
+        try {
+            execute(answer);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
-        var message = new SendMessage();
+    private List<InlineQueryResult> convertBooksToInlineResult(List<BookModel> bookModels) {
 
+        var results = new ArrayList<InlineQueryResult>();
 
+        for (int i = 0; i < bookModels.size(); i++) {
+            var book = bookModels.get(i);
+            System.out.println(book);
+            var messageContent = new InputTextMessageContent();
+            messageContent.setDisableWebPagePreview(true);
+            messageContent.setMessageText(book.getTitle());
+            var article = new InlineQueryResultArticle();
+            article.setInputMessageContent(messageContent);
+            article.setId(Integer.toString(i));
+            article.setTitle(book.getTitle());
+            article.setDescription(book.getPages());
+            article.setThumbUrl(book.getImageUrl());
+            results.add(article);
+        }
+
+        return results;
     }
 
     private void sendBook(Update update, BookModel book) {
