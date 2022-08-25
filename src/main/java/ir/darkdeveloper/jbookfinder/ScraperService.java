@@ -15,7 +15,6 @@ public class ScraperService {
     public CompletableFuture<List<BookModel>> fetchBookModels(String bookName, Integer page) {
         return CompletableFuture.supplyAsync(() -> {
                     try {
-                        System.out.println(Thread.currentThread().getId());
                         // retry
                         Document doc = null;
                         for (int i = 0; i < 3; i++) {
@@ -55,7 +54,7 @@ public class ScraperService {
                 .thenApplyAsync(this::cleanAndFetchOtherData);
     }
 
-    public List<BookModel> cleanAndFetchOtherData(List<BookModel> books) {
+    private List<BookModel> cleanAndFetchOtherData(List<BookModel> books) {
         books.forEach(book -> {
             try {
                 var downloadPage = Jsoup.connect(book.getMirror()).userAgent("Mozilla").get();
