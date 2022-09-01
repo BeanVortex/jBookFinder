@@ -1,46 +1,47 @@
 package ir.darkdeveloper.jbookfinder;
 
-import lombok.RequiredArgsConstructor;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Polygon;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.io.IOException;
+import java.net.URL;
 
-@SpringBootApplication
+
+//@SpringBootApplication
 @Slf4j
-@RestController
-@RequiredArgsConstructor
-public class JBookFinderApplication {
-
-    private final ScraperService service;
+//@RestController
+public class JBookFinderApplication extends Application {
 
 
-    public static void main(String[] args) throws TelegramApiException {
-        var app = SpringApplication.run(JBookFinderApplication.class, args);
-//        app.setWebApplicationType(WebApplicationType.NONE);
-//        var run = app.run(args);
-        var botsApi = new TelegramBotsApi(DefaultBotSession.class);
-        botsApi.registerBot(app.getBean(TelBot.class));
-
+    public static void main(String[] args) {
+//        var app = SpringApplication.run(JBookFinderApplication.class, args);
+        launch(args);
     }
 
-    @GetMapping("/")
-    public CompletableFuture<List<BookModel>> getBooks(
-            @RequestParam("s") String name,
-            @RequestParam(name = "p", required = false) Integer page
-    ) {
-        return service.fetchBookModels(name, page);
+    @Override
+    public void start(Stage stage) throws IOException {
+        Parent root = FXMLLoader.load(getResource("MainController.fxml"));
+        var scene = new Scene(root, 640, 480);
+        scene.getStylesheets().add(getResource("css/main.css").toExternalForm());
+        stage.setScene(scene);
+        stage.setTitle("Main Page");
+        stage.show();
+    }
+
+    private URL getResource(String path) {
+        return getClass().getClassLoader().getResource(path);
     }
 
 }

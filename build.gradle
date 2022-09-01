@@ -1,6 +1,8 @@
 plugins {
     id 'org.springframework.boot' version '2.7.3'
     id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'application'
     id 'java'
 }
 
@@ -18,12 +20,19 @@ repositories {
     mavenCentral()
 }
 
+mainClassName = 'ir.darkdeveloper.jbookfinder.JBookFinderApplication'
+
+javafx {
+    version = "18.0.2"
+    modules = [ 'javafx.controls', 'javafx.base', 'javafx.fxml', 'javafx.graphics' ]
+}
+
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.jsoup:jsoup:1.15.3'
-    implementation 'org.telegram:telegrambots:6.1.0'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
