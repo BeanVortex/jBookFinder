@@ -1,4 +1,4 @@
-package ir.darkdeveloper.jbookfinder;
+package ir.darkdeveloper.jbookfinder.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

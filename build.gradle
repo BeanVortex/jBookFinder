@@ -30,7 +30,6 @@ javafx {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.jsoup:jsoup:1.15.3'
     compileOnly 'org.projectlombok:lombok'

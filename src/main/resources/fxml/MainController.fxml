@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane
+        xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="ir.darkdeveloper.jbookfinder.controllers.MainController"
+        prefHeight="400.0" prefWidth="600.0">
+    <VBox alignment="CENTER" fx:id="rootPane" spacing="10">
+        <HBox alignment="CENTER" prefHeight="95.0" prefWidth="600.0" spacing="10">
+            <TextField fx:id="fieldSearch" focusTraversable="false" prefHeight="25.0" prefWidth="262.0"
+                       promptText="Search a Book"/>
+            <Button fx:id="btnSearch" text="search" styleClass="searchButton" onAction="#searchTheBook"/>
+        </HBox>
+        <VBox alignment="CENTER" minHeight="-Infinity">
+            <Button fx:id="btnBooks" alignment="CENTER" text="Downloaded Books"/>
+        </VBox>
+    </VBox>
+</StackPane>

@@ -2,32 +2,28 @@ package ir.darkdeveloper.jbookfinder.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.shape.Polygon;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import org.springframework.util.StringUtils;
 
 public class MainController {
+
     @FXML
-    private Polygon polygon;
-    private double y;
-    private double x;
+    private TextField fieldSearch;
+    @FXML
+    private Button btnSearch;
+    @FXML
+    private Button btnBooks;
 
-    public void left(javafx.event.ActionEvent e) {
-        System.out.println("MainController.left");
-        polygon.setTranslateX(x-=10);
-    }
+//    private final ScraperService scraperService;
 
-    public void up(javafx.event.ActionEvent e) {
-        System.out.println("MainController.up");
-        polygon.setTranslateY(y-=10);
-    }
 
-    public void right(javafx.event.ActionEvent e) {
-        System.out.println("MainController.right");
-        polygon.setTranslateX(x+=10);
-    }
-
-    public void down(ActionEvent e) {
-        System.out.println("MainController.down");
-        polygon.setTranslateY(y+=10);
+    @FXML
+    private void searchTheBook(ActionEvent e) {
+        var text = fieldSearch.getText();
+        if (!text.isBlank()) {
+            var trimmedText = StringUtils.trimWhitespace(text);
+        }
     }
 
 

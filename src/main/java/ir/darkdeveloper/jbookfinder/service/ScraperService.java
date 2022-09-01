@@ -1,5 +1,6 @@
-package ir.darkdeveloper.jbookfinder;
+package ir.darkdeveloper.jbookfinder.service;
 
+import ir.darkdeveloper.jbookfinder.model.BookModel;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;

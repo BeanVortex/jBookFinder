@@ -1,47 +1,35 @@
 package ir.darkdeveloper.jbookfinder;
 
+import ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
-import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
-import java.net.URL;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-//@SpringBootApplication
-@Slf4j
-//@RestController
+@SpringBootApplication
 public class JBookFinderApplication extends Application {
 
 
     public static void main(String[] args) {
-//        var app = SpringApplication.run(JBookFinderApplication.class, args);
         launch(args);
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getResource("MainController.fxml"));
-        var scene = new Scene(root, 640, 480);
-        scene.getStylesheets().add(getResource("css/main.css").toExternalForm());
-        stage.setScene(scene);
+    public void start(Stage stage) {
+        var springContext = SpringApplication.run(JBookFinderApplication.class);
+//        Platform.setImplicitExit(false);
+        SwitchSceneUtil.switchScene(stage, "fxml/MainController.fxml", "css/main.css");
+        stage.setMinWidth(640);
+        stage.setMinHeight(480);
         stage.setTitle("Main Page");
         stage.show();
     }
 
-    private URL getResource(String path) {
-        return getClass().getClassLoader().getResource(path);
+
+    @Override
+    public void stop() throws Exception {
+        System.out.println("stopped");
     }
 
 }

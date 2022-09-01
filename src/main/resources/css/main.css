@@ -1,14 +1,38 @@
-.root{
-    -fx-background-color: #9191b7;
-}
-.button{
-    -fx-min-width: 50;
 
-    -fx-background-color: red;
-    -fx-text-fill: white;
+.root{
+    -fx-background-image: url("../images/book_shelf.jpg");
+}
+
+#rootPane{
+    -fx-background-color: rgba(3, 3, 3, 0.65);
+}
+
+#fieldSearch{
+    -fx-padding: 10;
+    -fx-font-size: 13;
+}
+
+.button{
+    -fx-padding: 8 16;
     -fx-font-size: 15;
-    -fx-label-padding: 5;
-    -fx-border-radius: 100;
-    -fx-stroke-width: 2;
-    -fx-alignment: center;
+    -fx-background-color: #000;
+    -fx-background-radius: 16;
+    -fx-text-fill: white;
+    -fx-border-radius: 16;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(101, 101, 101, 0.6), 9,0,0,2);
+
+}
+
+.button:hover{
+    -fx-cursor: hand;
+}
+
+
+.button:pressed{
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.searchButton {
 }
