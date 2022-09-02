@@ -3,7 +3,7 @@
     -fx-background-image: url("../images/book_shelf.jpg");
 }
 
-#rootPane{
+#rootVbox{
     -fx-background-color: rgba(3, 3, 3, 0.65);
 }
 

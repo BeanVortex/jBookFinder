@@ -6,8 +6,9 @@
 <StackPane
         xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="ir.darkdeveloper.jbookfinder.controllers.MainController"
-        prefHeight="400.0" prefWidth="600.0">
-    <VBox alignment="CENTER" fx:id="rootPane" spacing="10">
+        prefHeight="400.0" prefWidth="600.0"
+        fx:id="rootPane">
+    <VBox alignment="CENTER" spacing="10" fx:id="rootVbox">
         <HBox alignment="CENTER" prefHeight="95.0" prefWidth="600.0" spacing="10">
             <TextField fx:id="fieldSearch" focusTraversable="false" prefHeight="25.0" prefWidth="262.0"
                        promptText="Search a Book"/>
