@@ -1,31 +1,41 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import ir.darkdeveloper.jbookfinder.utils.BookUtils;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.CountingInputStream;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 public class BookItemController implements FXMLController {
 
+    @FXML
+    private VBox operationVbox;
     @FXML
     private Button moreDetails;
     @FXML
     private Label bookTitle;
     @FXML
     private Label bookAuthor;
-//    @FXML
+    //    @FXML
 //    private Label bookPublisher;
     @FXML
     private Label bookFormat;
@@ -33,14 +43,14 @@ public class BookItemController implements FXMLController {
     private Label bookSize;
     @FXML
     private Label bookPages;
-//    @FXML
+    //    @FXML
 //    private Label bookYear;
 //    @FXML
 //    private Label bookLanguage;
     @FXML
-    private Button downloadBook;
-    @FXML
     private ImageView bookImage;
+
+    private BookModel bookModel;
 
     @Override
     public void initialize() {
@@ -48,6 +58,7 @@ public class BookItemController implements FXMLController {
     }
 
     public void setBookModel(BookModel bookModel, List<String> bookImages) {
+        this.bookModel = bookModel;
         bookTitle.setText("Title: " + bookModel.getTitle());
         bookAuthor.setText("Author: " + bookModel.getAuthor());
 //        bookPublisher.setText("Publisher: " + bookModel.getPublisher());
@@ -61,21 +72,40 @@ public class BookItemController implements FXMLController {
     }
 
 
+    @FXML
+    private void downloadBook(ActionEvent e) {
+        if (bookModel == null)
+            return;
+        var mirror = bookModel.getMirror();
+        var bookUtils = new BookUtils();
+        bookUtils.downloadBookAndAddProgress(mirror, operationVbox);
+
+    }
+
+
+    @FXML
+    private void moreDetails(ActionEvent e) {
+    }
+
+
     private void fetchAndSetImageAsync(String imageUrl, List<String> bookImages) {
-        CompletableFuture.supplyAsync(() -> {
-                    if (imageUrl == null)
-                        return null;
-                    var imageFile = new File("src/main/resources/book_images/" + UUID.randomUUID() + ".jpg");
-                    try {
-                        FileUtils.copyURLToFile(
-                                new URL(imageUrl),
-                                imageFile
-                        );
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return imageFile;
-                })
+        Supplier<File> downloadSup = () -> {
+            if (imageUrl == null)
+                return null;
+            var imageFile = new File("src/main/resources/book_images/" + UUID.randomUUID() + ".jpg");
+            try {
+                FileUtils.copyURLToFile(
+                        new URL(imageUrl),
+                        imageFile
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+            return imageFile;
+        };
+
+        CompletableFuture.supplyAsync(downloadSup)
                 .whenComplete((file, throwable) -> {
                     try {
                         var finalFile = file;
@@ -91,5 +121,4 @@ public class BookItemController implements FXMLController {
                     }
                 });
     }
-
 }

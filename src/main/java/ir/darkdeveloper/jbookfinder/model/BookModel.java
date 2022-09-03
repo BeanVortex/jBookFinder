@@ -1,14 +1,12 @@
 package ir.darkdeveloper.jbookfinder.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
+@AllArgsConstructor
 public class BookModel {
     private String id;
     private String author;

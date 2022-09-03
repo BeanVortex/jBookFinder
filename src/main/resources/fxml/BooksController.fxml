@@ -6,9 +6,9 @@
 <VBox minWidth="850" prefHeight="480" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="ir.darkdeveloper.jbookfinder.controllers.BooksController">
     <Button text="Back" onAction="#getBack" prefWidth="100" prefHeight="100"/>
-    <ScrollPane hbarPolicy="NEVER" minWidth="850" prefHeight="480">
-        <VBox minWidth="640" prefHeight="480">
-            <FlowPane fx:id="booksContainer" alignment="CENTER" hgap="15" prefHeight="480.0" prefWidth="850" vgap="25">
+    <ScrollPane hbarPolicy="NEVER" minWidth="850" >
+        <VBox>
+            <FlowPane fx:id="booksContainer" alignment="CENTER" hgap="15"  prefWidth="850" vgap="25">
             </FlowPane>
         </VBox>
     </ScrollPane>

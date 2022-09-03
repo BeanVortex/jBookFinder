@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
+import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.service.ScraperService;
 import ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil;
 import javafx.application.Platform;
@@ -14,6 +15,8 @@ import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 @Slf4j
 public class MainController implements FXMLController {
 
@@ -24,10 +27,7 @@ public class MainController implements FXMLController {
     private VBox rootVbox;
     @FXML
     private TextField fieldSearch;
-    @FXML
-    private Button btnSearch;
-    @FXML
-    private Button btnBooks;
+
 
     private final ScraperService scraperService = new ScraperService();
 
@@ -56,7 +56,6 @@ public class MainController implements FXMLController {
                         booksController.showSearch(bookModels);
                         booksController.resizeListViewByStage(stage);
                     }));
-
         }
     }
 
