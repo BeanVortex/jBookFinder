@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -70,6 +72,16 @@ public class BooksController implements FXMLController {
                     }
                 }
         );
-        SwitchSceneUtil.switchScene(e, "MainController.fxml", "main.css");
+        SwitchSceneUtil.switchSceneToMain(e, "MainController.fxml", "main.css");
+    }
+
+    public void showSettings() {
+        var stage = new Stage();
+        var l = new Label("f");
+        var scene = new Scene(l);
+        stage.setScene(scene);
+        stage.setHeight(200);
+        stage.setWidth(300);
+        stage.show();
     }
 }

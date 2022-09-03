@@ -1,7 +1,9 @@
 package ir.darkdeveloper.jbookfinder.utils;
 
+import com.sun.tools.javac.Main;
 import ir.darkdeveloper.jbookfinder.controllers.BooksController;
 import ir.darkdeveloper.jbookfinder.controllers.FXMLController;
+import ir.darkdeveloper.jbookfinder.controllers.MainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -16,16 +18,22 @@ import java.net.URL;
 
 public class SwitchSceneUtil {
 
-    public static void switchScene(ActionEvent e, String fxmlFilename, String styleSheetPath) {
-        switchScene(getStageFromEvent(e), fxmlFilename, styleSheetPath);
+    public static void switchSceneToMain(ActionEvent e, String fxmlFilename, String styleSheetPath) {
+        switchSceneToMain(getStageFromEvent(e), fxmlFilename, styleSheetPath);
     }
 
-    public static void switchScene(Stage stage, String fxmlFilename, String styleSheetPath) {
+    public static void switchSceneToMain(Stage stage, String fxmlFilename, String styleSheetPath) {
         try {
-            var root = (Parent) FXMLLoader.load(getResource("fxml/" + fxmlFilename));
+            var loader = new FXMLLoader(getResource("fxml/" + fxmlFilename));
+            Parent root = loader.load();
             var scene = new Scene(root);
+            MainController controller = loader.getController();
             if (styleSheetPath != null)
                 scene.getStylesheets().add(getResource("css/" + styleSheetPath).toExternalForm());
+            scene.setOnKeyPressed(event -> {
+                if (event.getCode().equals(KeyCode.ENTER))
+                    controller.searchTheBook(stage);
+            });
             stage.setScene(scene);
         } catch (IOException ex) {
             ex.printStackTrace();

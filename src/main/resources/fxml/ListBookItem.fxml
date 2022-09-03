@@ -4,20 +4,21 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox prefHeight="300.0" prefWidth="400.0" stylesheets="@../css/bookItem.css" xmlns="http://javafx.com/javafx/16"
+<HBox  minHeight="327" minWidth="400" stylesheets="@../css/bookItem.css"
+      xmlns="http://javafx.com/javafx/16"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.darkdeveloper.jbookfinder.controllers.BookItemController"
-        style="-fx-border-color: #5f5f5f">
+      style="-fx-border-color: #5f5f5f">
 
     <ImageView fx:id="bookImage" fitHeight="327.0" fitWidth="190.0"/>
     <VBox prefHeight="300.0" prefWidth="210.0" spacing="10" style="-fx-padding: 15;">
         <Label fx:id="bookTitle" text="Title"/>
         <Label fx:id="bookAuthor" text="Author"/>
-        <!--        <Label fx:id="bookPublisher" text="Publisher" />-->
+        <Label fx:id="bookPublisher" text="Publisher"/>
         <Label fx:id="bookFormat" text="Format"/>
         <Label fx:id="bookSize" text="Size"/>
         <Label fx:id="bookPages" text="Pages"/>
-        <!--        <Label fx:id="bookYear" text="Year" />-->
-        <!--        <Label fx:id="bookLanguage" text="Language" />-->
+        <Label fx:id="bookYear" text="Year"/>
+        <Label fx:id="bookLanguage" text="Language"/>
         <VBox alignment="CENTER" prefHeight="162.0" prefWidth="180.0" spacing="15" fx:id="operationVbox">
             <Button onAction="#downloadBook" text="Download" fx:id="downloadBtn"/>
             <Button onAction="#moreDetails" text="More Details"/>

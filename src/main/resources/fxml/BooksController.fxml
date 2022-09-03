@@ -3,14 +3,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox minWidth="850" prefHeight="480" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="ir.darkdeveloper.jbookfinder.controllers.BooksController">
-    <Button text="Back" onAction="#getBack" prefWidth="100" prefHeight="100"/>
-    <ScrollPane hbarPolicy="NEVER" minWidth="850" >
+<VBox minWidth="850" prefHeight="480" spacing="5" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.darkdeveloper.jbookfinder.controllers.BooksController">
+    <MenuBar prefHeight="9.0" prefWidth="794.0">
+        <Menu mnemonicParsing="false" text="File">
+            <MenuItem mnemonicParsing="false" text="Go Back" onAction="#getBack" />
+            <MenuItem mnemonicParsing="false" text="Settings" onAction="#showSettings"/>
+         <SeparatorMenuItem mnemonicParsing="false" />
+        </Menu>
+    </MenuBar>
+    <Button onAction="#getBack" prefHeight="17.0" prefWidth="88.0" text="Back" />
+    <ScrollPane hbarPolicy="NEVER" minWidth="850">
         <VBox>
-            <FlowPane fx:id="booksContainer" alignment="CENTER" hgap="15"  prefWidth="850" vgap="25">
+            <FlowPane fx:id="booksContainer" alignment="CENTER" hgap="15" prefWidth="850" vgap="25">
             </FlowPane>
         </VBox>
     </ScrollPane>
 </VBox>
-
