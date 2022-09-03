@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -47,11 +49,15 @@ public class SwitchSceneUtil {
     }
 
     public static <T extends FXMLController> T switchSceneAndGetController(ActionEvent e, String fxmlFilename, Class<T> tClass) {
+        return switchSceneAndGetController(getStageFromEvent(e), fxmlFilename, tClass);
+    }
+
+    public static <T extends FXMLController> T switchSceneAndGetController(Stage stage, String fxmlFilename, Class<T> tClass) {
         try {
             var loader = new FXMLLoader(SwitchSceneUtil.getResource("fxml/" + fxmlFilename));
             Parent root = loader.load();
             var scene = new Scene(root);
-            getStageFromEvent(e).setScene(scene);
+            stage.setScene(scene);
             return tClass.cast(loader.getController());
         } catch (Exception ex) {
             ex.printStackTrace();

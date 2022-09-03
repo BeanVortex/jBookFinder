@@ -3,14 +3,12 @@ package ir.darkdeveloper.jbookfinder.service;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Service
 public class ScraperService {
 
     public CompletableFuture<List<BookModel>> fetchBookModels(String bookName, Integer page) {
@@ -27,6 +25,7 @@ public class ScraperService {
                                         .get();
                             }catch (IOException e){
                                 // delay request
+                                e.printStackTrace();
                                 Thread.sleep(3000);
                             }
                         }

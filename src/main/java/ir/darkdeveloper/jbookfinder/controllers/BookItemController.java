@@ -28,6 +28,9 @@ import java.util.function.Supplier;
 public class BookItemController implements FXMLController {
 
     @FXML
+    private Button downloadBtn;
+
+    @FXML
     private VBox operationVbox;
     @FXML
     private Button moreDetails;
@@ -76,10 +79,14 @@ public class BookItemController implements FXMLController {
     private void downloadBook(ActionEvent e) {
         if (bookModel == null)
             return;
-        var mirror = bookModel.getMirror();
-        var bookUtils = new BookUtils();
-        bookUtils.downloadBookAndAddProgress(mirror, operationVbox);
 
+        if (!downloadBtn.getText().equals("Open Book")){
+            var bookUtils = new BookUtils();
+            bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
+            return;
+        }
+
+        System.out.println("Show Book");
     }
 
 

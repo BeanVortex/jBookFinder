@@ -1,23 +1,17 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
-import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.service.ScraperService;
 import ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
+import javafx.stage.Stage;
 
-import java.util.List;
-
-@Slf4j
 public class MainController implements FXMLController {
 
 
@@ -34,10 +28,14 @@ public class MainController implements FXMLController {
 
     @FXML
     private void searchTheBook(ActionEvent e) {
+        var stage = SwitchSceneUtil.getStageFromEvent(e);
+        searchTheBook(stage);
+    }
+
+    public void searchTheBook(Stage stage) {
         var text = fieldSearch.getText();
         if (!text.isBlank()) {
-            var trimmedText = StringUtils.trimWhitespace(text);
-            var stage = SwitchSceneUtil.getStageFromEvent(e);
+            var trimmedText =text.replaceAll("\s", "");
 
             var progress = new ProgressIndicator();
             var vbox = new VBox(progress);
@@ -48,9 +46,9 @@ public class MainController implements FXMLController {
             scraperService.fetchBookModels(trimmedText, 1)
                     .whenComplete((bookModels, throwable) -> Platform.runLater(() -> {
                         var booksController = SwitchSceneUtil.
-                                switchSceneAndGetController(e, "BooksController.fxml", BooksController.class);
+                                switchSceneAndGetController(stage, "BooksController.fxml", BooksController.class);
                         if (booksController == null) {
-                            log.error("Books controller is null");
+                            System.out.println("Books controller is null");
                             return;
                         }
                         booksController.showSearch(bookModels);
