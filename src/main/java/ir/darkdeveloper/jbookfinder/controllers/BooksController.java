@@ -73,6 +73,7 @@ public class BooksController implements FXMLController {
     }
 
     public void showSettings() {
+        // Todo: file save locations, search configs, theme
         var stage = new Stage();
         var l = new Label("f");
         var scene = new Scene(l);
