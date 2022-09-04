@@ -1,8 +1,11 @@
 package ir.darkdeveloper.jbookfinder.utils;
 
+import ir.darkdeveloper.jbookfinder.controllers.BooksController;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import ir.darkdeveloper.jbookfinder.service.ScraperService;
 import ir.darkdeveloper.jbookfinder.task.BookDownloadTask;
 import ir.darkdeveloper.jbookfinder.task.ImageFetchTask;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,15 +22,15 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 
 import static ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil.getResource;
 
 @Getter
 @Setter
 public class BookUtils {
-    private String saveLocation = System.getProperty("user.home") + "/Downloads/JBookFinder/";
 
+    private String saveLocation = System.getProperty("user.home") + "/Downloads/JBookFinder/";
+    private static final ScraperService scraperService = new ScraperService();
 
     public void downloadBookAndAddProgress(BookModel bookModel, VBox operationVbox) {
         var downTask = downloadBook(bookModel, operationVbox);
@@ -75,14 +79,17 @@ public class BookUtils {
     }
 
 
-    // Todo: save by book name
-    public void fetchAndSetImageAsync(String imageUrl, String title, List<String> bookImages, ImageView bookImage) {
-        var fileExt = imageUrl.substring(imageUrl.lastIndexOf('.'));
-        var fileName = title.replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + fileExt;
-        var fetchTask = new ImageFetchTask(imageUrl, fileName, bookImages, bookImage);
+    public void fetchAndSetImageAsync(String imageUrl, String title, ImageView bookImage) {
+        var fileName = getImageFileName(imageUrl, title);
+        var fetchTask = new ImageFetchTask(imageUrl, fileName, bookImage);
         var taskT = new Thread(fetchTask);
         taskT.setDaemon(true);
         taskT.start();
+    }
+
+    private String getImageFileName(String imageUrl, String title) {
+        var fileExt = imageUrl.substring(imageUrl.lastIndexOf('.'));
+        return title.replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + fileExt;
     }
 
 
@@ -103,10 +110,12 @@ public class BookUtils {
         trayIcon.displayMessage("Book Downloaded", "I downloaded the book", TrayIcon.MessageType.INFO);
     }
 
-    public void setDataForDetails(HBox root, BookModel bookModel, List<String> bookImages, int iterationNum) {
+    public void setDataForDetails(HBox root, BookModel bookModel) {
         var imageView = (ImageView) root.getChildren().get(0);
         try {
-            var file = new File(saveLocation + "bookImages/" + bookImages.get(iterationNum));
+            var imageUrl = bookModel.getImageUrl();
+            var title = bookModel.getTitle();
+            var file = new File(saveLocation + "bookImages/" + getImageFileName(imageUrl, title));
             var is = new FileInputStream(file);
             imageView.setImage(new Image(is));
             is.close();
@@ -127,6 +136,7 @@ public class BookUtils {
         var operationVbox = (VBox) vBox.getChildren().get(8);
         var downloadBtn = (Button) operationVbox.getChildren().get(0);
         var detailsBtn = operationVbox.getChildren().get(1);
+
         detailsBtn.setVisible(false);
         downloadBtn.setVisible(false);
         detailsBtn.setDisable(true);
@@ -148,6 +158,25 @@ public class BookUtils {
         bookPages.setText("Pages: " + bookModel.getPages());
         bookYear.setText("Year: " + bookModel.getYear());
         bookLanguage.setText("Language: " + bookModel.getLanguage());
+    }
+
+
+    public void searchTheBookWithScrapper(Stage stage, String text) {
+
+        scraperService.fetchBookModels(text, 1)
+                .whenComplete((bookModels, throwable) -> Platform.runLater(() -> {
+                    var booksController = SwitchSceneUtil.
+                            switchSceneAndGetController(stage, "BooksController.fxml", BooksController.class);
+                    if (booksController == null) {
+                        System.out.println("Books controller is null");
+                        return;
+                    }
+                    if (bookModels != null && !bookModels.isEmpty()) {
+                        booksController.showSearch(bookModels, text);
+                        booksController.resizeListViewByStage(stage);
+                    }
+                }));
+
     }
 }
 

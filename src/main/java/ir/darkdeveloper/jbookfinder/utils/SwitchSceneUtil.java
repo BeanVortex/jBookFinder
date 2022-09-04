@@ -1,7 +1,5 @@
 package ir.darkdeveloper.jbookfinder.utils;
 
-import com.sun.tools.javac.Main;
-import ir.darkdeveloper.jbookfinder.controllers.BooksController;
 import ir.darkdeveloper.jbookfinder.controllers.FXMLController;
 import ir.darkdeveloper.jbookfinder.controllers.MainController;
 import javafx.event.ActionEvent;
@@ -10,17 +8,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 
 public class SwitchSceneUtil {
 
-    public static void switchSceneToMain(ActionEvent e, String fxmlFilename, String styleSheetPath) {
-        switchSceneToMain(getStageFromEvent(e), fxmlFilename, styleSheetPath);
-    }
 
     public static void switchSceneToMain(Stage stage, String fxmlFilename, String styleSheetPath) {
         try {
@@ -53,7 +46,11 @@ public class SwitchSceneUtil {
 
 
     public static Stage getStageFromEvent(ActionEvent e) {
-        return (Stage) ((Node) e.getSource()).getScene().getWindow();
+        if (e.getSource() instanceof Node n
+                && n.getScene().getWindow() instanceof Stage stage) {
+            return stage;
+        }
+        return null;
     }
 
     public static <T extends FXMLController> T switchSceneAndGetController(ActionEvent e, String fxmlFilename, Class<T> tClass) {

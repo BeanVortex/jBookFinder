@@ -3,19 +3,32 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox minWidth="850" prefHeight="480" spacing="5" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.darkdeveloper.jbookfinder.controllers.BooksController">
-    <MenuBar prefHeight="9.0" prefWidth="794.0">
-        <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" text="Go Back" onAction="#getBack" />
-            <MenuItem mnemonicParsing="false" text="Settings" onAction="#showSettings"/>
-         <SeparatorMenuItem mnemonicParsing="false" />
-        </Menu>
-    </MenuBar>
-    <Button onAction="#getBack" prefHeight="17.0" prefWidth="88.0" text="Back" />
-    <ScrollPane hbarPolicy="NEVER" minWidth="850">
-        <VBox>
-            <FlowPane fx:id="booksContainer" alignment="CENTER" hgap="15" prefWidth="850" vgap="25">
-            </FlowPane>
-        </VBox>
-    </ScrollPane>
-</VBox>
+<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/16"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.darkdeveloper.jbookfinder.controllers.BooksController">
+
+    <VBox minWidth="850" prefHeight="480" spacing="5">
+        <MenuBar prefHeight="9.0" prefWidth="794.0" fx:id="menuBar">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" text="Go back" onAction="#getBack"/>
+                <MenuItem mnemonicParsing="false" text="Clear image cache" onAction="#clearImageCache"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+
+                <MenuItem mnemonicParsing="false" text="New search" onAction="#newSearch"/>
+                <MenuItem mnemonicParsing="false" text="Settings" onAction="#showSettings"/>
+            </Menu>
+        </MenuBar>
+        <HBox alignment="CENTER" prefHeight="95.0" prefWidth="600.0" spacing="10">
+            <TextField fx:id="fieldSearch" focusTraversable="false" prefHeight="25.0" prefWidth="262.0"
+                       promptText="Search a Book"/>
+            <Button text="search" styleClass="searchButton" onAction="#searchTheBook"/>
+            <Button text="Downloaded Books" alignment="BASELINE_RIGHT"/>
+        </HBox>
+
+        <ScrollPane hbarPolicy="NEVER" minWidth="850">
+            <VBox>
+                <FlowPane fx:id="booksContainer" alignment="CENTER" hgap="15" prefWidth="850" vgap="25">
+                </FlowPane>
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</StackPane>

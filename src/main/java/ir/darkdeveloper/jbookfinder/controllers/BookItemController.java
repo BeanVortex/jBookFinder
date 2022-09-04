@@ -43,8 +43,6 @@ public class BookItemController implements FXMLController {
     private ImageView bookImage;
 
     private BookModel bookModel;
-    private int iterationNum;
-    private List<String> bookImages;
     private static final BookUtils bookUtils = new BookUtils();
 
 
@@ -53,15 +51,13 @@ public class BookItemController implements FXMLController {
 
     }
 
-    public void setBookModel(BookModel bookModel, List<String> bookImages, int iterationNum) {
-        this.iterationNum = iterationNum;
+    public void setBookModel(BookModel bookModel) {
         this.bookModel = bookModel;
         bookUtils.displayData(bookTitle, bookAuthor, bookPublisher, bookFormat,
                 bookSize, bookPages, bookYear, bookLanguage, bookModel);
         hideExtraInfo();
         var bookUtils = new BookUtils();
-        bookUtils.fetchAndSetImageAsync(bookModel.getImageUrl(), bookModel.getTitle(), bookImages, bookImage);
-        this.bookImages = bookImages;
+        bookUtils.fetchAndSetImageAsync(bookModel.getImageUrl(), bookModel.getTitle(), bookImage);
     }
 
     private void hideExtraInfo() {
@@ -98,7 +94,7 @@ public class BookItemController implements FXMLController {
         stage.setWidth(800);
         stage.setMinWidth(root.getMinWidth());
         stage.setMinHeight(root.getMinHeight());
-        bookUtils.setDataForDetails(root, bookModel, bookImages, iterationNum);
+        bookUtils.setDataForDetails(root, bookModel);
         stage.show();
         var vBox = (VBox) root.getChildren().get(1);
         vBox.setPrefWidth(800);

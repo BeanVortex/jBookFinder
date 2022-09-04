@@ -11,12 +11,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.UUID;
 
 public class ImageFetchTask extends Task<File> {
 
     private final String imageUrl;
-    private final List<String> bookImages;
     private final ImageView bookImage;
     private final String fileName;
     private static final String SAVE_LOCATION = "/bookImages/";
@@ -24,9 +22,8 @@ public class ImageFetchTask extends Task<File> {
     private static final BookUtils bookUtils = new BookUtils();
     private File file;
 
-    public ImageFetchTask(String imageUrl, String fileName, List<String> bookImages, ImageView bookImage) {
+    public ImageFetchTask(String imageUrl, String fileName, ImageView bookImage) {
         this.imageUrl = imageUrl;
-        this.bookImages = bookImages;
         this.bookImage = bookImage;
         this.fileName = fileName;
     }
@@ -37,7 +34,6 @@ public class ImageFetchTask extends Task<File> {
             return null;
         var imageFile = new File(bookUtils.getSaveLocation() + SAVE_LOCATION + fileName);
         if (imageFile.exists()){
-//            succeeded();
             file = imageFile;
             return imageFile;
         }
@@ -55,7 +51,6 @@ public class ImageFetchTask extends Task<File> {
             var finalFile = file;
             if (file == null)
                 finalFile = new File("src/main/resources/images/blank.png");
-            bookImages.add(finalFile.getName());
             var inputStream = new FileInputStream(finalFile);
             var image = new Image(inputStream);
             bookImage.setImage(image);
