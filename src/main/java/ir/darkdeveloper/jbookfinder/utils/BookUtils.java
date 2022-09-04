@@ -87,7 +87,7 @@ public class BookUtils {
         taskT.start();
     }
 
-    private String getImageFileName(String imageUrl, String title) {
+    public String getImageFileName(String imageUrl, String title) {
         var fileExt = imageUrl.substring(imageUrl.lastIndexOf('.'));
         return title.replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + fileExt;
     }
