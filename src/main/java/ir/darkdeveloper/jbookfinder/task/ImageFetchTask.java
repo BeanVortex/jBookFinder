@@ -18,22 +18,29 @@ public class ImageFetchTask extends Task<File> {
     private final String imageUrl;
     private final List<String> bookImages;
     private final ImageView bookImage;
+    private final String fileName;
     private static final String SAVE_LOCATION = "/bookImages/";
 
     private static final BookUtils bookUtils = new BookUtils();
     private File file;
 
-    public ImageFetchTask(String imageUrl, List<String> bookImages, ImageView bookImage) {
+    public ImageFetchTask(String imageUrl, String fileName, List<String> bookImages, ImageView bookImage) {
         this.imageUrl = imageUrl;
         this.bookImages = bookImages;
         this.bookImage = bookImage;
+        this.fileName = fileName;
     }
 
     @Override
     protected File call() throws Exception {
         if (imageUrl == null)
             return null;
-        var imageFile = new File(bookUtils.getSaveLocation() + SAVE_LOCATION + UUID.randomUUID() + ".jpg");
+        var imageFile = new File(bookUtils.getSaveLocation() + SAVE_LOCATION + fileName);
+        if (imageFile.exists()){
+//            succeeded();
+            file = imageFile;
+            return imageFile;
+        }
         FileUtils.copyURLToFile(
                 new URL(imageUrl),
                 imageFile

@@ -62,15 +62,15 @@ public class BooksController implements FXMLController {
                     imageView.setImage(null);
                 }
         );
-        bookImages.forEach(name ->
-                {
-                    try {
-                        Files.delete(Path.of("src/main/resources/book_images/" + name));
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-        );
+//        bookImages.forEach(name ->
+//                {
+//                    try {
+//                        Files.delete(Path.of("src/main/resources/book_images/" + name));
+//                    } catch (IOException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//        );
         SwitchSceneUtil.switchSceneToMain(e, "MainController.fxml", "main.css");
     }
 

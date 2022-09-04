@@ -76,8 +76,10 @@ public class BookUtils {
 
 
     // Todo: save by book name
-    public void fetchAndSetImageAsync(String imageUrl, List<String> bookImages, ImageView bookImage) {
-        var fetchTask = new ImageFetchTask(imageUrl, bookImages, bookImage);
+    public void fetchAndSetImageAsync(String imageUrl, String title, List<String> bookImages, ImageView bookImage) {
+        var fileExt = imageUrl.substring(imageUrl.lastIndexOf('.'));
+        var fileName = title.replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + fileExt;
+        var fetchTask = new ImageFetchTask(imageUrl, fileName, bookImages, bookImage);
         var taskT = new Thread(fetchTask);
         taskT.setDaemon(true);
         taskT.start();

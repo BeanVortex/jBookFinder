@@ -60,7 +60,7 @@ public class BookItemController implements FXMLController {
                 bookSize, bookPages, bookYear, bookLanguage, bookModel);
         hideExtraInfo();
         var bookUtils = new BookUtils();
-        bookUtils.fetchAndSetImageAsync(bookModel.getImageUrl(), bookImages, bookImage);
+        bookUtils.fetchAndSetImageAsync(bookModel.getImageUrl(), bookModel.getTitle(), bookImages, bookImage);
         this.bookImages = bookImages;
     }
 
