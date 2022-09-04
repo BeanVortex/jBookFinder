@@ -51,8 +51,10 @@ public class MainController implements FXMLController {
                             System.out.println("Books controller is null");
                             return;
                         }
-                        booksController.showSearch(bookModels);
-                        booksController.resizeListViewByStage(stage);
+                        if (bookModels != null && !bookModels.isEmpty()){
+                            booksController.showSearch(bookModels);
+                            booksController.resizeListViewByStage(stage);
+                        }
                     }));
         }
     }

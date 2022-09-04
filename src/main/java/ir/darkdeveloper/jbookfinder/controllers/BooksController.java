@@ -25,7 +25,6 @@ public class BooksController implements FXMLController {
     private FlowPane booksContainer;
 
     private final List<String> bookImages = new ArrayList<>();
-    private BookItemController itemController;
 
     @Override
     public void initialize() {
@@ -33,18 +32,18 @@ public class BooksController implements FXMLController {
     }
 
     public void showSearch(List<BookModel> bookModels) {
-        bookModels.forEach(bookModel -> {
-                    try {
-                        var fxmlLoader = new FXMLLoader(SwitchSceneUtil.getResource("fxml/ListBookItem.fxml"));
-                        Parent root = fxmlLoader.load();
-                        itemController = fxmlLoader.getController();
-                        itemController.setBookModel(bookModel, bookImages);
-                        booksContainer.getChildren().add(root);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
+        for (int i = 0; i < bookModels.size(); i++) {
+            try {
+                var fxmlLoader = new FXMLLoader(SwitchSceneUtil.getResource("fxml/ListBookItem.fxml"));
+                Parent root = fxmlLoader.load();
+                BookItemController itemController = fxmlLoader.getController();
+                itemController.setBookModel(bookModels.get(i), bookImages, i);
+                booksContainer.getChildren().add(root);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
 
     }
 
