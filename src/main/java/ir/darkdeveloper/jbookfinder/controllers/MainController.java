@@ -5,6 +5,7 @@ import ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
@@ -31,13 +32,14 @@ public class MainController implements FXMLController {
     }
 
 
-
     public void searchTheBook(Stage stage) {
         var text = fieldSearch.getText();
         if (!text.isBlank()) {
             var trimmedText = text.replaceAll("\s", "");
             var progress = new ProgressIndicator();
-            var vbox = new VBox(progress);
+            var btnCancel = new Button("Cancel");
+            var vbox = new VBox(progress, btnCancel);
+            vbox.setSpacing(10);
             vbox.setAlignment(Pos.CENTER);
             rootVbox.setDisable(true);
             rootPane.getChildren().add(vbox);

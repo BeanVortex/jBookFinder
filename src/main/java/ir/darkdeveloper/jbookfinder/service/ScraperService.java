@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder.service;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ScraperService {
+
+    private Configs configs = Configs.getInstance();
 
     public CompletableFuture<List<BookModel>> fetchBookModels(String bookName, Integer page) {
         return CompletableFuture.supplyAsync(() -> {
@@ -23,7 +26,8 @@ public class ScraperService {
                                         .data("page", page.toString())
                                         .userAgent("Mozilla")
                                         .get();
-                            }catch (IOException e){
+                                break;
+                            } catch (IOException e) {
                                 // delay request
                                 e.printStackTrace();
                                 Thread.sleep(3000);
@@ -44,7 +48,7 @@ public class ScraperService {
                                 }
                             }
                         }
-
+                        System.out.println("done");
                         return books;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -54,32 +58,27 @@ public class ScraperService {
                 .thenApplyAsync(this::cleanAndFetchOtherData);
     }
 
+    /**
+     * Fetches download link and image link
+     */
     private List<BookModel> cleanAndFetchOtherData(List<BookModel> books) {
+        var baseURL = configs.getImageBaseUrl();
+
         books.forEach(book -> {
             try {
                 var downloadPage = Jsoup.connect(book.getMirror()).userAgent("Mozilla").get();
                 var downloadDiv = downloadPage.getElementById("download");
                 String link = null;
                 if (downloadDiv != null) link = downloadDiv.select("h2 > a").attr("href");
-
                 book.setMirror(link);
-
                 var imageUrl = downloadPage.select("img").attr("src");
-                var baseURL = new StringBuilder();
-                int slashCount = 0;
-                for (int i = 0; i < downloadPage.baseUri().length(); i++) {
-
-                    if (downloadPage.baseUri().charAt(i) == '/') slashCount++;
-                    if (slashCount == 3) break;
-                    baseURL.append(downloadPage.baseUri().charAt(i));
-
-                }
                 book.setImageUrl(baseURL + imageUrl);
-
+                System.out.println("foreach");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+        System.out.println("after for of forEach");
         return books;
     }
 }

@@ -27,7 +27,6 @@ javafx {
 
 
 dependencies {
-
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.jsoup:jsoup:1.15.3'
     compileOnly 'org.projectlombok:lombok:1.18.24'
@@ -35,13 +34,12 @@ dependencies {
 }
 
 
-
 tasks.named('test') {
     useJUnitPlatform()
 }
 
-jar {
-    manifest {
-        attributes "Main-Class": "$mainClassName"
-    }
-}
+//jar {
+//    manifest {
+//        attributes "Main-Class": "$mainClassName"
+//    }
+//}
