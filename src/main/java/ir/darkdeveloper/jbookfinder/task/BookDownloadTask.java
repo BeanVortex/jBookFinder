@@ -1,19 +1,16 @@
 package ir.darkdeveloper.jbookfinder.task;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import javafx.concurrent.Task;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import static ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil.getResource;
 
 public class BookDownloadTask extends Task<Void> {
 
@@ -23,6 +20,7 @@ public class BookDownloadTask extends Task<Void> {
     private final VBox operationVbox;
     private final String fileName;
     private static final BookUtils bookUtils = new BookUtils();
+    private final Configs configs = Configs.getInstance();
 
     public BookDownloadTask(BookModel bookModel, VBox operationVbox, String fileName) {
         this.bookModel = bookModel;
@@ -34,11 +32,10 @@ public class BookDownloadTask extends Task<Void> {
     protected Void call() throws Exception {
         var mirror = bookModel.getMirror();
 
-
         var urlConnection = new URL(mirror).openConnection();
         var fileSize = urlConnection.getContentLength();
         try (var is = urlConnection.getInputStream();
-             var os = Files.newOutputStream(Paths.get(bookUtils.getSaveLocation() + fileName))) {
+             var os = Files.newOutputStream(Paths.get(configs.getSaveLocation() + fileName))) {
             long nRead = 0L;
             var buf = new byte[8192];
             int n;
@@ -70,7 +67,7 @@ public class BookDownloadTask extends Task<Void> {
         var fileExt = bookModel.getFileFormat();
 
         try {
-            var file = new File(bookUtils.getSaveLocation() + "/" + fileName + "." + fileExt);
+            var file = new File(configs.getSaveLocation() + "/" + fileName + "." + fileExt);
             if (file.exists())
                 Files.delete(Paths.get(file.getPath()));
         } catch (IOException ex) {

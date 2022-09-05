@@ -27,6 +27,7 @@ javafx {
 
 
 dependencies {
+
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.jsoup:jsoup:1.15.3'
     compileOnly 'org.projectlombok:lombok:1.18.24'

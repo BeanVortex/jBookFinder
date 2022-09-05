@@ -1,6 +1,6 @@
 package ir.darkdeveloper.jbookfinder.task;
 
-import ir.darkdeveloper.jbookfinder.utils.BookUtils;
+import ir.darkdeveloper.jbookfinder.config.Configs;
 import javafx.concurrent.Task;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,16 +10,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 
 public class ImageFetchTask extends Task<File> {
 
     private final String imageUrl;
     private final ImageView bookImage;
     private final String fileName;
-    private static final String SAVE_LOCATION = "/bookImages/";
+    private final Configs configs = Configs.getInstance();
 
-    private static final BookUtils bookUtils = new BookUtils();
     private File file;
 
     public ImageFetchTask(String imageUrl, String fileName, ImageView bookImage) {
@@ -32,7 +30,7 @@ public class ImageFetchTask extends Task<File> {
     protected File call() throws Exception {
         if (imageUrl == null)
             return null;
-        var imageFile = new File(bookUtils.getSaveLocation() + SAVE_LOCATION + fileName);
+        var imageFile = new File(configs.getBookCoverLocation() + fileName);
         if (imageFile.exists()){
             file = imageFile;
             return imageFile;

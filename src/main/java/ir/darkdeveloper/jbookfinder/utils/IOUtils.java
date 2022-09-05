@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder.utils;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 
 import java.io.File;
@@ -9,9 +10,11 @@ import java.util.List;
 public class IOUtils {
 
     private static final BookUtils bookUtils = new BookUtils();
+    private final Configs configs = Configs.getInstance();
+
 
     public void deleteCachedImages(List<BookModel> notToDeleteBooks) {
-        var path = bookUtils.getSaveLocation() + "bookImages/";
+        var path = configs.getBookCoverLocation();
 
         var filesNotToDelete = new ArrayList<String>();
         notToDeleteBooks.forEach(book -> {

@@ -13,11 +13,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
 
 import static ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil.getResource;
 
-public class BookItemController implements FXMLController {
+public class BookItemController implements FXMLController{
 
     @FXML
     private Button downloadBtn;
@@ -44,7 +43,6 @@ public class BookItemController implements FXMLController {
 
     private BookModel bookModel;
     private static final BookUtils bookUtils = new BookUtils();
-
 
     @Override
     public void initialize() {

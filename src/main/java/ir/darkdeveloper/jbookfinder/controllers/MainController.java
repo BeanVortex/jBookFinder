@@ -23,6 +23,7 @@ public class MainController implements FXMLController {
 
     private static final BookUtils bookUtils = new BookUtils();
 
+
     @FXML
     private void searchTheBook(ActionEvent e) {
         var stage = SwitchSceneUtil.getStageFromEvent(e);
@@ -30,7 +31,8 @@ public class MainController implements FXMLController {
     }
 
 
-    public void searchTheBook(Stage stage){
+
+    public void searchTheBook(Stage stage) {
         var text = fieldSearch.getText();
         if (!text.isBlank()) {
             var trimmedText = text.replaceAll("\s", "");

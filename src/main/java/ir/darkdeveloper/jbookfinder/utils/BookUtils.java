@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder.utils;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.controllers.BooksController;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.service.ScraperService;
@@ -15,8 +16,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.awt.*;
 import java.io.File;
@@ -25,12 +24,11 @@ import java.io.IOException;
 
 import static ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil.getResource;
 
-@Getter
-@Setter
+
 public class BookUtils {
 
-    private String saveLocation = System.getProperty("user.home") + "/Downloads/JBookFinder/";
     private static final ScraperService scraperService = new ScraperService();
+    private final Configs configs = Configs.getInstance();
 
     public void downloadBookAndAddProgress(BookModel bookModel, VBox operationVbox) {
         var downTask = downloadBook(bookModel, operationVbox);
@@ -64,7 +62,7 @@ public class BookUtils {
     private BookDownloadTask downloadBook(BookModel bookModel, VBox operationVbox) {
         var fileName = bookModel.getTitle()
                 .replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + "." + bookModel.getFileFormat();
-        var file = new File(saveLocation + fileName);
+        var file = new File(configs.getSaveLocation() + fileName);
         if (file.exists()) {
             addProgress(operationVbox, null);
             completeDownload(operationVbox);
@@ -92,7 +90,6 @@ public class BookUtils {
         return title.replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + fileExt;
     }
 
-
     public void completeDownload(VBox operationVbox) {
         operationVbox.getChildren().remove(1);
         operationVbox.getChildren().get(0).setDisable(false);
@@ -107,7 +104,7 @@ public class BookUtils {
         try {
             var imageUrl = bookModel.getImageUrl();
             var title = bookModel.getTitle();
-            var file = new File(saveLocation + "bookImages/" + getImageFileName(imageUrl, title));
+            var file = new File(configs.getBookCoverLocation() + getImageFileName(imageUrl, title));
             var is = new FileInputStream(file);
             imageView.setImage(new Image(is));
             is.close();
