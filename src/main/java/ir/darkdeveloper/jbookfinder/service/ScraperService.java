@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ScraperService {
 
-    private Configs configs = Configs.getInstance();
+    private final Configs configs = Configs.getInstance();
 
     public CompletableFuture<List<BookModel>> fetchBookModels(String bookName, Integer page) {
         return CompletableFuture.supplyAsync(() -> {
@@ -48,7 +48,6 @@ public class ScraperService {
                                 }
                             }
                         }
-                        System.out.println("done");
                         return books;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -73,12 +72,10 @@ public class ScraperService {
                 book.setMirror(link);
                 var imageUrl = downloadPage.select("img").attr("src");
                 book.setImageUrl(baseURL + imageUrl);
-                System.out.println("foreach");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-        System.out.println("after for of forEach");
         return books;
     }
 }

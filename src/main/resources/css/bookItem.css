@@ -1,4 +1,6 @@
-
+.root{
+    -fx-border-color: #5f5f5f
+}
 
 .button{
     -fx-cursor: hand;

@@ -29,6 +29,17 @@ public class BookUtils {
 
     private static final ScraperService scraperService = new ScraperService();
     private final Configs configs = Configs.getInstance();
+    private static BookUtils bookUtils;
+
+    private BookUtils() {
+
+    }
+
+    public static BookUtils getInstance() {
+        if (bookUtils == null)
+            bookUtils = new BookUtils();
+        return bookUtils;
+    }
 
     public void downloadBookAndAddProgress(BookModel bookModel, VBox operationVbox) {
         var downTask = downloadBook(bookModel, operationVbox);
@@ -155,7 +166,7 @@ public class BookUtils {
         scraperService.fetchBookModels(text, 1)
                 .whenComplete((bookModels, throwable) -> Platform.runLater(() -> {
                     var booksController = SwitchSceneUtil.
-                            switchSceneAndGetController(stage, "BooksController.fxml", BooksController.class);
+                            switchSceneAndGetController(stage, "books.fxml", BooksController.class);
                     if (booksController == null) {
                         System.out.println("Books controller is null");
                         return;

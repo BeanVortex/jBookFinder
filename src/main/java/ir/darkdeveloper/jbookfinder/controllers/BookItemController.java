@@ -42,7 +42,7 @@ public class BookItemController implements FXMLController{
     private ImageView bookImage;
 
     private BookModel bookModel;
-    private static final BookUtils bookUtils = new BookUtils();
+    private final BookUtils bookUtils = BookUtils.getInstance();
 
     @Override
     public void initialize() {
@@ -54,7 +54,6 @@ public class BookItemController implements FXMLController{
         bookUtils.displayData(bookTitle, bookAuthor, bookPublisher, bookFormat,
                 bookSize, bookPages, bookYear, bookLanguage, bookModel);
         hideExtraInfo();
-        var bookUtils = new BookUtils();
         bookUtils.fetchAndSetImageAsync(bookModel.getImageUrl(), bookModel.getTitle(), bookImage);
     }
 
@@ -74,7 +73,6 @@ public class BookItemController implements FXMLController{
             return;
 
         if (!downloadBtn.getText().equals("Open Book")) {
-            var bookUtils = new BookUtils();
             bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
             return;
         }
@@ -86,7 +84,7 @@ public class BookItemController implements FXMLController{
     @FXML
     private void moreDetails() throws IOException {
         var stage = new Stage();
-        HBox root = FXMLLoader.load(getResource("fxml/ListBookItem.fxml"));
+        HBox root = FXMLLoader.load(getResource("fxml/bookItem.fxml"));
         var scene = new Scene(root);
         stage.setScene(scene);
         stage.setWidth(800);

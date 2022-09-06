@@ -3,8 +3,10 @@ package ir.darkdeveloper.jbookfinder.config;
 
 public class Configs {
 
-    private static Configs beans = null;
+    private static Configs configs;
     private static String baseLocation = System.getProperty("user.home") + "/Downloads/JBookFinder/";
+    private static String theme = "light";
+
     private static final String bookCoverLocation = baseLocation + "/book_covers/";
     private static final String imageBaseUrl = "http://library.lol/";
 
@@ -12,9 +14,9 @@ public class Configs {
     }
 
     public static Configs getInstance() {
-        if (beans == null)
-            beans = new Configs();
-        return beans;
+        if (configs == null)
+            configs = new Configs();
+        return configs;
     }
 
 
@@ -32,5 +34,13 @@ public class Configs {
 
     public String getImageBaseUrl() {
         return imageBaseUrl;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        Configs.theme = theme;
     }
 }

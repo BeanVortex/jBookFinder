@@ -34,8 +34,8 @@ public class BooksController implements FXMLController {
     private FlowPane booksContainer;
 
     private List<BookModel> books;
-    private static final IOUtils IO_UTILS = new IOUtils();
-    private static final BookUtils bookUtils = new BookUtils();
+    private final IOUtils ioUtils = IOUtils.getInstance();
+    private final BookUtils bookUtils = BookUtils.getInstance();
 
     @Override
     public void initialize() {
@@ -48,7 +48,7 @@ public class BooksController implements FXMLController {
         booksContainer.requestFocus();
         books.forEach(book -> {
             try {
-                var fxmlLoader = new FXMLLoader(SwitchSceneUtil.getResource("fxml/ListBookItem.fxml"));
+                var fxmlLoader = new FXMLLoader(SwitchSceneUtil.getResource("fxml/bookItem.fxml"));
                 Parent root = fxmlLoader.load();
                 BookItemController itemController = fxmlLoader.getController();
                 itemController.setBookModel(book);
@@ -69,7 +69,7 @@ public class BooksController implements FXMLController {
     @FXML
     private void getBack() {
         var stage = (Stage) menuBar.getScene().getWindow();
-        SwitchSceneUtil.switchSceneToMain(stage, "MainController.fxml", "main.css");
+        SwitchSceneUtil.switchSceneToMain(stage, "main.fxml");
     }
 
     public void showSettings() {
@@ -99,7 +99,7 @@ public class BooksController implements FXMLController {
 
     @FXML
     private void clearImageCache() {
-        IO_UTILS.deleteCachedImages(books);
+        ioUtils.deleteCachedImages(books);
     }
 
     @FXML

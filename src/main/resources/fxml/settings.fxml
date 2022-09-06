@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<VBox prefHeight="500.0" prefWidth="450.0" spacing="20" stylesheets="@../css/settings.css"
+      xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="ir.darkdeveloper.jbookfinder.controllers.SettingsController">
+
+    <VBox alignment="BASELINE_LEFT" prefHeight="43.0" spacing="10">
+        <Label styleClass="settingTile" text="Save Location"/>
+        <HBox prefWidth="430" alignment="CENTER">
+            <Label styleClass="settingDescription" text="Current Location: " fx:id="labelLocation"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="change" onAction="#changeSaveDir"/>
+        </HBox>
+        <HBox prefWidth="430" alignment="CENTER">
+            <Label styleClass="settingDescription" text="Image caches: " fx:id="labelImageCache"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="clear" onAction="#clearCache"/>
+        </HBox>
+    </VBox>
+
+    <Line endX="430" stroke="lightgray"/>
+
+    <VBox prefWidth="270" spacing="10">
+        <Label styleClass="settingTile" text="Customize"/>
+        <VBox>
+            <HBox alignment="CENTER">
+                <Label styleClass="settingDescription" text="Theme:"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Circle radius="10.0" fill="#fff" stroke="#333" fx:id="circleTheme"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <Line endX="430" stroke="lightgray"/>
+
+    <!--    <VBox prefWidth="270" spacing="10">-->
+    <!--        <Label styleClass="settingTile" text="Search configs"/>-->
+    <!--        <VBox>-->
+    <!--            <HBox alignment="CENTER">-->
+    <!--                <Label styleClass="settingDescription" text="Search book type:"/>-->
+    <!--                <Region HBox.hgrow="ALWAYS"/>-->
+    <!--                <SplitMenuButton text="Non-fiction/Sci-tech" fx:id="bookTypeMenu">-->
+    <!--                    <items>-->
+    <!--                        <MenuItem text="Non-fiction/Sci-tech"/>-->
+    <!--                        <MenuItem text="Fiction"/>-->
+    <!--                        <MenuItem text="Scientific articles"/>-->
+    <!--                    </items>-->
+    <!--                </SplitMenuButton>-->
+    <!--            </HBox>-->
+    <!--        </VBox>-->
+    <!--    </VBox>-->
+
+
+</VBox>

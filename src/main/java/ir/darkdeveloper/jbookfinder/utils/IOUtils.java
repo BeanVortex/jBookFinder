@@ -9,8 +9,20 @@ import java.util.List;
 
 public class IOUtils {
 
-    private static final BookUtils bookUtils = new BookUtils();
+    private static IOUtils ioUtils;
+
+    private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
+
+    private IOUtils() {
+
+    }
+
+    public static IOUtils getInstance() {
+        if (ioUtils == null)
+            ioUtils = new IOUtils();
+        return ioUtils;
+    }
 
 
     public void deleteCachedImages(List<BookModel> notToDeleteBooks) {
@@ -31,5 +43,7 @@ public class IOUtils {
 
         bookUtils.showNotification("Cleared cache", "Caches Deleted", "Image caches deleted");
     }
+
+    // Todo: calculate image cache size
 
 }

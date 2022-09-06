@@ -22,7 +22,7 @@ public class MainController implements FXMLController {
     @FXML
     private TextField fieldSearch;
 
-    private static final BookUtils bookUtils = new BookUtils();
+    private final BookUtils bookUtils = BookUtils.getInstance();
 
 
     @FXML

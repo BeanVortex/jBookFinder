@@ -15,14 +15,12 @@ import java.net.URL;
 public class SwitchSceneUtil {
 
 
-    public static void switchSceneToMain(Stage stage, String fxmlFilename, String styleSheetPath) {
+    public static void switchSceneToMain(Stage stage, String fxmlFilename) {
         try {
             var loader = new FXMLLoader(getResource("fxml/" + fxmlFilename));
             Parent root = loader.load();
             var scene = new Scene(root);
             MainController controller = loader.getController();
-            if (styleSheetPath != null)
-                scene.getStylesheets().add(getResource("css/" + styleSheetPath).toExternalForm());
             scene.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER))
                     controller.searchTheBook(stage);
