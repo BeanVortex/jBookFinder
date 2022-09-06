@@ -1,13 +1,21 @@
 package ir.darkdeveloper.jbookfinder.config;
 
 
+import java.io.File;
+
 public class Configs {
 
     private static Configs configs;
-    private static String baseLocation = System.getProperty("user.home") + "/Downloads/JBookFinder/";
-    private static String theme = "light";
 
-    private static final String bookCoverLocation = baseLocation + "/book_covers/";
+    private static String saveLocation = System.getProperty("user.home")
+            + File.separator + "Downloads"
+            + File.separator + "JBookFinder"
+            + File.separator;
+    private static final String bookCoverLocation = saveLocation
+            + File.separator + "book_covers"
+            + File.separator;
+
+    private static String theme = "light";
     private static final String imageBaseUrl = "http://library.lol/";
 
     private Configs() {
@@ -21,11 +29,11 @@ public class Configs {
 
 
     public String getSaveLocation() {
-        return baseLocation;
+        return saveLocation;
     }
 
-    public static void setBaseLocation(String baseLocation) {
-        Configs.baseLocation = baseLocation;
+    public void setSaveLocation(String saveLocation) {
+        Configs.saveLocation = saveLocation;
     }
 
     public String getBookCoverLocation() {

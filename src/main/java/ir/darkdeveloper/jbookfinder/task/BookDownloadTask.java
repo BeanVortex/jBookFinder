@@ -19,7 +19,7 @@ public class BookDownloadTask extends Task<Void> {
     private final BookModel bookModel;
     private final VBox operationVbox;
     private final String fileName;
-    private static final BookUtils bookUtils = new BookUtils();
+    private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
 
     public BookDownloadTask(BookModel bookModel, VBox operationVbox, String fileName) {
