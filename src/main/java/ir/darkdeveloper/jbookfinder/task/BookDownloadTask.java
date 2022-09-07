@@ -35,7 +35,7 @@ public class BookDownloadTask extends Task<Void> {
         var urlConnection = new URL(mirror).openConnection();
         var fileSize = urlConnection.getContentLength();
         try (var is = urlConnection.getInputStream();
-             var os = Files.newOutputStream(Paths.get(configs.getSaveLocation() + fileName))) {
+             var os = Files.newOutputStream(Paths.get(configs.getSaveLocation() + File.separator + fileName))) {
             long nRead = 0L;
             var buf = new byte[8192];
             int n;
@@ -67,7 +67,7 @@ public class BookDownloadTask extends Task<Void> {
         var fileExt = bookModel.getFileFormat();
 
         try {
-            var file = new File(configs.getSaveLocation() + "/" + fileName + "." + fileExt);
+            var file = new File(configs.getSaveLocation() + File.separator + fileName + "." + fileExt);
             if (file.exists())
                 Files.delete(Paths.get(file.getPath()));
         } catch (IOException ex) {

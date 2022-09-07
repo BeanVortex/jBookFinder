@@ -9,13 +9,14 @@ public class Configs {
 
     private static String saveLocation = System.getProperty("user.home")
             + File.separator + "Downloads"
-            + File.separator + "JBookFinder"
-            + File.separator;
-    private static final String bookCoverLocation = saveLocation
+            + File.separator + "JBookFinder";
+    private static String bookCoverLocation = saveLocation
+            + File.separator
             + "book_covers"
             + File.separator;
-    private static final String configLocation = saveLocation
-            + "configs"
+    private static final String configLocation = System.getProperty("user.home")
+            + File.separator + "Documents"
+            + File.separator + "JBookFinder"
             + File.separator;
 
     private static String theme = "light";
@@ -37,6 +38,7 @@ public class Configs {
 
     public void setSaveLocation(String saveLocation) {
         Configs.saveLocation = saveLocation;
+        Configs.bookCoverLocation = saveLocation + File.separator + "book_covers" + File.separator;
     }
 
     public String getBookCoverLocation() {

@@ -78,7 +78,7 @@ public class BookUtils {
     private BookDownloadTask downloadBook(BookModel bookModel, VBox operationVbox) {
         var fileName = bookModel.getTitle()
                 .replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + "." + bookModel.getFileFormat();
-        var file = new File(configs.getSaveLocation() + fileName);
+        var file = new File(configs.getSaveLocation() + File.separator + fileName);
         if (file.exists()) {
             addProgress(operationVbox, null);
             completeDownload(operationVbox);
