@@ -113,7 +113,7 @@ public class BookUtils {
         operationVbox.getChildren().get(1).setDisable(false);
         var downloadBtn = (Button) operationVbox.getChildren().get(0);
         downloadBtn.setText("Open Book");
-        showNotification("download", "Book Downloaded", "I downloaded the book");
+        FxUtils.showNotification("download", "Book Downloaded", "I downloaded the book");
     }
 
     public void setDataForDetails(HBox root, BookModel bookModel) {
@@ -190,18 +190,6 @@ public class BookUtils {
 
     }
 
-    public void showNotification(String tooltip, String caption, String text) {
-        var tray = SystemTray.getSystemTray();
-        var trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(getResource("images/blank.png")), tooltip);
-        try {
-            tray.add(trayIcon);
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
-        trayIcon.displayMessage(caption, text, TrayIcon.MessageType.INFO);
-        trayIcon.addActionListener(e -> tray.remove(trayIcon));
-        tray.remove(trayIcon);
-    }
 
     public void createSearchUI(String text, StackPane stackPane, Parent rootBox, ActionEvent e) {
         createSearchUI(text, stackPane, rootBox, getStageFromEvent(e));

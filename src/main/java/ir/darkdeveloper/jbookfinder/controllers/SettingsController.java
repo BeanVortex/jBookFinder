@@ -2,6 +2,7 @@ package ir.darkdeveloper.jbookfinder.controllers;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.event.ActionEvent;
@@ -38,12 +39,12 @@ public class SettingsController implements FXMLController {
                 circleTheme.setFill(Paint.valueOf("#333"));
             else
                 circleTheme.setFill(Paint.valueOf("#fff"));
-            ioUtils.saveConfigs();
+            ioUtils.saveConfigs(null);
             // Todo: apply theme
         });
     }
 
-    // should be called before
+    // should be called in books controller
     public void setNotToDeleteBooks(List<BookModel> notToDeleteBooks) {
         this.notToDeleteBooks = notToDeleteBooks;
     }
@@ -62,10 +63,13 @@ public class SettingsController implements FXMLController {
         dirChooser.setInitialDirectory(new File(configs.getSaveLocation()));
         var selectedDir = dirChooser.showDialog(FxUtils.getStageFromEvent(e));
         if (selectedDir != null) {
-            configs.setSaveLocation(selectedDir.getPath());
-            labelLocation.setText(configs.getSaveLocation());
-            ioUtils.createSaveLocation();
-            ioUtils.saveConfigs();
+            var files = selectedDir.listFiles();
+            if (files != null && files.length == 0) {
+                ioUtils.createSaveLocation();
+                ioUtils.saveConfigs(selectedDir.getPath());
+                labelLocation.setText(configs.getSaveLocation());
+            } else
+                FxUtils.showNotification("notif", "Directory is not empty", "Directory must be empty");
         }
     }
 }

@@ -10,9 +10,11 @@ public class Configs {
     private static String saveLocation = System.getProperty("user.home")
             + File.separator + "Downloads"
             + File.separator + "JBookFinder";
+
+    private static final String bookCoverDirName = "book_covers";
     private static String bookCoverLocation = saveLocation
             + File.separator
-            + "book_covers"
+            + bookCoverDirName
             + File.separator;
     private static final String configLocation = System.getProperty("user.home")
             + File.separator + "Documents"
@@ -59,5 +61,9 @@ public class Configs {
 
     public String getConfigLocation() {
         return configLocation;
+    }
+
+    public String getBookCoverDirName() {
+        return bookCoverDirName;
     }
 }

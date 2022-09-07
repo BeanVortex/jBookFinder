@@ -43,7 +43,7 @@ public class IOUtils {
                 if (!file.isDirectory() && !filesNotToDelete.contains(file.getName()))
                     file.delete();
 
-        bookUtils.showNotification("Cleared cache", "Caches Deleted", "Image caches deleted");
+        FxUtils.showNotification("Cleared cache", "Caches Deleted", "Image caches deleted");
     }
 
 
@@ -75,17 +75,25 @@ public class IOUtils {
             System.out.println("not created dir: " + dirPath);
     }
 
-    public void saveConfigs() {
+    public void saveConfigs(String savePath) {
         try {
+            var prevSaveLocation = configs.getSaveLocation();
+            var prevBookCoverLocation = configs.getBookCoverLocation();
+            if (savePath != null)
+                configs.setSaveLocation(savePath);
+
             var file = new File(configs.getConfigLocation() + "config.cfg");
             if (!file.exists())
                 file.createNewFile();
+
             var writer = new FileWriter(file);
             writer.append("save_location=").append(configs.getSaveLocation())
                     .append("\n")
                     .append("theme=").append(configs.getTheme());
             writer.flush();
             writer.close();
+            moveAndDeletePreviousData(prevBookCoverLocation, configs.getBookCoverLocation());
+            moveAndDeletePreviousData(prevSaveLocation, configs.getSaveLocation());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,7 +102,7 @@ public class IOUtils {
     public void readConfig() {
         try {
             var file = new File(configs.getConfigLocation() + "config.cfg");
-            if (file.exists()){
+            if (file.exists()) {
                 var reader = new BufferedReader(new FileReader(file));
                 String cfg;
                 while ((cfg = reader.readLine()) != null) {
@@ -111,6 +119,22 @@ public class IOUtils {
         }
     }
 
-    // Todo: save and read configs using a file
+    private void moveAndDeletePreviousData(String prevSaveLocation, String nextSaveLocation) {
+        if (prevSaveLocation.equals(nextSaveLocation))
+            return;
+        var nextDir = new File(nextSaveLocation);
+        if (!nextDir.exists())
+            nextDir.mkdir();
+        var prevDir = new File(prevSaveLocation);
+        var files = prevDir.listFiles();
+        if (files != null) {
+            for (var file : files) {
+                if (file.isFile())
+                    file.renameTo(new File(nextSaveLocation + File.separator + file.getName()));
+
+            }
+        }
+        prevDir.delete();
+    }
 
 }

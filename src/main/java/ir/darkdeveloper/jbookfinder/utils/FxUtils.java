@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 
@@ -91,5 +92,18 @@ public class FxUtils {
 
     public static URL getResource(String path) {
         return FxUtils.class.getClassLoader().getResource(path);
+    }
+
+    public static void showNotification(String tooltip, String caption, String text) {
+        var tray = SystemTray.getSystemTray();
+        var trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(getResource("images/blank.png")), tooltip);
+        try {
+            tray.add(trayIcon);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+        trayIcon.displayMessage(caption, text, TrayIcon.MessageType.INFO);
+        trayIcon.addActionListener(e -> tray.remove(trayIcon));
+        tray.remove(trayIcon);
     }
 }
