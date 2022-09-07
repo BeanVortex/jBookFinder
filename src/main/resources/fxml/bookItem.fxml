@@ -6,10 +6,13 @@
 
 <HBox minHeight="327" minWidth="400" stylesheets="@../css/bookItem.css"
       xmlns="http://javafx.com/javafx/16"
-      fx:id="rootBox"
+      fx:id="itemBox"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.darkdeveloper.jbookfinder.controllers.BookItemController">
 
-    <ImageView fx:id="bookImage" fitHeight="327.0" fitWidth="190.0"/>
+    <VBox prefHeight="327.0" prefWidth="190.0" fx:id="imageBox" alignment="CENTER">
+        <ProgressIndicator fx:id="imageProgress"/>
+        <ImageView fx:id="bookImage"/>
+    </VBox>
     <VBox prefHeight="300.0" prefWidth="210.0" spacing="10" style="-fx-padding: 15;">
         <Label fx:id="bookTitle" text="Title"/>
         <Label fx:id="bookAuthor" text="Author"/>

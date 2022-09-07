@@ -93,9 +93,10 @@ public class BookUtils {
     }
 
 
-    public void fetchAndSetImageAsync(String imageUrl, String title, ImageView bookImage) {
+    public void fetchAndSetImageAsync(String imageUrl, String title, ImageView bookImage,
+                                      VBox imageBox, ProgressIndicator imageProgress) {
         var fileName = getImageFileName(imageUrl, title);
-        var fetchTask = new ImageFetchTask(imageUrl, fileName, bookImage);
+        var fetchTask = new ImageFetchTask(imageUrl, fileName, bookImage, imageBox, imageProgress);
         var taskT = new Thread(fetchTask);
         taskT.setDaemon(true);
         taskT.start();
@@ -116,12 +117,17 @@ public class BookUtils {
     }
 
     public void setDataForDetails(HBox root, BookModel bookModel) {
-        var imageView = (ImageView) root.getChildren().get(0);
+        var imageBox = (VBox) root.getChildren().get(0);
+        var imageProgress = (ProgressIndicator) imageBox.getChildren().get(0);
+        var imageView = (ImageView) imageBox.getChildren().get(1);
         try {
             var imageUrl = bookModel.getImageUrl();
             var title = bookModel.getTitle();
             var file = new File(configs.getBookCoverLocation() + getImageFileName(imageUrl, title));
             var is = new FileInputStream(file);
+            imageBox.getChildren().remove(imageProgress);
+            imageView.setFitHeight(imageBox.getPrefHeight());
+            imageView.setFitWidth(imageBox.getPrefWidth());
             imageView.setImage(new Image(is));
             is.close();
         } catch (IOException e) {

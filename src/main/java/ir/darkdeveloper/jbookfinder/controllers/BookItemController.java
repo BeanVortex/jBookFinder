@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -18,6 +19,10 @@ import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
 
 public class BookItemController implements FXMLController{
 
+    @FXML
+    private ProgressIndicator imageProgress;
+    @FXML
+    private VBox imageBox;
     @FXML
     private Button downloadBtn;
     @FXML
@@ -54,7 +59,7 @@ public class BookItemController implements FXMLController{
         bookUtils.displayData(bookTitle, bookAuthor, bookPublisher, bookFormat,
                 bookSize, bookPages, bookYear, bookLanguage, bookModel);
         hideExtraInfo();
-        bookUtils.fetchAndSetImageAsync(bookModel.getImageUrl(), bookModel.getTitle(), bookImage);
+        bookUtils.fetchAndSetImageAsync(bookModel.getImageUrl(), bookModel.getTitle(), bookImage, imageBox, imageProgress);
     }
 
     private void hideExtraInfo() {

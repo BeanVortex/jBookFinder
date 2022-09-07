@@ -24,6 +24,7 @@ public class JBookFinderApplication extends Application {
         stage.setMinHeight(480);
         stage.setTitle("Main Page");
         stage.show();
+        stage.setOnCloseRequest(event -> Platform.exit());
     }
 
 
