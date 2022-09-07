@@ -14,6 +14,9 @@ public class Configs {
     private static final String bookCoverLocation = saveLocation
             + File.separator + "book_covers"
             + File.separator;
+    private static final String configLocation = saveLocation
+            + File.separator + "configs"
+            + File.separator;
 
     private static String theme = "light";
     private static final String imageBaseUrl = "http://library.lol/";
@@ -50,5 +53,9 @@ public class Configs {
 
     public void setTheme(String theme) {
         Configs.theme = theme;
+    }
+
+    public String getConfigLocation() {
+        return configLocation;
     }
 }

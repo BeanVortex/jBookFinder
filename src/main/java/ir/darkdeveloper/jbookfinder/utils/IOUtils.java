@@ -4,7 +4,7 @@ import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import org.apache.commons.io.FileUtils;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,28 +49,42 @@ public class IOUtils {
     public String getFolderSize(File folder) {
         var sizeInBytes = FileUtils.sizeOfDirectory(folder);
         var sizeInMB = (float) sizeInBytes / 1_000_000;
-        if (sizeInMB < 1){
+        if (sizeInMB < 1) {
             var sizeInKB = (float) sizeInBytes / 1_000;
             return sizeInKB + " KB";
-        }else
+        } else
             return sizeInMB + " MB";
     }
 
 
     public void createSaveLocation() {
         var saveLocation = configs.getSaveLocation();
-        var file = new File(saveLocation);
-        if (file.mkdir())
-            System.out.println("created dir");
-        else
-            System.out.println("not created dir");
-
         var bookCoverLocation = configs.getBookCoverLocation();
-        file = new File(bookCoverLocation);
-        if (file.mkdir())
-            System.out.println("created book image dir");
-        else
-            System.out.println("not created book image dir");
+        var configLocation = configs.getConfigLocation();
+        mkdir(saveLocation);
+        mkdir(bookCoverLocation);
+        mkdir(configLocation);
     }
+
+    private void mkdir(String dirPath) {
+        var file = new File(dirPath);
+        if (file.mkdir())
+            System.out.println("created dir: " + dirPath);
+        else
+            System.out.println("not created dir" + dirPath);
+    }
+
+    public void saveConfigs() throws IOException {
+        var file = new File(configs.getConfigLocation() + "config.cfg");
+        if (!file.exists())
+            file.createNewFile();
+        var writer = new FileWriter(file);
+        writer.append("save_location=").append(configs.getSaveLocation())
+                .append("theme=").append(configs.getTheme());
+        writer.flush();
+        writer.close();
+    }
+
+    // Todo: save and read configs using a file
 
 }
