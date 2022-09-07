@@ -1,12 +1,9 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
-import ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil;
+import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -16,9 +13,9 @@ public class MainController implements FXMLController {
 
 
     @FXML
-    private StackPane rootPane;
-    @FXML
     private VBox rootVbox;
+    @FXML
+    private StackPane rootPane;
     @FXML
     private TextField fieldSearch;
 
@@ -27,26 +24,24 @@ public class MainController implements FXMLController {
 
     @FXML
     private void searchTheBook(ActionEvent e) {
-        var stage = SwitchSceneUtil.getStageFromEvent(e);
-        searchTheBook(stage);
+        var text = fieldSearch.getText();
+        if (!text.isBlank()) {
+            bookUtils.createSearchUI(text, rootPane, rootVbox, e);
+        }
     }
-
 
     public void searchTheBook(Stage stage) {
         var text = fieldSearch.getText();
         if (!text.isBlank()) {
-            var trimmedText = text.replaceAll("\s", "");
-            var progress = new ProgressIndicator();
-            var btnCancel = new Button("Cancel");
-            var vbox = new VBox(progress, btnCancel);
-            vbox.setSpacing(10);
-            vbox.setAlignment(Pos.CENTER);
-            rootVbox.setDisable(true);
-            rootPane.getChildren().add(vbox);
-            bookUtils.searchTheBookWithScrapper(stage, trimmedText);
+            bookUtils.createSearchUI(text, rootPane, rootVbox, stage);
         }
     }
 
+
+    @FXML
+    private void showSettings() {
+        FxUtils.newStageAndReturnController("settings.fxml", 450, 500, SettingsController.class);
+    }
 
     @Override
     public void initialize() {

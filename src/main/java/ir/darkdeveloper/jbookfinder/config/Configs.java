@@ -12,10 +12,10 @@ public class Configs {
             + File.separator + "JBookFinder"
             + File.separator;
     private static final String bookCoverLocation = saveLocation
-            + File.separator + "book_covers"
+            + "book_covers"
             + File.separator;
     private static final String configLocation = saveLocation
-            + File.separator + "configs"
+            + "configs"
             + File.separator;
 
     private static String theme = "light";

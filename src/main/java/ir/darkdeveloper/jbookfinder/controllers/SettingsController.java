@@ -3,11 +3,12 @@ package ir.darkdeveloper.jbookfinder.controllers;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
-import ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil;
+import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.DirectoryChooser;
 
@@ -32,7 +33,14 @@ public class SettingsController implements FXMLController {
     public void initialize() {
         labelImageCache.setText(String.valueOf(ioUtils.getFolderSize(new File(configs.getBookCoverLocation()))));
         labelLocation.setText(configs.getSaveLocation());
-        circleTheme.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> System.out.println("clicked"));
+        circleTheme.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            if (circleTheme.getFill().equals(Paint.valueOf("#fff")))
+                circleTheme.setFill(Paint.valueOf("#333"));
+            else
+                circleTheme.setFill(Paint.valueOf("#fff"));
+            ioUtils.saveConfigs();
+            // Todo: apply theme
+        });
     }
 
     // should be called before
@@ -52,11 +60,12 @@ public class SettingsController implements FXMLController {
         var dirChooser = new DirectoryChooser();
         dirChooser.setTitle("Select books save location");
         dirChooser.setInitialDirectory(new File(configs.getSaveLocation()));
-        var selectedDir = dirChooser.showDialog(SwitchSceneUtil.getStageFromEvent(e));
-        if (selectedDir != null){
+        var selectedDir = dirChooser.showDialog(FxUtils.getStageFromEvent(e));
+        if (selectedDir != null) {
             configs.setSaveLocation(selectedDir.getPath());
             labelLocation.setText(configs.getSaveLocation());
             ioUtils.createSaveLocation();
+            ioUtils.saveConfigs();
         }
     }
 }

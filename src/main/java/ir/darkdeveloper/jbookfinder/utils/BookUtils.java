@@ -7,13 +7,17 @@ import ir.darkdeveloper.jbookfinder.service.ScraperService;
 import ir.darkdeveloper.jbookfinder.task.BookDownloadTask;
 import ir.darkdeveloper.jbookfinder.task.ImageFetchTask;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -22,7 +26,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import static ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil.getResource;
+import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
+import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getStageFromEvent;
 
 
 public class BookUtils {
@@ -165,7 +170,7 @@ public class BookUtils {
 
         scraperService.fetchBookModels(text, 1)
                 .whenComplete((bookModels, throwable) -> Platform.runLater(() -> {
-                    var booksController = SwitchSceneUtil.
+                    var booksController = FxUtils.
                             switchSceneAndGetController(stage, "books.fxml", BooksController.class);
                     if (booksController == null) {
                         System.out.println("Books controller is null");
@@ -190,6 +195,26 @@ public class BookUtils {
         trayIcon.displayMessage(caption, text, TrayIcon.MessageType.INFO);
         trayIcon.addActionListener(e -> tray.remove(trayIcon));
         tray.remove(trayIcon);
+    }
+
+    public void createSearchUI(String text, StackPane stackPane, Parent rootBox, ActionEvent e) {
+        createSearchUI(text, stackPane, rootBox, getStageFromEvent(e));
+    }
+
+    public void createSearchUI(String text, StackPane stackPane, Parent rootBox, Stage stage) {
+        var trimmedText = text.replaceAll("\s", "");
+        var progress = new ProgressIndicator();
+        var btnCancel = new Button("Cancel");
+        btnCancel.setOnAction(this::cancelSearch);
+        var vbox = new VBox(progress, btnCancel);
+        vbox.setSpacing(10);
+        vbox.setAlignment(Pos.CENTER);
+        rootBox.setDisable(true);
+        stackPane.getChildren().add(vbox);
+        bookUtils.searchTheBookWithScrapper(stage, trimmedText);
+    }
+
+    private void cancelSearch(ActionEvent e) {
     }
 }
 

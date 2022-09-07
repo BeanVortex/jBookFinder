@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil.getResource;
+import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
 
 public class BookItemController implements FXMLController{
 

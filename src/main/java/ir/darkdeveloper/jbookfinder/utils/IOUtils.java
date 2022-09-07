@@ -30,10 +30,11 @@ public class IOUtils {
         var path = configs.getBookCoverLocation();
 
         var filesNotToDelete = new ArrayList<String>();
-        notToDeleteBooks.forEach(book -> {
-            var imageFileName = bookUtils.getImageFileName(book.getImageUrl(), book.getTitle());
-            filesNotToDelete.add(imageFileName);
-        });
+        if (notToDeleteBooks != null)
+            notToDeleteBooks.forEach(book -> {
+                var imageFileName = bookUtils.getImageFileName(book.getImageUrl(), book.getTitle());
+                filesNotToDelete.add(imageFileName);
+            });
 
         var dir = new File(path);
         var files = dir.listFiles();
@@ -71,18 +72,43 @@ public class IOUtils {
         if (file.mkdir())
             System.out.println("created dir: " + dirPath);
         else
-            System.out.println("not created dir" + dirPath);
+            System.out.println("not created dir: " + dirPath);
     }
 
-    public void saveConfigs() throws IOException {
-        var file = new File(configs.getConfigLocation() + "config.cfg");
-        if (!file.exists())
-            file.createNewFile();
-        var writer = new FileWriter(file);
-        writer.append("save_location=").append(configs.getSaveLocation())
-                .append("theme=").append(configs.getTheme());
-        writer.flush();
-        writer.close();
+    public void saveConfigs() {
+        try {
+            var file = new File(configs.getConfigLocation() + "config.cfg");
+            if (!file.exists())
+                file.createNewFile();
+            var writer = new FileWriter(file);
+            writer.append("save_location=").append(configs.getSaveLocation())
+                    .append("\n")
+                    .append("theme=").append(configs.getTheme());
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readConfig() {
+        try {
+            var file = new File(configs.getConfigLocation() + "config.cfg");
+            if (file.exists()){
+                var reader = new BufferedReader(new FileReader(file));
+                String cfg;
+                while ((cfg = reader.readLine()) != null) {
+                    var key = cfg.split("=")[0];
+                    var value = cfg.split("=")[1];
+                    switch (key) {
+                        case "save_location" -> configs.setSaveLocation(value);
+                        case "theme" -> configs.setTheme(value);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Todo: save and read configs using a file

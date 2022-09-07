@@ -6,7 +6,7 @@
 <StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/16"
            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.darkdeveloper.jbookfinder.controllers.BooksController">
 
-    <VBox minWidth="850" prefHeight="480" spacing="5">
+    <VBox minWidth="850" prefHeight="480" spacing="5" fx:id="rootVbox">
         <MenuBar prefHeight="9.0" prefWidth="794.0" fx:id="menuBar">
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem mnemonicParsing="false" text="Go back" onAction="#getBack"/>

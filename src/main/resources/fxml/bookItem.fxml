@@ -6,6 +6,7 @@
 
 <HBox minHeight="327" minWidth="400" stylesheets="@../css/bookItem.css"
       xmlns="http://javafx.com/javafx/16"
+      fx:id="rootBox"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.darkdeveloper.jbookfinder.controllers.BookItemController">
 
     <ImageView fx:id="bookImage" fitHeight="327.0" fitWidth="190.0"/>

@@ -15,8 +15,9 @@
                        promptText="Search a Book"/>
             <Button text="search" styleClass="searchButton" onAction="#searchTheBook"/>
         </HBox>
-        <VBox alignment="CENTER" minHeight="-Infinity">
+        <VBox alignment="CENTER" minHeight="-Infinity" spacing="10">
             <Button alignment="CENTER" text="Downloaded Books"/>
+            <Button alignment="CENTER" text="Settings" onAction="#showSettings"/>
         </VBox>
     </VBox>
 </StackPane>

@@ -9,10 +9,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 
-public class SwitchSceneUtil {
+public class FxUtils {
 
 
     public static void switchSceneToMain(Stage stage, String fxmlFilename) {
@@ -57,7 +58,7 @@ public class SwitchSceneUtil {
 
     public static <T extends FXMLController> T switchSceneAndGetController(Stage stage, String fxmlFilename, Class<T> tClass) {
         try {
-            var loader = new FXMLLoader(SwitchSceneUtil.getResource("fxml/" + fxmlFilename));
+            var loader = new FXMLLoader(FxUtils.getResource("fxml/" + fxmlFilename));
             Parent root = loader.load();
             var scene = new Scene(root);
             stage.setScene(scene);
@@ -68,8 +69,27 @@ public class SwitchSceneUtil {
         }
     }
 
+    public static <T extends FXMLController> T newStageAndReturnController(
+            String fxmlFilename, double minWidth,
+            double minHeight, Class<T> tClass) {
+        try {
+            var stage = new Stage();
+            var loader = new FXMLLoader(getResource("fxml/" + fxmlFilename));
+            Parent root = loader.load();
+            var controller = loader.getController();
+            var scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setMinWidth(minWidth);
+            stage.setMinHeight(minHeight);
+            stage.show();
+            return tClass.cast(controller);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static URL getResource(String path) {
-        return SwitchSceneUtil.class.getClassLoader().getResource(path);
+        return FxUtils.class.getClassLoader().getResource(path);
     }
 }

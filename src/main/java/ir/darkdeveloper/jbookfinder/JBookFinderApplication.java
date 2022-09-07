@@ -1,8 +1,8 @@
 package ir.darkdeveloper.jbookfinder;
 
-import ir.darkdeveloper.jbookfinder.controllers.SettingsController;
+import ir.darkdeveloper.jbookfinder.controllers.MainController;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
-import ir.darkdeveloper.jbookfinder.utils.SwitchSceneUtil;
+import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -18,7 +18,8 @@ public class JBookFinderApplication extends Application {
     @Override
     public void start(Stage stage) {
         ioUtils.createSaveLocation();
-        SwitchSceneUtil.switchSceneAndGetController(stage, "settings.fxml", SettingsController.class);
+        ioUtils.readConfig();
+        FxUtils.switchSceneToMain(stage, "main.fxml");
         stage.setMinWidth(850);
         stage.setMinHeight(480);
         stage.setTitle("Main Page");
