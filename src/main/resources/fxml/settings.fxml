@@ -5,6 +5,7 @@
 <?import javafx.scene.shape.*?>
 
 <VBox prefHeight="500.0" prefWidth="450.0" spacing="20" stylesheets="@../css/settings.css"
+      fx:id="parent"
       xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="ir.darkdeveloper.jbookfinder.controllers.SettingsController">
 

@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FxUtils {
 
@@ -106,4 +108,7 @@ public class FxUtils {
         trayIcon.addActionListener(e -> tray.remove(trayIcon));
         tray.remove(trayIcon);
     }
+
+
 }
+

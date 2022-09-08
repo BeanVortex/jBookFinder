@@ -2,22 +2,28 @@ package ir.darkdeveloper.jbookfinder.controllers;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
-import ir.darkdeveloper.jbookfinder.utils.BookUtils;
-import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
+import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.DirectoryChooser;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsController implements FXMLController {
 
+    @FXML
+    private VBox parent;
     @FXML
     private Circle circleTheme;
     @FXML
@@ -34,14 +40,35 @@ public class SettingsController implements FXMLController {
     public void initialize() {
         labelImageCache.setText(String.valueOf(ioUtils.getFolderSize(new File(configs.getBookCoverLocation()))));
         labelLocation.setText(configs.getSaveLocation());
+        var labels = getAllLabels(parent);
+
+        if (configs.getTheme().equals("light")) {
+            circleTheme.setFill(Paint.valueOf("#333"));
+            parent.setBackground(Background.fill(Paint.valueOf("#fff")));
+        } else {
+            circleTheme.setFill(Paint.valueOf("#fff"));
+            parent.setBackground(Background.fill(Paint.valueOf("#333")));
+            labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
+        }
+
         circleTheme.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            if (circleTheme.getFill().equals(Paint.valueOf("#fff")))
-                circleTheme.setFill(Paint.valueOf("#333"));
-            else
+            if (configs.getTheme().equals("light")) {
                 circleTheme.setFill(Paint.valueOf("#fff"));
+                circleTheme.setStroke(Paint.valueOf("#333"));
+                parent.setBackground(Background.fill(Paint.valueOf("#333")));
+                labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
+                configs.setTheme("dark");
+            } else {
+                circleTheme.setFill(Paint.valueOf("#333"));
+                circleTheme.setStroke(Paint.valueOf("#fff"));
+                parent.setBackground(Background.fill(Paint.valueOf("#fff")));
+                labels.forEach(label -> label.setTextFill(Paint.valueOf("#111")));
+                configs.setTheme("light");
+            }
             ioUtils.saveConfigs(null);
-            // Todo: apply theme
+
         });
+
     }
 
     // should be called in books controller
@@ -55,7 +82,6 @@ public class SettingsController implements FXMLController {
         labelImageCache.setText(String.valueOf(ioUtils.getFolderSize(new File(configs.getBookCoverLocation()))));
     }
 
-    // Todo: move contents from previous location to the new one
     @FXML
     private void changeSaveDir(ActionEvent e) {
         var dirChooser = new DirectoryChooser();
@@ -70,6 +96,22 @@ public class SettingsController implements FXMLController {
                 labelLocation.setText(configs.getSaveLocation());
             } else
                 FxUtils.showNotification("notif", "Directory is not empty", "Directory must be empty");
+        }
+    }
+
+
+    private List<Label> getAllLabels(Parent root) {
+        var labels = new ArrayList<Label>();
+        addAllDescendents(root, labels);
+        return labels;
+    }
+
+    private void addAllDescendents(Parent parent, ArrayList<Label> labels) {
+        for (var node : parent.getChildrenUnmodifiable()) {
+            if (node instanceof Label label)
+                labels.add(label);
+            if (node instanceof Parent p)
+                addAllDescendents(p, labels);
         }
     }
 }
