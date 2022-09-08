@@ -182,6 +182,7 @@ public class BookUtils {
                         System.out.println("Books controller is null");
                         return;
                     }
+                    configs.addObserver(booksController);
                     if (bookModels != null && !bookModels.isEmpty()) {
                         booksController.showSearch(bookModels, text);
                         booksController.resizeListViewByStage(stage);

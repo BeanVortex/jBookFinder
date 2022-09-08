@@ -17,7 +17,7 @@ import java.io.IOException;
 
 import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
 
-public class BookItemController implements FXMLController{
+public class BookItemController implements FXMLController {
 
     @FXML
     private ProgressIndicator imageProgress;
@@ -102,6 +102,5 @@ public class BookItemController implements FXMLController{
         stage.heightProperty().addListener((o, ol, newVal) -> vBox.setPrefHeight((Double) newVal));
         stage.widthProperty().addListener((o, ol, newVal) -> vBox.setPrefWidth((Double) newVal));
     }
-
 
 }

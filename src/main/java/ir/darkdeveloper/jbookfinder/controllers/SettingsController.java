@@ -1,6 +1,7 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
+import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
@@ -40,7 +41,7 @@ public class SettingsController implements FXMLController {
     public void initialize() {
         labelImageCache.setText(String.valueOf(ioUtils.getFolderSize(new File(configs.getBookCoverLocation()))));
         labelLocation.setText(configs.getSaveLocation());
-        var labels = getAllLabels(parent);
+        var labels = FxUtils.getAllLabels(parent);
 
         if (configs.getTheme().equals("light")) {
             circleTheme.setFill(Paint.valueOf("#333"));
@@ -66,7 +67,6 @@ public class SettingsController implements FXMLController {
                 configs.setTheme("light");
             }
             ioUtils.saveConfigs(null);
-
         });
 
     }
@@ -100,18 +100,4 @@ public class SettingsController implements FXMLController {
     }
 
 
-    private List<Label> getAllLabels(Parent root) {
-        var labels = new ArrayList<Label>();
-        addAllDescendents(root, labels);
-        return labels;
-    }
-
-    private void addAllDescendents(Parent parent, ArrayList<Label> labels) {
-        for (var node : parent.getChildrenUnmodifiable()) {
-            if (node instanceof Label label)
-                labels.add(label);
-            if (node instanceof Parent p)
-                addAllDescendents(p, labels);
-        }
-    }
 }

@@ -1,5 +1,7 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
+import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
@@ -7,19 +9,21 @@ import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class BooksController implements FXMLController {
+public class BooksController implements FXMLController, ThemeObserver {
 
+    @FXML
+    private VBox contentVbox;
     @FXML
     private VBox rootVbox;
     @FXML
@@ -32,12 +36,13 @@ public class BooksController implements FXMLController {
     private FlowPane booksContainer;
 
     private List<BookModel> books;
+    private final List<HBox> itemParents = new ArrayList<>();
     private final IOUtils ioUtils = IOUtils.getInstance();
     private final BookUtils bookUtils = BookUtils.getInstance();
+    private final Configs configs = Configs.getInstance();
 
     @Override
     public void initialize() {
-
     }
 
     public void showSearch(List<BookModel> books, String text) {
@@ -47,7 +52,8 @@ public class BooksController implements FXMLController {
         books.forEach(book -> {
             try {
                 var fxmlLoader = new FXMLLoader(FxUtils.getResource("fxml/bookItem.fxml"));
-                Parent root = fxmlLoader.load();
+                HBox root = fxmlLoader.load();
+                itemParents.add(root);
                 BookItemController itemController = fxmlLoader.getController();
                 itemController.setBookModel(book);
                 booksContainer.getChildren().add(root);
@@ -55,6 +61,7 @@ public class BooksController implements FXMLController {
                 e.printStackTrace();
             }
         });
+        updateTheme(configs.getTheme());
     }
 
     public void resizeListViewByStage(Stage stage) {
@@ -94,5 +101,23 @@ public class BooksController implements FXMLController {
     private void newSearch() {
         fieldSearch.setText("");
         fieldSearch.requestFocus();
+    }
+
+    @Override
+    public void updateTheme(String theme) {
+        var labels = FxUtils.getAllLabels(contentVbox);
+
+        if (theme.equals("light")) {
+            contentVbox.setBackground(Background.fill(Paint.valueOf("#fff")));
+            booksContainer.setBackground(Background.fill(Paint.valueOf("#fff")));
+            itemParents.forEach(parent -> parent.setBackground(Background.fill(Paint.valueOf("#fff"))));
+            labels.forEach(label -> label.setTextFill(Paint.valueOf("#333")));
+        } else {
+            contentVbox.setBackground(Background.fill(Paint.valueOf("#333")));
+            booksContainer.setBackground(Background.fill(Paint.valueOf("#333")));
+            itemParents.forEach(parent -> parent.setBackground(Background.fill(Paint.valueOf("#333"))));
+            labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
+        }
+
     }
 }
