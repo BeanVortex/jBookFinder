@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import javafx.fxml.FXML;
@@ -48,6 +49,7 @@ public class BookItemController implements FXMLController {
 
     private BookModel bookModel;
     private final BookUtils bookUtils = BookUtils.getInstance();
+    private final Configs configs = Configs.getInstance();
 
     @Override
     public void initialize() {
@@ -89,18 +91,17 @@ public class BookItemController implements FXMLController {
     @FXML
     private void moreDetails() throws IOException {
         var stage = new Stage();
-        HBox root = FXMLLoader.load(getResource("fxml/bookItem.fxml"));
+        var fxmlLoader = new FXMLLoader(getResource("fxml/bookItemDetails.fxml"));
+        HBox root = fxmlLoader.load();
+        MoreDetailsController detailsController = fxmlLoader.getController();
+        detailsController.setStage(stage);
+        detailsController.setBookModel(bookModel);
+        detailsController.initStage();
+        configs.addObserver(detailsController);
         var scene = new Scene(root);
         stage.setScene(scene);
         stage.setWidth(800);
-        stage.setMinWidth(root.getMinWidth());
-        stage.setMinHeight(root.getMinHeight());
-        bookUtils.setDataForDetails(root, bookModel);
         stage.show();
-        var vBox = (VBox) root.getChildren().get(1);
-        vBox.setPrefWidth(800);
-        stage.heightProperty().addListener((o, ol, newVal) -> vBox.setPrefHeight((Double) newVal));
-        stage.widthProperty().addListener((o, ol, newVal) -> vBox.setPrefWidth((Double) newVal));
     }
 
 }

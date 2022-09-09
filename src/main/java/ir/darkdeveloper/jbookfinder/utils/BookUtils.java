@@ -63,7 +63,9 @@ public class BookUtils {
 
         operationVbox.getChildren().add(1, progressBox);
         operationVbox.getChildren().get(0).setDisable(true);
-        operationVbox.getChildren().get(2).setDisable(true);
+        if (operationVbox.getChildren().size() == 3) {
+            operationVbox.getChildren().get(2).setDisable(true);
+        }
 
 
         if (downTask != null) {
@@ -110,7 +112,8 @@ public class BookUtils {
     public void completeDownload(VBox operationVbox) {
         operationVbox.getChildren().remove(1);
         operationVbox.getChildren().get(0).setDisable(false);
-        operationVbox.getChildren().get(1).setDisable(false);
+        if (operationVbox.getChildren().size() == 2)
+            operationVbox.getChildren().get(1).setDisable(false);
         var downloadBtn = (Button) operationVbox.getChildren().get(0);
         downloadBtn.setText("Open Book");
         FxUtils.showNotification("download", "Book Downloaded", "I downloaded the book");
@@ -145,13 +148,12 @@ public class BookUtils {
         var bookYear = (Label) vBox.getChildren().get(6);
         var bookLanguage = (Label) vBox.getChildren().get(7);
         var operationVbox = (VBox) vBox.getChildren().get(8);
-        var downloadBtn = (Button) operationVbox.getChildren().get(0);
-        var detailsBtn = operationVbox.getChildren().get(1);
 
-        detailsBtn.setVisible(false);
-        downloadBtn.setVisible(false);
-        detailsBtn.setDisable(true);
-        downloadBtn.setDisable(true);
+        if (operationVbox.getChildren().size() == 2) {
+            var detailsBtn = operationVbox.getChildren().get(1);
+            detailsBtn.setVisible(false);
+            detailsBtn.setDisable(true);
+        }
 
         displayData(bookTitle, bookAuthor, bookPublisher,
                 bookFormat, bookSize, bookPages, bookYear,

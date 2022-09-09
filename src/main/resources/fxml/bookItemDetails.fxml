@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<HBox minHeight="327" minWidth="400" stylesheets="@../css/bookItem.css"
+      xmlns="http://javafx.com/javafx/16"
+      fx:id="itemBox"
+      fx:controller="ir.darkdeveloper.jbookfinder.controllers.MoreDetailsController"
+      xmlns:fx="http://javafx.com/fxml/1">
+
+    <VBox prefHeight="327.0" prefWidth="190.0" alignment="CENTER">
+        <ProgressIndicator/>
+        <ImageView/>
+    </VBox>
+    <VBox prefHeight="300.0" prefWidth="210.0" spacing="10" style="-fx-padding: 15;">
+        <Label text="Title"/>
+        <Label text="Author"/>
+        <Label text="Publisher"/>
+        <Label text="Format"/>
+        <Label text="Size"/>
+        <Label text="Pages"/>
+        <Label text="Year"/>
+        <Label text="Language"/>
+        <VBox alignment="CENTER" prefHeight="162.0" prefWidth="180.0" spacing="15" fx:id="operationVbox">
+            <Button onAction="#downloadBook" text="Download" fx:id="downloadBtn"/>
+        </VBox>
+    </VBox>
+
+
+</HBox>

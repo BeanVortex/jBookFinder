@@ -7,7 +7,8 @@
 <HBox minHeight="327" minWidth="400" stylesheets="@../css/bookItem.css"
       xmlns="http://javafx.com/javafx/16"
       fx:id="itemBox"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.darkdeveloper.jbookfinder.controllers.BookItemController">
+      fx:controller="ir.darkdeveloper.jbookfinder.controllers.BookItemController"
+      xmlns:fx="http://javafx.com/fxml/1">
 
     <VBox prefHeight="327.0" prefWidth="190.0" fx:id="imageBox" alignment="CENTER">
         <ProgressIndicator fx:id="imageProgress"/>

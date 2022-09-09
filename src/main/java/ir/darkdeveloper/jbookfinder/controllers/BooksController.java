@@ -53,8 +53,8 @@ public class BooksController implements FXMLController, ThemeObserver {
             try {
                 var fxmlLoader = new FXMLLoader(FxUtils.getResource("fxml/bookItem.fxml"));
                 HBox root = fxmlLoader.load();
-                itemParents.add(root);
                 BookItemController itemController = fxmlLoader.getController();
+                itemParents.add(root);
                 itemController.setBookModel(book);
                 booksContainer.getChildren().add(root);
             } catch (Exception e) {
