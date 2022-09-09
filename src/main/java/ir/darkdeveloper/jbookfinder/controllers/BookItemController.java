@@ -97,7 +97,7 @@ public class BookItemController implements FXMLController {
         detailsController.setStage(stage);
         detailsController.setBookModel(bookModel);
         detailsController.initStage();
-        configs.addObserver(detailsController);
+        configs.getThemeSubject().addObserver(detailsController);
         var scene = new Scene(root);
         stage.setScene(scene);
         stage.setWidth(800);

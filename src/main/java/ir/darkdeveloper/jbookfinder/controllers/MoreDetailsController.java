@@ -35,18 +35,7 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
         updateTheme(configs.getTheme());
     }
 
-    @Override
-    public void updateTheme(String theme) {
-        var labels = FxUtils.getAllLabels(itemBox);
 
-        if (theme.equals("light")) {
-            itemBox.setBackground(Background.fill(Paint.valueOf("#fff")));
-            labels.forEach(label -> label.setTextFill(Paint.valueOf("#333")));
-        } else {
-            itemBox.setBackground(Background.fill(Paint.valueOf("#333")));
-            labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
-        }
-    }
 
     @FXML
     private void downloadBook() {
@@ -77,5 +66,18 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
         vBox.setPrefWidth(800);
         stage.heightProperty().addListener((o, ol, newVal) -> vBox.setPrefHeight((Double) newVal));
         stage.widthProperty().addListener((o, ol, newVal) -> vBox.setPrefWidth((Double) newVal));
+    }
+
+    @Override
+    public void updateTheme(String theme) {
+        var labels = FxUtils.getAllLabels(itemBox);
+
+        if (theme.equals("light")) {
+            itemBox.setBackground(Background.fill(Paint.valueOf("#fff")));
+            labels.forEach(label -> label.setTextFill(Paint.valueOf("#333")));
+        } else {
+            itemBox.setBackground(Background.fill(Paint.valueOf("#333")));
+            labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
+        }
     }
 }

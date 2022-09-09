@@ -19,14 +19,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
 import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getStageFromEvent;
 
 
@@ -58,6 +57,10 @@ public class BookUtils {
         var progressBar = new ProgressBar();
         progressBox.setSpacing(8);
         progressLabel.setText("0 %");
+        if (configs.getTheme().equals("dark"))
+            progressLabel.setTextFill(Paint.valueOf("#fff"));
+        else
+            progressLabel.setTextFill(Paint.valueOf("#333"));
         progressBox.getChildren().addAll(progressBar, progressLabel);
         progressBox.setAlignment(Pos.CENTER);
 
@@ -184,7 +187,7 @@ public class BookUtils {
                         System.out.println("Books controller is null");
                         return;
                     }
-                    configs.addObserver(booksController);
+                    configs.getThemeSubject().addObserver(booksController);
                     if (bookModels != null && !bookModels.isEmpty()) {
                         booksController.showSearch(bookModels, text);
                         booksController.resizeListViewByStage(stage);

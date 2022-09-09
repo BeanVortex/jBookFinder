@@ -26,6 +26,7 @@ public class Configs {
 
     private static String theme = "light";
     private static final String imageBaseUrl = "http://library.lol/";
+    private static final ThemeSubject themeSubject = new ThemeSubject();
 
     private Configs() {
     }
@@ -60,7 +61,7 @@ public class Configs {
 
     public void setTheme(String theme) {
         Configs.theme = theme;
-        notifyAllObservers();
+        themeSubject.notifyAllObservers(theme);
     }
 
     public String getConfigLocation() {
@@ -71,11 +72,8 @@ public class Configs {
         return bookCoverDirName;
     }
 
-    public void addObserver(ThemeObserver newO){
-        observers.add(newO);
+    public ThemeSubject getThemeSubject() {
+        return themeSubject;
     }
 
-    private void notifyAllObservers(){
-        observers.forEach(observer -> observer.updateTheme(getTheme()));
-    }
 }
