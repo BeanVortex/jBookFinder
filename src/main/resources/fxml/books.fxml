@@ -28,10 +28,7 @@
             </HBox>
 
             <ScrollPane hbarPolicy="NEVER" minWidth="850">
-                <VBox>
-                    <FlowPane fx:id="booksContainer" alignment="CENTER" hgap="15" prefWidth="850" vgap="25">
-                    </FlowPane>
-                </VBox>
+                <FlowPane fx:id="booksContainer" alignment="TOP_CENTER" hgap="15" prefWidth="850" vgap="25"/>
             </ScrollPane>
         </VBox>
     </VBox>

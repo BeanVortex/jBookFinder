@@ -1,6 +1,5 @@
 package ir.darkdeveloper.jbookfinder.model;
 
-import javafx.scene.Node;
 import lombok.*;
 
 @Getter
@@ -8,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
-public class BookModel extends Node {
+public class BookModel {
     private String id;
     private String author;
     private String title;

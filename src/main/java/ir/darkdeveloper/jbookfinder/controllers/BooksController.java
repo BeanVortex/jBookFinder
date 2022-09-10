@@ -3,23 +3,14 @@ package ir.darkdeveloper.jbookfinder.controllers;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
-import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
@@ -28,7 +19,6 @@ import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 
 public class BooksController implements FXMLController, ThemeObserver {
@@ -46,7 +36,7 @@ public class BooksController implements FXMLController, ThemeObserver {
     @FXML
     private FlowPane booksContainer;
 
-    private List<BookModel> books;
+    private final List<BookModel> booksList = new ArrayList<>();
     private final List<HBox> itemParents = new ArrayList<>();
     private final IOUtils ioUtils = IOUtils.getInstance();
     private final BookUtils bookUtils = BookUtils.getInstance();
@@ -59,25 +49,39 @@ public class BooksController implements FXMLController, ThemeObserver {
     public void showSearch(Flux<BookModel> books, String text) {
         fieldSearch.setText(text);
         booksContainer.requestFocus();
-//        ObservableList<BookModel> booksList = FXCollections.observableArrayList();
-        var booksList = new ArrayList<BookModel>();
-
-        books.subscribe(book -> {
-                    try {
-                        var fxmlLoader = new FXMLLoader(FxUtils.getResource("fxml/bookItem.fxml"));
-                        HBox root = fxmlLoader.load();
-                        BookItemController itemController = fxmlLoader.getController();
-                        itemParents.add(root);
-                        itemController.setBookModel(book);
-                        booksContainer.getChildren().add(root);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                },
-                Throwable::printStackTrace,
-                () -> this.books = booksList);
-
         updateTheme(configs.getTheme());
+
+        var task = new Task<HBox>() {
+            @Override
+            protected HBox call() {
+                books.subscribe(book -> {
+                            try {
+                                var fxmlLoader = new FXMLLoader(FxUtils.getResource("fxml/bookItem.fxml"));
+                                HBox root = fxmlLoader.load();
+                                itemParents.add(root);
+                                BookItemController itemController = fxmlLoader.getController();
+                                itemController.setBookModel(book);
+                                booksList.add(book);
+                                updateValue(root);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        },
+                        Throwable::printStackTrace);
+                return null;
+            }
+        };
+
+        task.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                booksContainer.getChildren().add(newValue);
+                updateTheme(configs.getTheme());
+            }
+        });
+
+        var th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
     }
 
     public void resizeListViewByStage(Stage stage) {
@@ -97,7 +101,7 @@ public class BooksController implements FXMLController, ThemeObserver {
         var controller = FxUtils.newStageAndReturnController("settings.fxml",
                 450, 500, SettingsController.class);
         if (controller != null)
-            controller.setNotToDeleteBooks(books);
+            controller.setNotToDeleteBooks(booksList);
     }
 
     @FXML
@@ -110,7 +114,7 @@ public class BooksController implements FXMLController, ThemeObserver {
 
     @FXML
     private void clearImageCache() {
-        ioUtils.deleteCachedImages(books);
+        ioUtils.deleteCachedImages(booksList);
     }
 
     @FXML
