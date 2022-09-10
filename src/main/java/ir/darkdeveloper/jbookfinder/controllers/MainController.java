@@ -25,16 +25,16 @@ public class MainController implements FXMLController {
     @FXML
     private void searchTheBook(ActionEvent e) {
         var text = fieldSearch.getText();
-        if (!text.isBlank()) {
+        if (!text.isBlank())
             bookUtils.createSearchUI(text, rootPane, rootVbox, e);
-        }
+
     }
 
     public void searchTheBook(Stage stage) {
         var text = fieldSearch.getText();
-        if (!text.isBlank()) {
+        if (!text.isBlank())
             bookUtils.createSearchUI(text, rootPane, rootVbox, stage);
-        }
+
     }
 
 

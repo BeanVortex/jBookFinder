@@ -2,6 +2,7 @@ package ir.darkdeveloper.jbookfinder.task;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import javafx.concurrent.Task;
 import javafx.scene.layout.VBox;
@@ -21,6 +22,9 @@ public class BookDownloadTask extends Task<Void> {
     private final String fileName;
     private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
+    private final BooksRepo booksRepo = BooksRepo.getInstance();
+
+
 
     public BookDownloadTask(BookModel bookModel, VBox operationVbox, String fileName) {
         this.bookModel = bookModel;
@@ -44,6 +48,11 @@ public class BookDownloadTask extends Task<Void> {
                 nRead += n;
                 updateProgress(nRead, fileSize);
             }
+            var imagePath = configs.getBookCoverLocation() +
+                    bookUtils.getImageFileName(bookModel.getImageUrl(), bookModel.getTitle());
+            var filePath = configs.getSaveLocation() + File.separator +
+                    bookUtils.getImageFileName("." + bookModel.getFileFormat(), bookModel.getTitle());
+            booksRepo.insertBook(bookModel, imagePath, filePath);
         } catch (IOException e) {
             e.printStackTrace();
             failed();

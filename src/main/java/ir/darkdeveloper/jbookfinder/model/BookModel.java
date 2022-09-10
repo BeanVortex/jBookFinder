@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder.model;
 
+import javafx.scene.Node;
 import lombok.*;
 
 @Getter
@@ -7,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
-public class BookModel {
+public class BookModel extends Node {
     private String id;
     private String author;
     private String title;
@@ -21,8 +22,8 @@ public class BookModel {
     private String mirror;
 
     public BookModel(String id, String author, String title, String publisher, String year,
-                   String pages, String language, String size, String fileFormat,
-                   String mirror) {
+                     String pages, String language, String size, String fileFormat,
+                     String mirror) {
         this.id = id;
         this.author = author;
         this.title = title;

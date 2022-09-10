@@ -3,20 +3,32 @@ package ir.darkdeveloper.jbookfinder.controllers;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 public class BooksController implements FXMLController, ThemeObserver {
@@ -44,22 +56,27 @@ public class BooksController implements FXMLController, ThemeObserver {
     public void initialize() {
     }
 
-    public void showSearch(List<BookModel> books, String text) {
-        this.books = books;
+    public void showSearch(Flux<BookModel> books, String text) {
         fieldSearch.setText(text);
         booksContainer.requestFocus();
-        books.forEach(book -> {
-            try {
-                var fxmlLoader = new FXMLLoader(FxUtils.getResource("fxml/bookItem.fxml"));
-                HBox root = fxmlLoader.load();
-                BookItemController itemController = fxmlLoader.getController();
-                itemParents.add(root);
-                itemController.setBookModel(book);
-                booksContainer.getChildren().add(root);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+//        ObservableList<BookModel> booksList = FXCollections.observableArrayList();
+        var booksList = new ArrayList<BookModel>();
+
+        books.subscribe(book -> {
+                    try {
+                        var fxmlLoader = new FXMLLoader(FxUtils.getResource("fxml/bookItem.fxml"));
+                        HBox root = fxmlLoader.load();
+                        BookItemController itemController = fxmlLoader.getController();
+                        itemParents.add(root);
+                        itemController.setBookModel(book);
+                        booksContainer.getChildren().add(root);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                Throwable::printStackTrace,
+                () -> this.books = booksList);
+
         updateTheme(configs.getTheme());
     }
 

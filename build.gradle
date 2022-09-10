@@ -29,6 +29,8 @@ javafx {
 dependencies {
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.jsoup:jsoup:1.15.3'
+    implementation 'org.xerial:sqlite-jdbc:3.39.2.1'
+    implementation 'io.projectreactor:reactor-core:3.4.22'
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }

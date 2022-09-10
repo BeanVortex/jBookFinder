@@ -2,13 +2,10 @@ package ir.darkdeveloper.jbookfinder.config;
 
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Configs {
 
     private static Configs configs;
-    private static final List<ThemeObserver> observers = new ArrayList<>();
 
     private static String saveLocation = System.getProperty("user.home")
             + File.separator + "Downloads"
@@ -44,7 +41,7 @@ public class Configs {
 
     public void setSaveLocation(String saveLocation) {
         Configs.saveLocation = saveLocation;
-        Configs.bookCoverLocation = saveLocation + File.separator + "book_covers" + File.separator;
+        Configs.bookCoverLocation = saveLocation + File.separator + bookCoverDirName + File.separator;
     }
 
     public String getBookCoverLocation() {
@@ -66,10 +63,6 @@ public class Configs {
 
     public String getConfigLocation() {
         return configLocation;
-    }
-
-    public String getBookCoverDirName() {
-        return bookCoverDirName;
     }
 
     public ThemeSubject getThemeSubject() {

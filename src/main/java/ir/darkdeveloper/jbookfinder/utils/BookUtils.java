@@ -3,7 +3,7 @@ package ir.darkdeveloper.jbookfinder.utils;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.controllers.BooksController;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
-import ir.darkdeveloper.jbookfinder.service.ScraperService;
+import ir.darkdeveloper.jbookfinder.task.ScraperTask;
 import ir.darkdeveloper.jbookfinder.task.BookDownloadTask;
 import ir.darkdeveloper.jbookfinder.task.ImageFetchTask;
 import javafx.application.Platform;
@@ -31,7 +31,6 @@ import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getStageFromEvent;
 
 public class BookUtils {
 
-    private static final ScraperService scraperService = new ScraperService();
     private final Configs configs = Configs.getInstance();
     private static BookUtils bookUtils;
 
@@ -178,22 +177,22 @@ public class BookUtils {
 
 
     public void searchTheBookWithScrapper(Stage stage, String text) {
+        var scrapper = new ScraperTask(text, 1);
+        scrapper.valueProperty().addListener((obs, old, bookModelFlux) -> {
+            var booksController = FxUtils.
+                    switchSceneAndGetController(stage, "books.fxml", BooksController.class);
+            if (booksController == null) {
+                System.out.println("Books controller is null");
+                return;
+            }
+            configs.getThemeSubject().addObserver(booksController);
+            booksController.showSearch(bookModelFlux, text);
+            booksController.resizeListViewByStage(stage);
+        });
 
-        scraperService.fetchBookModels(text, 1)
-                .whenComplete((bookModels, throwable) -> Platform.runLater(() -> {
-                    var booksController = FxUtils.
-                            switchSceneAndGetController(stage, "books.fxml", BooksController.class);
-                    if (booksController == null) {
-                        System.out.println("Books controller is null");
-                        return;
-                    }
-                    configs.getThemeSubject().addObserver(booksController);
-                    if (bookModels != null && !bookModels.isEmpty()) {
-                        booksController.showSearch(bookModels, text);
-                        booksController.resizeListViewByStage(stage);
-                    }
-                }));
-
+        var thread = new Thread(scrapper);
+        thread.setDaemon(true);
+        thread.start();
     }
 
 
@@ -202,7 +201,7 @@ public class BookUtils {
     }
 
     public void createSearchUI(String text, StackPane stackPane, Parent rootBox, Stage stage) {
-        var trimmedText = text.replaceAll("\s", "");
+        var trimmedText = text.trim();
         var progress = new ProgressIndicator();
         var btnCancel = new Button("Cancel");
         btnCancel.setOnAction(this::cancelSearch);

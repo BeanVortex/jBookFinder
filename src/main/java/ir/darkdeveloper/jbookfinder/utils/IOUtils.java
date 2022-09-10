@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class IOUtils {
 
@@ -14,6 +15,7 @@ public class IOUtils {
 
     private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
+    private static final Logger log = Logger.getLogger(IOUtils.class.getName());
 
     private IOUtils() {
 
@@ -70,9 +72,9 @@ public class IOUtils {
     private void mkdir(String dirPath) {
         var file = new File(dirPath);
         if (file.mkdir())
-            System.out.println("created dir: " + dirPath);
+            log.info("created dir: " + dirPath);
         else
-            System.out.println("not created dir: " + dirPath);
+            log.info("not created dir: " + dirPath);
     }
 
     public void saveConfigs(String savePath) {

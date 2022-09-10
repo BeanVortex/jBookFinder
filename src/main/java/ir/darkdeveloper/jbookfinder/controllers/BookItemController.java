@@ -3,6 +3,8 @@ package ir.darkdeveloper.jbookfinder.controllers;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -47,7 +49,7 @@ public class BookItemController implements FXMLController {
     @FXML
     private ImageView bookImage;
 
-    private BookModel bookModel;
+    private final ObjectProperty<BookModel> bookModel = new SimpleObjectProperty<>(this, "bookModel", null);
     private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
 
@@ -56,8 +58,16 @@ public class BookItemController implements FXMLController {
 
     }
 
+    public BookModel getBookModel() {
+        return bookModel.get();
+    }
+
+    public ObjectProperty<BookModel> bookModelProperty() {
+        return bookModel;
+    }
+
     public void setBookModel(BookModel bookModel) {
-        this.bookModel = bookModel;
+        this.bookModel.set(bookModel);
         bookUtils.displayData(bookTitle, bookAuthor, bookPublisher, bookFormat,
                 bookSize, bookPages, bookYear, bookLanguage, bookModel);
         hideExtraInfo();
@@ -76,11 +86,11 @@ public class BookItemController implements FXMLController {
 
     @FXML
     private void downloadBook() {
-        if (bookModel == null)
+        if (bookModel.get() == null)
             return;
 
         if (!downloadBtn.getText().equals("Open Book")) {
-            bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
+            bookUtils.downloadBookAndAddProgress(bookModel.get(), operationVbox);
             return;
         }
 
@@ -95,7 +105,7 @@ public class BookItemController implements FXMLController {
         HBox root = fxmlLoader.load();
         MoreDetailsController detailsController = fxmlLoader.getController();
         detailsController.setStage(stage);
-        detailsController.setBookModel(bookModel);
+        detailsController.setBookModel(bookModel.get());
         detailsController.initStage();
         configs.getThemeSubject().addObserver(detailsController);
         var scene = new Scene(root);
