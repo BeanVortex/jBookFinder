@@ -16,7 +16,7 @@
             <Button text="search" styleClass="searchButton" onAction="#searchTheBook"/>
         </HBox>
         <VBox alignment="CENTER" minHeight="-Infinity" spacing="10">
-            <Button alignment="CENTER" text="Library"/>
+            <Button alignment="CENTER" text="Library" onAction="#openLibrary"/>
             <Button alignment="CENTER" text="Settings" onAction="#showSettings"/>
         </VBox>
     </VBox>

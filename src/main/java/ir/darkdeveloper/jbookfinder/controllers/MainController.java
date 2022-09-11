@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.event.ActionEvent;
@@ -20,14 +21,12 @@ public class MainController implements FXMLController {
     private TextField fieldSearch;
 
     private final BookUtils bookUtils = BookUtils.getInstance();
-
+    private final Configs configs = Configs.getInstance();
+    private Stage stage;
 
     @FXML
     private void searchTheBook(ActionEvent e) {
-        var text = fieldSearch.getText();
-        if (!text.isBlank())
-            bookUtils.createSearchUI(text, rootPane, rootVbox, e);
-
+        searchTheBook(FxUtils.getStageFromEvent(e));
     }
 
     public void searchTheBook(Stage stage) {
@@ -54,11 +53,21 @@ public class MainController implements FXMLController {
 
     @Override
     public void setStage(Stage stage) {
-
+        this.stage = stage;
     }
 
     @Override
     public Stage getStage() {
-        return null;
+        return stage;
+    }
+
+    @FXML
+    private void openLibrary(ActionEvent e) {
+        var controller = FxUtils.switchSceneAndGetController(e, "library.fxml", LibraryController.class);
+        if (controller != null) {
+            controller.setStage(stage);
+            controller.resizeListViewByStage();
+            configs.getThemeSubject().addObserver(controller);
+        }
     }
 }

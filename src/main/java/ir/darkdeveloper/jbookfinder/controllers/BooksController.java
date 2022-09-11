@@ -12,8 +12,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import reactor.core.publisher.Flux;
 
@@ -136,19 +138,6 @@ public class BooksController implements FXMLController, ThemeObserver {
 
     @Override
     public void updateTheme(String theme) {
-        var labels = FxUtils.getAllLabels(contentVbox);
-
-        if (theme.equals("light")) {
-            contentVbox.setBackground(Background.fill(Paint.valueOf("#fff")));
-            booksContainer.setBackground(Background.fill(Paint.valueOf("#fff")));
-            itemParents.forEach(parent -> parent.setBackground(Background.fill(Paint.valueOf("#fff"))));
-            labels.forEach(label -> label.setTextFill(Paint.valueOf("#333")));
-        } else {
-            contentVbox.setBackground(Background.fill(Paint.valueOf("#333")));
-            booksContainer.setBackground(Background.fill(Paint.valueOf("#333")));
-            itemParents.forEach(parent -> parent.setBackground(Background.fill(Paint.valueOf("#333"))));
-            labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
-        }
-
+        bookUtils.updateThemeForBooks(theme, booksContainer, contentVbox, itemParents);
     }
 }

@@ -5,10 +5,10 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml" minWidth="850" prefHeight="480" fx:id="rootVbox"
+      xmlns:fx="http://javafx.com/fxml" minWidth="850" prefHeight="480"
       fx:controller="ir.darkdeveloper.jbookfinder.controllers.LibraryController">
 
-    <MenuBar prefHeight="9.0" prefWidth="794.0" fx:id="menuBar">
+    <MenuBar prefHeight="9.0" prefWidth="794.0" fx:id="menuBar" >
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" text="Go back" onAction="#getBack"/>
             <SeparatorMenuItem mnemonicParsing="false"/>

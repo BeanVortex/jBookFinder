@@ -26,6 +26,7 @@ public class FxUtils {
             Parent root = loader.load();
             var scene = new Scene(root);
             MainController controller = loader.getController();
+            controller.setStage(stage);
             scene.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER))
                     controller.searchTheBook(stage);

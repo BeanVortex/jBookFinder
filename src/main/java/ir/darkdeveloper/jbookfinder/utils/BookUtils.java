@@ -15,15 +15,14 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getStageFromEvent;
 
@@ -42,6 +41,21 @@ public class BookUtils {
         if (bookUtils == null)
             bookUtils = new BookUtils();
         return bookUtils;
+    }
+
+    public void updateThemeForBooks(String theme, FlowPane booksContainer, VBox contentVbox, List<HBox> itemParents) {
+        var labels = FxUtils.getAllLabels(booksContainer);
+        if (theme.equals("light")) {
+            booksContainer.setBackground(Background.fill(Paint.valueOf("#fff")));
+            contentVbox.setBackground(Background.fill(Paint.valueOf("#fff")));
+            itemParents.forEach(parent -> parent.setBackground(Background.fill(Paint.valueOf("#fff"))));
+            labels.forEach(label -> label.setTextFill(Paint.valueOf("#333")));
+        } else {
+            booksContainer.setBackground(Background.fill(Paint.valueOf("#333")));
+            contentVbox.setBackground(Background.fill(Paint.valueOf("#333")));
+            itemParents.forEach(parent -> parent.setBackground(Background.fill(Paint.valueOf("#333"))));
+            labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
+        }
     }
 
     public void downloadBookAndAddProgress(BookModel bookModel, VBox operationVbox) {
