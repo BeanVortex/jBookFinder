@@ -58,6 +58,16 @@ public class BookItemController implements FXMLController {
 
     }
 
+    @Override
+    public void setStage(Stage stage) {
+
+    }
+
+    @Override
+    public Stage getStage() {
+        return null;
+    }
+
     public BookModel getBookModel() {
         return bookModel.get();
     }

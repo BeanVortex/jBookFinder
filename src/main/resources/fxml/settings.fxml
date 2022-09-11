@@ -23,7 +23,7 @@
         </HBox>
     </VBox>
 
-    <Line endX="430" stroke="lightgray"/>
+    <Line endX="450" stroke="lightgray" fx:id="line1"/>
 
     <VBox prefWidth="270" spacing="10">
         <Label styleClass="settingTile" text="Customize"/>
@@ -36,7 +36,7 @@
         </VBox>
     </VBox>
 
-    <Line endX="430" stroke="lightgray"/>
+    <Line endX="450" stroke="lightgray" fx:id="line2"/>
 
     <!--    <VBox prefWidth="270" spacing="10">-->
     <!--        <Label styleClass="settingTile" text="Search configs"/>-->

@@ -27,7 +27,7 @@ public class JBookFinderApplication extends Application {
         stage.show();
         stage.setOnCloseRequest(event -> Platform.exit());
         booksRepo.createTable();
-
+        booksRepo.updateBookRecords();
     }
 
     @Override

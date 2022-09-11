@@ -46,6 +46,16 @@ public class BooksController implements FXMLController, ThemeObserver {
     public void initialize() {
     }
 
+    @Override
+    public void setStage(Stage stage) {
+
+    }
+
+    @Override
+    public Stage getStage() {
+        return null;
+    }
+
     public void showSearch(Flux<BookModel> books, String text) {
         fieldSearch.setText(text);
         booksContainer.requestFocus();
@@ -71,6 +81,7 @@ public class BooksController implements FXMLController, ThemeObserver {
                 return null;
             }
         };
+
 
         task.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -98,8 +109,8 @@ public class BooksController implements FXMLController, ThemeObserver {
     }
 
     public void showSettings() {
-        var controller = FxUtils.newStageAndReturnController("settings.fxml",
-                450, 500, SettingsController.class);
+        var controller = (SettingsController) FxUtils
+                .newStageAndReturnController("settings.fxml", 450, 500);
         if (controller != null)
             controller.setNotToDeleteBooks(booksList);
     }

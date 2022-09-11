@@ -1,28 +1,30 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
-import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsController implements FXMLController {
 
+    @FXML
+    private Line line1;
+    @FXML
+    private Line line2;
     @FXML
     private VBox parent;
     @FXML
@@ -36,6 +38,8 @@ public class SettingsController implements FXMLController {
     private final IOUtils ioUtils = IOUtils.getInstance();
 
     private List<BookModel> notToDeleteBooks;
+    private Stage stage;
+
 
     @Override
     public void initialize() {
@@ -71,6 +75,16 @@ public class SettingsController implements FXMLController {
 
     }
 
+    @Override
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    @Override
+    public Stage getStage() {
+        return stage;
+    }
+
     // should be called in books controller
     public void setNotToDeleteBooks(List<BookModel> notToDeleteBooks) {
         this.notToDeleteBooks = notToDeleteBooks;
@@ -100,4 +114,12 @@ public class SettingsController implements FXMLController {
     }
 
 
+    public void resizeLinesByStage(Stage stage) {
+        stage.widthProperty().addListener((obs, old, newVal) -> parent.setPrefWidth((Double) newVal));
+        var padding = parent.getPadding().getRight() + parent.getPadding().getLeft();
+        parent.prefWidthProperty().addListener((obs, old, newValue) -> {
+            line1.setEndX((Double) newValue - padding);
+            line2.setEndX((Double) newValue - padding);
+        });
+    }
 }

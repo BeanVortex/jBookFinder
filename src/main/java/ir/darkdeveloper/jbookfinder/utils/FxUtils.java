@@ -73,20 +73,19 @@ public class FxUtils {
         }
     }
 
-    public static <T extends FXMLController> T newStageAndReturnController(
-            String fxmlFilename, double minWidth,
-            double minHeight, Class<T> tClass) {
+    public static FXMLController newStageAndReturnController(String fxmlFilename, double minWidth, double minHeight) {
         try {
             var stage = new Stage();
             var loader = new FXMLLoader(getResource("fxml/" + fxmlFilename));
             Parent root = loader.load();
-            var controller = loader.getController();
+            FXMLController controller = loader.getController();
+            controller.setStage(stage);
             var scene = new Scene(root);
             stage.setScene(scene);
             stage.setMinWidth(minWidth);
             stage.setMinHeight(minHeight);
             stage.show();
-            return tClass.cast(controller);
+            return controller;
         } catch (IOException e) {
             e.printStackTrace();
         }

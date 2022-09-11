@@ -3,10 +3,9 @@ package ir.darkdeveloper.jbookfinder.utils;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.controllers.BooksController;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
-import ir.darkdeveloper.jbookfinder.task.ScraperTask;
 import ir.darkdeveloper.jbookfinder.task.BookDownloadTask;
 import ir.darkdeveloper.jbookfinder.task.ImageFetchTask;
-import javafx.application.Platform;
+import ir.darkdeveloper.jbookfinder.task.ScraperTask;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -32,6 +31,7 @@ import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getStageFromEvent;
 public class BookUtils {
 
     private final Configs configs = Configs.getInstance();
+
     private static BookUtils bookUtils;
 
     private BookUtils() {
@@ -80,8 +80,8 @@ public class BookUtils {
     }
 
     private BookDownloadTask downloadBook(BookModel bookModel, VBox operationVbox) {
-        var fileName = bookModel.getTitle()
-                .replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + "." + bookModel.getFileFormat();
+
+        var fileName = getFileName(bookModel);
         var file = new File(configs.getSaveLocation() + File.separator + fileName);
         if (file.exists()) {
             addProgress(operationVbox, null);
@@ -109,6 +109,11 @@ public class BookUtils {
     public String getImageFileName(String imageUrl, String title) {
         var fileExt = imageUrl.substring(imageUrl.lastIndexOf('.'));
         return title.replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + fileExt;
+    }
+
+    public String getFileName(BookModel bookModel) {
+        return bookModel.getTitle()
+                .replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + "." + bookModel.getFileFormat();
     }
 
     public void completeDownload(VBox operationVbox) {
@@ -178,7 +183,7 @@ public class BookUtils {
 
     public void searchTheBookWithScrapper(Stage stage, String text) {
         var scrapper = new ScraperTask(text, 1);
-        scrapper.valueProperty().addListener((obs, old, bookModelFlux) -> {
+        scrapper.valueProperty().addListener((obs, old, booksFlux) -> {
             var booksController = FxUtils.
                     switchSceneAndGetController(stage, "books.fxml", BooksController.class);
             if (booksController == null) {
@@ -186,7 +191,7 @@ public class BookUtils {
                 return;
             }
             configs.getThemeSubject().addObserver(booksController);
-            booksController.showSearch(bookModelFlux, text);
+            booksController.showSearch(booksFlux, text);
             booksController.resizeListViewByStage(stage);
         });
 
@@ -212,6 +217,7 @@ public class BookUtils {
         stackPane.getChildren().add(vbox);
         bookUtils.searchTheBookWithScrapper(stage, trimmedText);
     }
+
 
     private void cancelSearch(ActionEvent e) {
     }

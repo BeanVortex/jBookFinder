@@ -50,8 +50,14 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
         System.out.println("Show Book");
     }
 
+    @Override
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    @Override
+    public Stage getStage() {
+        return null;
     }
 
     public void setBookModel(BookModel bookModel) {

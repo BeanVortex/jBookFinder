@@ -40,10 +40,25 @@ public class MainController implements FXMLController {
 
     @FXML
     private void showSettings() {
-        FxUtils.newStageAndReturnController("settings.fxml", 450, 500, SettingsController.class);
+        var controller = (SettingsController) FxUtils
+                .newStageAndReturnController("settings.fxml", 450, 500);
+        if (controller != null) {
+            var stage = controller.getStage();
+            controller.resizeLinesByStage(stage);
+        }
     }
 
     @Override
     public void initialize() {
+    }
+
+    @Override
+    public void setStage(Stage stage) {
+
+    }
+
+    @Override
+    public Stage getStage() {
+        return null;
     }
 }

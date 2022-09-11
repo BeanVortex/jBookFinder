@@ -2,7 +2,11 @@ package ir.darkdeveloper.jbookfinder.repo;
 
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 
+import java.io.File;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static ir.darkdeveloper.jbookfinder.repo.DBHelper.*;
 
@@ -50,12 +54,9 @@ public class BooksRepo {
                 imagePath + "\",\"" +
                 filePath +
                 "\");";
-        try {
-            var con = dbHelper.openConnection();
-            var stmt = con.createStatement();
+        try (var con = dbHelper.openConnection();
+             var stmt = con.createStatement()) {
             stmt.executeUpdate(sql);
-            con.close();
-            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -63,44 +64,68 @@ public class BooksRepo {
 
     public BookModel findByTitle(String cleanedTitle) {
         var sql = "SELECT * FROM " + TABLE_NAME + " WHERE title=\"" + cleanedTitle + "\";";
-        try {
-            var con = dbHelper.openConnection();
-            var stmt = con.createStatement();
-            var rs = stmt.executeQuery(sql);
-            if (rs.next()) {
-                var id = rs.getInt(COL_ID);
-                var author = rs.getString(COL_AUTHOR);
-                var title = rs.getString(COL_TITLE);
-                var publisher = rs.getString(COL_PUBLISHER);
-                var year = rs.getString(COL_YEAR);
-                var pages = rs.getString(COL_PAGES);
-                var language = rs.getString(COL_LANGUAGE);
-                var size = rs.getString(COL_SIZE);
-                var fileFormat = rs.getString(COL_FILE_FORMAT);
-                var imagePath = rs.getString(COL_IMAGE);
-                var filePath = rs.getString(COL_FILE);
-                var book = new BookModel(String.valueOf(id), author, title, publisher, year, pages, language, size,
-                        fileFormat, imagePath, filePath);
-                rs.close();
-                stmt.close();
-                con.close();
-                return book;
-            }
+        try (var con = dbHelper.openConnection();
+             var stmt = con.createStatement();
+             var rs = stmt.executeQuery(sql)) {
+
+            if (rs.next())
+                return createBook(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public void deleteBook(Integer id){
-        var sql = "DELETE FROM " + TABLE_NAME + " WHERE id=" + id +";";
-        try {
-            var con = dbHelper.openConnection();
-            var stmt = con.createStatement();
+    public void deleteBook(Integer id) {
+        var sql = "DELETE FROM " + TABLE_NAME + " WHERE id=" + id + ";";
+        try (var con = dbHelper.openConnection();
+             var stmt = con.createStatement()) {
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+
+    public List<BookModel> getBooks() {
+        var sql = "SELECT * FROM " + TABLE_NAME + ";";
+        try (var con = dbHelper.openConnection();
+             var stmt = con.createStatement();
+             var rs = stmt.executeQuery(sql)) {
+            var list = new ArrayList<BookModel>();
+            while (rs.next())
+                list.add(createBook(rs));
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private BookModel createBook(ResultSet rs) throws SQLException {
+        var id = rs.getInt(COL_ID);
+        var author = rs.getString(COL_AUTHOR);
+        var title = rs.getString(COL_TITLE);
+        var publisher = rs.getString(COL_PUBLISHER);
+        var year = rs.getString(COL_YEAR);
+        var pages = rs.getString(COL_PAGES);
+        var language = rs.getString(COL_LANGUAGE);
+        var size = rs.getString(COL_SIZE);
+        var fileFormat = rs.getString(COL_FILE_FORMAT);
+        var imagePath = rs.getString(COL_IMAGE);
+        var filePath = rs.getString(COL_FILE);
+        return new BookModel(String.valueOf(id), author, title, publisher, year, pages, language, size,
+                fileFormat, imagePath, filePath);
+    }
+
+    public void updateBookRecords() {
+        var books = booksRepo.getBooks();
+        books.forEach(book -> {
+            var file = new File(book.getMirror());
+            if (!file.exists())
+                booksRepo.deleteBook(Integer.valueOf(book.getId()));
+        });
+
+    }
 }

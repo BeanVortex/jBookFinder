@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml" minWidth="850" prefHeight="480" fx:id="rootVbox"
+      fx:controller="ir.darkdeveloper.jbookfinder.controllers.LibraryController">
+
+    <MenuBar prefHeight="9.0" prefWidth="794.0" fx:id="menuBar">
+        <Menu mnemonicParsing="false" text="File">
+            <MenuItem mnemonicParsing="false" text="Go back" onAction="#getBack"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="Settings" onAction="#showSettings"/>
+        </Menu>
+    </MenuBar>
+
+    <VBox fx:id="contentVbox" spacing="5" alignment="CENTER" style="-fx-padding: 5 0 0 0">
+        <ScrollPane hbarPolicy="NEVER" minWidth="850">
+            <FlowPane fx:id="booksContainer" alignment="TOP_CENTER" hgap="15" prefWidth="850" vgap="25"/>
+        </ScrollPane>
+    </VBox>
+</VBox>
