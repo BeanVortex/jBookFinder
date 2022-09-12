@@ -1,33 +1,21 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
-import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+public class LibraryItemController implements FXMLController {
 
-import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
-
-public class BookItemController implements FXMLController {
 
     @FXML
     private ProgressIndicator imageProgress;
     @FXML
     private VBox imageBox;
-    @FXML
-    private Button downloadBtn;
-    @FXML
-    private VBox operationVbox;
     @FXML
     private Label bookTitle;
     @FXML
@@ -49,7 +37,7 @@ public class BookItemController implements FXMLController {
 
     private BookModel bookModel;
     private final BookUtils bookUtils = BookUtils.getInstance();
-    private final Configs configs = Configs.getInstance();
+    private Stage stage;
 
     @Override
     public void initialize() {
@@ -58,12 +46,12 @@ public class BookItemController implements FXMLController {
 
     @Override
     public void setStage(Stage stage) {
-
+        this.stage = stage;
     }
 
     @Override
     public Stage getStage() {
-        return null;
+        return stage;
     }
 
 
@@ -86,22 +74,17 @@ public class BookItemController implements FXMLController {
 
 
     @FXML
-    private void downloadBook() {
+    private void showBook() {
         if (bookModel == null)
             return;
-
-        if (!downloadBtn.getText().equals("Open Book")) {
-            bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
-            return;
-        }
-
         System.out.println("Show Book");
     }
 
 
     @FXML
-    public void moreDetails() {
+    private void moreDetails() {
         bookUtils.showDetails(bookModel);
     }
+
 
 }

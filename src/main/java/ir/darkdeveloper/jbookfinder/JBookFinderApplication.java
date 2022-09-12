@@ -30,6 +30,8 @@ public class JBookFinderApplication extends Application {
         booksRepo.updateBookRecords();
     }
 
+    // Todo: refactorings
+
     @Override
     public void stop() {
         System.out.println("stopped");

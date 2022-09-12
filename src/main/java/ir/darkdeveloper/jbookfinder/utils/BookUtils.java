@@ -2,13 +2,16 @@ package ir.darkdeveloper.jbookfinder.utils;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.controllers.BooksController;
+import ir.darkdeveloper.jbookfinder.controllers.MoreDetailsController;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.task.BookDownloadTask;
 import ir.darkdeveloper.jbookfinder.task.ImageFetchTask;
 import ir.darkdeveloper.jbookfinder.task.ScraperTask;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -24,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
+import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
 import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getStageFromEvent;
 
 
@@ -234,6 +238,26 @@ public class BookUtils {
 
 
     private void cancelSearch(ActionEvent e) {
+    }
+
+    public void showDetails(BookModel bookModel) {
+        try {
+            var stage = new Stage();
+            var fxmlLoader = new FXMLLoader(getResource("fxml/bookItemDetails.fxml"));
+            HBox root = fxmlLoader.load();
+            MoreDetailsController detailsController = fxmlLoader.getController();
+            detailsController.setStage(stage);
+            detailsController.setBookModel(bookModel);
+            detailsController.initStage();
+            configs.getThemeSubject().addObserver(detailsController);
+            var scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setWidth(800);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
 

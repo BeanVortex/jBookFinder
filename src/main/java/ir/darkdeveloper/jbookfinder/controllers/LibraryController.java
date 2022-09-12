@@ -55,10 +55,10 @@ public class LibraryController implements FXMLController, ThemeObserver {
         booksList = new ArrayList<>(fetchedBooks);
         fetchedBooks.forEach(book -> {
             try {
-                var fxmlLoader = new FXMLLoader(FxUtils.getResource("fxml/bookItem.fxml"));
+                var fxmlLoader = new FXMLLoader(FxUtils.getResource("fxml/bookItemLibrary.fxml"));
                 HBox root = fxmlLoader.load();
                 itemParents.add(root);
-                BookItemController itemController = fxmlLoader.getController();
+                LibraryItemController itemController = fxmlLoader.getController();
                 itemController.setBookModel(book);
                 booksContainer.getChildren().add(root);
             } catch (IOException e) {

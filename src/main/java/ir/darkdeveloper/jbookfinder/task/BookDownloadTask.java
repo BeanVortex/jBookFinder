@@ -63,7 +63,6 @@ public class BookDownloadTask extends Task<Void> {
 
     @Override
     protected void succeeded() {
-        // Todo: save book data in database
         bookUtils.completeDownload(operationVbox);
     }
 
