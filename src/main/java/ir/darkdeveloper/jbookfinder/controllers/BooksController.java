@@ -44,18 +44,20 @@ public class BooksController implements FXMLController, ThemeObserver {
     private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
 
+    private Stage stage;
+
     @Override
     public void initialize() {
     }
 
     @Override
     public void setStage(Stage stage) {
-
+        this.stage = stage;
     }
 
     @Override
     public Stage getStage() {
-        return null;
+        return stage;
     }
 
     public void showSearch(Flux<BookModel> books, String text) {
@@ -134,6 +136,16 @@ public class BooksController implements FXMLController, ThemeObserver {
     private void newSearch() {
         fieldSearch.setText("");
         fieldSearch.requestFocus();
+    }
+
+    @FXML
+    private void openLibrary(ActionEvent e) {
+        var controller = FxUtils.switchSceneAndGetController(e, "library.fxml", LibraryController.class);
+        if (controller != null) {
+            controller.setStage(stage);
+            controller.resizeListViewByStage();
+            configs.getThemeSubject().addObserver(controller);
+        }
     }
 
     @Override

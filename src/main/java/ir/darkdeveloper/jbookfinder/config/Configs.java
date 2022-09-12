@@ -1,6 +1,8 @@
 package ir.darkdeveloper.jbookfinder.config;
 
 
+import javafx.application.HostServices;
+
 import java.io.File;
 
 public class Configs {
@@ -24,6 +26,7 @@ public class Configs {
     private static String theme = "light";
     private static final String imageBaseUrl = "http://library.lol/";
     private static final ThemeSubject themeSubject = new ThemeSubject();
+    private static HostServices hostServices;
 
     private Configs() {
     }
@@ -69,4 +72,11 @@ public class Configs {
         return themeSubject;
     }
 
+    public HostServices getHostServices() {
+        return hostServices;
+    }
+
+    public void setHostServices(HostServices hostServices) {
+        Configs.hostServices = hostServices;
+    }
 }

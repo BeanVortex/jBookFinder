@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import javafx.fxml.FXML;
@@ -35,8 +36,10 @@ public class LibraryItemController implements FXMLController {
     @FXML
     private ImageView bookImage;
 
-    private BookModel bookModel;
     private final BookUtils bookUtils = BookUtils.getInstance();
+    private final Configs configs = Configs.getInstance();
+
+    private BookModel bookModel;
     private Stage stage;
 
     @Override
@@ -77,7 +80,8 @@ public class LibraryItemController implements FXMLController {
     private void showBook() {
         if (bookModel == null)
             return;
-        System.out.println("Show Book");
+        var hostServices = configs.getHostServices();
+        hostServices.showDocument(bookModel.getMirror());
     }
 
 

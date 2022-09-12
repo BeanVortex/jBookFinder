@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
@@ -11,6 +12,7 @@ public class JBookFinderApplication extends Application {
 
     private final IOUtils ioUtils = IOUtils.getInstance();
     private final BooksRepo booksRepo = BooksRepo.getInstance();
+    private final Configs configs = Configs.getInstance();
 
     public static void main(String[] args) {
         launch(args);
@@ -28,6 +30,7 @@ public class JBookFinderApplication extends Application {
         stage.setOnCloseRequest(event -> Platform.exit());
         booksRepo.createTable();
         booksRepo.updateBookRecords();
+        configs.setHostServices(getHostServices());
     }
 
     // Todo: refactorings

@@ -24,7 +24,7 @@
                 <TextField fx:id="fieldSearch" focusTraversable="false" prefHeight="25.0" prefWidth="262.0"
                            promptText="Search a Book"/>
                 <Button text="search" styleClass="searchButton" onAction="#searchTheBook"/>
-                <Button text="Library" alignment="BASELINE_RIGHT"/>
+                <Button text="Library" alignment="BASELINE_RIGHT" onAction="#openLibrary"/>
             </HBox>
 
             <ScrollPane hbarPolicy="NEVER" minWidth="850">

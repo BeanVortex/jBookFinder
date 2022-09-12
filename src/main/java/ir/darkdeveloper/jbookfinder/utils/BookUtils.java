@@ -26,6 +26,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
 import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getStageFromEvent;
@@ -36,6 +38,8 @@ public class BookUtils {
     private final Configs configs = Configs.getInstance();
 
     private static BookUtils bookUtils;
+
+    private static final Logger log = Logger.getLogger(BookUtils.class.getName());
 
     private BookUtils() {
 
@@ -205,10 +209,11 @@ public class BookUtils {
             var booksController = FxUtils.
                     switchSceneAndGetController(stage, "books.fxml", BooksController.class);
             if (booksController == null) {
-                System.out.println("Books controller is null");
+                log.log(Level.WARNING, "Books controller is null");
                 return;
             }
             configs.getThemeSubject().addObserver(booksController);
+            booksController.setStage(stage);
             booksController.showSearch(booksFlux, text);
             booksController.resizeListViewByStage(stage);
         });

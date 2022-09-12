@@ -4,19 +4,12 @@ import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-
-import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
 
 public class BookItemController implements FXMLController {
 
@@ -95,7 +88,8 @@ public class BookItemController implements FXMLController {
             return;
         }
 
-        System.out.println("Show Book");
+        var hostServices = configs.getHostServices();
+        hostServices.showDocument(bookModel.getMirror());
     }
 
 
