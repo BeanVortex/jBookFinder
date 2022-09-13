@@ -8,8 +8,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
-import java.awt.*;
-
 public class JBookFinderApplication extends Application {
 
     private final IOUtils ioUtils = IOUtils.getInstance();

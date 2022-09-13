@@ -1,5 +1,7 @@
 package ir.darkdeveloper.jbookfinder.repo;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -22,9 +24,11 @@ public class DBHelper {
     static final String COL_FILE = "file";
 
     private static final Logger log = Logger.getLogger(DBHelper.class.getName());
+    private final Configs configs = Configs.getInstance();
 
     Connection openConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:sqlite:JBookFinder.db");
+        var path = configs.getConfigLocation() + "JBookFinder.db";
+        return DriverManager.getConnection("jdbc:sqlite:" + path);
     }
 
     void createTable() {

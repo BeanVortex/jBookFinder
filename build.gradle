@@ -1,11 +1,12 @@
 plugins {
     id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'application'
+    id 'org.beryx.jlink' version '2.25.0'
     id 'java'
 }
 
 group = 'ir.darkdeveloper'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '18'
 
 configurations {
@@ -18,7 +19,10 @@ repositories {
     mavenCentral()
 }
 
-mainClassName = 'ir.darkdeveloper.jbookfinder.JBookFinderApplication'
+application {
+    mainClassName = 'ir.darkdeveloper.jbookfinder.JBookFinderApplication'
+    mainModule.set("ir.darkdeveloper.jbookfinder");
+}
 
 javafx {
     version = "18.0.2"
@@ -29,9 +33,9 @@ javafx {
 dependencies {
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.jsoup:jsoup:1.15.3'
-    implementation 'org.xerial:sqlite-jdbc:3.39.2.1'
+    implementation 'org.xerial:sqlite-jdbc:3.39.3.0'
     implementation 'io.projectreactor:reactor-core:3.4.22'
-    compileOnly 'org.projectlombok:lombok:1.18.24'
+    implementation 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
@@ -40,8 +44,15 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-//jar {
-//    manifest {
-//        attributes "Main-Class": "$mainClassName"
-//    }
-//}
+jlink {
+    jpackage {
+        installerType = 'exe'
+    }
+    mergedModule {
+//        excludeProvides servicePattern: 'reactor.blockhound.*'
+    }
+}
+
+jar {
+    mainClassName = 'ir.darkdeveloper.jbookfinder.JBookFinderApplication'
+}
