@@ -110,20 +110,19 @@ public class FxUtils {
         tray.remove(trayIcon);
     }
 
-    public static List<Label> getAllLabels(Parent root) {
-        var labels = new ArrayList<Label>();
-        addAllDescendents(root, labels);
-        return labels;
+    public static <T> List<T> getAllNodes(Parent root, Class<T> tClass) {
+        var nodes = new ArrayList<T>();
+        addAllDescendents(root, nodes, tClass);
+        return nodes;
     }
 
-    private static void addAllDescendents(Parent parent, ArrayList<Label> labels) {
-        for (var node : parent.getChildrenUnmodifiable()) {
-            if (node instanceof Label label)
-                labels.add(label);
+    private static <T> void addAllDescendents(Parent root, ArrayList<T> nodes, Class<T> tClass) {
+        for (var node : root.getChildrenUnmodifiable()) {
+            if (tClass.isInstance(node))
+                nodes.add(tClass.cast(node));
             if (node instanceof Parent p)
-                addAllDescendents(p, labels);
+                addAllDescendents(p, nodes, tClass);
         }
     }
-
 }
 

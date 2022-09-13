@@ -45,7 +45,7 @@ public class SettingsController implements FXMLController {
     public void initialize() {
         labelImageCache.setText(String.valueOf(ioUtils.getFolderSize(new File(configs.getBookCoverLocation()))));
         labelLocation.setText(configs.getSaveLocation());
-        var labels = FxUtils.getAllLabels(parent);
+        var labels = FxUtils.getAllNodes(parent, Label.class);
 
         if (configs.getTheme().equals("light")) {
             circleTheme.setFill(Paint.valueOf("#333"));

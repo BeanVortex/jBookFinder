@@ -15,10 +15,10 @@
 .button{
     -fx-padding: 8 16;
     -fx-font-size: 15;
-    -fx-background-color: #000;
-    -fx-background-radius: 16;
+    -fx-background-color: #111;
+    -fx-background-radius: 8;
     -fx-text-fill: white;
-    -fx-border-radius: 16;
+    -fx-border-radius: 8;
     -fx-border-color: transparent;
     -fx-effect: dropshadow(gaussian, rgba(101, 101, 101, 0.6), 9,0,0,2);
 

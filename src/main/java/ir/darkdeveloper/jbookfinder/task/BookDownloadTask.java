@@ -25,7 +25,6 @@ public class BookDownloadTask extends Task<Void> {
     private final BooksRepo booksRepo = BooksRepo.getInstance();
 
 
-
     public BookDownloadTask(BookModel bookModel, VBox operationVbox, String fileName) {
         this.bookModel = bookModel;
         this.operationVbox = operationVbox;
@@ -53,6 +52,7 @@ public class BookDownloadTask extends Task<Void> {
             var filePath = configs.getSaveLocation() + File.separator +
                     bookUtils.getImageFileName("." + bookModel.getFileFormat(), bookModel.getTitle());
             booksRepo.insertBook(bookModel, imagePath, filePath);
+            bookModel.setMirror(filePath);
         } catch (IOException e) {
             e.printStackTrace();
             failed();

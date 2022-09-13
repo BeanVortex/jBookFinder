@@ -7,6 +7,7 @@ import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -76,7 +77,7 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
 
     @Override
     public void updateTheme(String theme) {
-        var labels = FxUtils.getAllLabels(itemBox);
+        var labels = FxUtils.getAllNodes(itemBox, Label.class);
 
         if (theme.equals("light")) {
             itemBox.setBackground(Background.fill(Paint.valueOf("#fff")));

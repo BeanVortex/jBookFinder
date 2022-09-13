@@ -10,6 +10,8 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
@@ -151,5 +153,17 @@ public class BooksController implements FXMLController, ThemeObserver {
     @Override
     public void updateTheme(String theme) {
         bookUtils.updateThemeForBooks(theme, booksContainer, contentVbox, itemParents);
+        var allButtons = FxUtils.getAllNodes(rootPane, Button.class);
+        allButtons.forEach(button -> {
+            if (configs.getTheme().equals("dark")) {
+                if (!button.getStyleClass().contains("button-light"))
+                    button.getStyleClass().add("button-light");
+                button.getStyleClass().remove("button-dark");
+            } else {
+                if (!button.getStyleClass().contains("button-dark"))
+                    button.getStyleClass().add("button-dark");
+                button.getStyleClass().remove("button-light");
+            }
+        });
     }
 }

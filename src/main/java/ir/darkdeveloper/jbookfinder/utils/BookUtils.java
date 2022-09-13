@@ -52,7 +52,7 @@ public class BookUtils {
     }
 
     public void updateThemeForBooks(String theme, FlowPane booksContainer, VBox contentVbox, List<HBox> itemParents) {
-        var labels = FxUtils.getAllLabels(booksContainer);
+        var labels = FxUtils.getAllNodes(booksContainer, Label.class);
         if (theme.equals("light")) {
             booksContainer.setBackground(Background.fill(Paint.valueOf("#fff")));
             contentVbox.setBackground(Background.fill(Paint.valueOf("#fff")));
