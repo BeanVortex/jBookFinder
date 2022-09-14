@@ -54,7 +54,7 @@ public class ImageFetchTask extends Task<File> {
         try {
             var finalFile = file;
             if (file == null)
-                finalFile = new File("src/main/resources/images/blank.png");
+                finalFile = new File("src/main/ir.darkdeveloper.jbookfinder.resources/images/blank.png");
             var inputStream = new FileInputStream(finalFile);
             var image = new Image(inputStream);
 

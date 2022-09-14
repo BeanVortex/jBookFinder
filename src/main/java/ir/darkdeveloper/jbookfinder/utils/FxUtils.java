@@ -21,6 +21,7 @@ public class FxUtils {
 
     public static void switchSceneToMain(Stage stage, String fxmlFilename) {
         try {
+            System.out.println(getResource("."));
             var loader = new FXMLLoader(getResource("fxml/" + fxmlFilename));
             Parent root = loader.load();
             var scene = new Scene(root);
@@ -93,7 +94,7 @@ public class FxUtils {
     }
 
     public static URL getResource(String path) {
-        return FxUtils.class.getClassLoader().getResource(path);
+        return ClassLoader.getSystemResource(path);
     }
 
     public static void showNotification(String tooltip, String caption, String text) {

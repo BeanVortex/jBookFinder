@@ -21,7 +21,7 @@ repositories {
 
 application {
     mainClassName = 'ir.darkdeveloper.jbookfinder.JBookFinderApplication'
-    mainModule.set("ir.darkdeveloper.jbookfinder");
+//    mainModule.set("jbookfinder");
 }
 
 javafx {
@@ -48,8 +48,11 @@ jlink {
     jpackage {
         installerType = 'exe'
     }
+    launcher{
+        name = 'jbookfinder'
+    }
     mergedModule {
-//        excludeProvides servicePattern: 'reactor.blockhound.*'
+        excludeProvides servicePattern: 'reactor.blockhound.*'
     }
 }
 
