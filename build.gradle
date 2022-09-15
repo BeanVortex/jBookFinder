@@ -19,7 +19,7 @@ repositories {
 }
 
 application {
-    mainClassName = 'ir.darkdeveloper.jbookfinder.JBookFinderApplication'
+    mainClassName = 'ir.darkdeveloper.jbookfinder.AppLauncher'
 }
 
 javafx {
@@ -43,5 +43,5 @@ tasks.named('test') {
 }
 
 jar {
-    mainClassName = 'ir.darkdeveloper.jbookfinder.JBookFinderApplication'
+    mainClassName = 'ir.darkdeveloper.jbookfinder.AppLauncher'
 }

@@ -51,8 +51,9 @@ public class BookDownloadTask extends Task<Void> {
                     bookUtils.getImageFileName(bookModel.getImageUrl(), bookModel.getTitle());
             var filePath = configs.getSaveLocation() + File.separator +
                     bookUtils.getImageFileName("." + bookModel.getFileFormat(), bookModel.getTitle());
-            booksRepo.insertBook(bookModel, imagePath, filePath);
-            bookModel.setMirror(filePath);
+            bookModel.setFilePath(filePath);
+            bookModel.setImagePath(imagePath);
+            booksRepo.insertBook(bookModel);
         } catch (IOException e) {
             e.printStackTrace();
             failed();

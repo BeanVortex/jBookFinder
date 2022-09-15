@@ -20,6 +20,8 @@ public class BookModel {
     private String fileFormat;
     private String imageUrl;
     private String mirror;
+    private String imagePath;
+    private String filePath;
 
     public BookModel(String id, String author, String title, String publisher, String year,
                      String pages, String language, String size, String fileFormat,

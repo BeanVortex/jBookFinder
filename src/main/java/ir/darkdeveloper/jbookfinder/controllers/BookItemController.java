@@ -89,7 +89,7 @@ public class BookItemController implements FXMLController {
         }
 
         var hostServices = configs.getHostServices();
-        hostServices.showDocument(bookModel.getMirror());
+        hostServices.showDocument(bookModel.getFilePath());
     }
 
 

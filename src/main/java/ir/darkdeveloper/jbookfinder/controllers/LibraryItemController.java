@@ -81,7 +81,7 @@ public class LibraryItemController implements FXMLController {
         if (bookModel == null)
             return;
         var hostServices = configs.getHostServices();
-        hostServices.showDocument(bookModel.getMirror());
+        hostServices.showDocument(bookModel.getFilePath());
     }
 
 

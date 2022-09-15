@@ -20,8 +20,10 @@ public class DBHelper {
     static final String COL_LANGUAGE = "language";
     static final String COL_SIZE = "size";
     static final String COL_FILE_FORMAT = "file_format";
-    static final String COL_IMAGE = "image";
-    static final String COL_FILE = "file";
+    static final String COL_IMAGE_URL = "image_url";
+    static final String COL_MIRROR = "mirror";
+    static final String COL_IMAGE_PATH = "image_path";
+    static final String COL_FILE_PATH = "file_path";
 
     private static final Logger log = Logger.getLogger(DBHelper.class.getName());
     private final Configs configs = Configs.getInstance();
@@ -42,8 +44,10 @@ public class DBHelper {
                 + COL_LANGUAGE + " VARCHAR,"
                 + COL_SIZE + " VARCHAR,"
                 + COL_FILE_FORMAT + " VARCHAR,"
-                + COL_IMAGE + " VARCHAR,"
-                + COL_FILE + " VARCHAR"
+                + COL_IMAGE_URL + " VARCHAR,"
+                + COL_MIRROR + " VARCHAR,"
+                + COL_IMAGE_PATH + " VARCHAR,"
+                + COL_FILE_PATH + " VARCHAR"
                 + ");";
         try {
             var con = openConnection();

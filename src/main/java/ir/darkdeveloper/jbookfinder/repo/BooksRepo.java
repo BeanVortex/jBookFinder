@@ -30,7 +30,7 @@ public class BooksRepo {
         dbHelper.createTable();
     }
 
-    public void insertBook(BookModel book, String imagePath, String filePath) {
+    public void insertBook(BookModel book) {
         var sql = "INSERT INTO " + TABLE_NAME + " (" +
                 COL_AUTHOR + "," +
                 COL_TITLE + "," +
@@ -40,8 +40,10 @@ public class BooksRepo {
                 COL_LANGUAGE + "," +
                 COL_SIZE + "," +
                 COL_FILE_FORMAT + "," +
-                COL_IMAGE + "," +
-                COL_FILE +
+                COL_IMAGE_URL + "," +
+                COL_MIRROR + "," +
+                COL_IMAGE_PATH + "," +
+                COL_FILE_PATH +
                 ") VALUES(\"" +
                 book.getAuthor() + "\",\"" +
                 book.getTitle() + "\",\"" +
@@ -51,8 +53,10 @@ public class BooksRepo {
                 book.getLanguage() + "\",\"" +
                 book.getSize() + "\",\"" +
                 book.getFileFormat() + "\",\"" +
-                imagePath + "\",\"" +
-                filePath +
+                book.getImageUrl() + "\",\"" +
+                book.getMirror() + "\",\"" +
+                book.getImagePath() + "\",\"" +
+                book.getFilePath() +
                 "\");";
         try (var con = dbHelper.openConnection();
              var stmt = con.createStatement()) {
@@ -113,10 +117,12 @@ public class BooksRepo {
         var language = rs.getString(COL_LANGUAGE);
         var size = rs.getString(COL_SIZE);
         var fileFormat = rs.getString(COL_FILE_FORMAT);
-        var imagePath = rs.getString(COL_IMAGE);
-        var filePath = rs.getString(COL_FILE);
+        var imageUrl = rs.getString(COL_IMAGE_URL);
+        var mirror = rs.getString(COL_MIRROR);
+        var imagePath = rs.getString(COL_IMAGE_PATH);
+        var filePath = rs.getString(COL_FILE_PATH);
         return new BookModel(String.valueOf(id), author, title, publisher, year, pages, language, size,
-                fileFormat, imagePath, filePath);
+                fileFormat, imageUrl, mirror, imagePath, filePath);
     }
 
     public void updateBookRecords() {
