@@ -107,7 +107,7 @@ public class BookUtils {
         var file = new File(configs.getSaveLocation() + File.separator + fileName);
         if (file.exists()) {
             addProgress(operationVbox, null);
-            completeDownload(stage, operationVbox);
+            completeDownload(operationVbox);
             return null;
         } else {
             var downTask = new BookDownloadTask(bookModel, operationVbox, fileName, stage);
@@ -138,14 +138,14 @@ public class BookUtils {
                 .replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + "." + bookModel.getFileFormat();
     }
 
-    public void completeDownload(Stage stage, VBox operationVbox) {
+    public void completeDownload(VBox operationVbox) {
         operationVbox.getChildren().remove(1);
         operationVbox.getChildren().get(0).setDisable(false);
         if (operationVbox.getChildren().size() == 2)
             operationVbox.getChildren().get(1).setDisable(false);
         var downloadBtn = (Button) operationVbox.getChildren().get(0);
         downloadBtn.setText("Open Book");
-        FxUtils.showNotification(stage, "download", "Book Downloaded", "I downloaded the book");
+        configs.getFxTray().showInfoMessage("Book download");
     }
 
     public void setDataForDetails(HBox root, BookModel bookModel) {

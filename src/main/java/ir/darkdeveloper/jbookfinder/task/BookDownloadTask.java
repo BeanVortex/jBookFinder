@@ -67,7 +67,7 @@ public class BookDownloadTask extends Task<Void> {
 
     @Override
     protected void succeeded() {
-        bookUtils.completeDownload(stage, operationVbox);
+        bookUtils.completeDownload(operationVbox);
     }
 
     @Override

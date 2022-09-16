@@ -1,6 +1,7 @@
 package ir.darkdeveloper.jbookfinder.config;
 
 
+import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import javafx.application.HostServices;
 
 import java.io.File;
@@ -28,6 +29,8 @@ public class Configs {
     private static final ThemeSubject themeSubject = new ThemeSubject();
     private static HostServices hostServices;
 
+    private static FXTrayIcon fxTray;
+
     private Configs() {
     }
 
@@ -35,6 +38,14 @@ public class Configs {
         if (configs == null)
             configs = new Configs();
         return configs;
+    }
+
+    public  FXTrayIcon getFxTray() {
+        return fxTray;
+    }
+
+    public void setFxTray(FXTrayIcon fxTray) {
+        Configs.fxTray = fxTray;
     }
 
 

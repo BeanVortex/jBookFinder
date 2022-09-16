@@ -109,7 +109,7 @@ public class SettingsController implements FXMLController {
                 ioUtils.saveConfigs(selectedDir.getPath());
                 labelLocation.setText(configs.getSaveLocation());
             } else
-                FxUtils.showNotification(FxUtils.getStageFromEvent(e), "notif", "Directory is not empty", "Directory must be empty");
+                configs.getFxTray().showErrorMessage("Directory is not empty");
         }
     }
 

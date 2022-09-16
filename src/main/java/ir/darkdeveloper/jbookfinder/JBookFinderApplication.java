@@ -9,9 +9,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.util.Objects;
-
 public class JBookFinderApplication extends Application {
 
     private final IOUtils ioUtils = IOUtils.getInstance();
@@ -32,16 +29,17 @@ public class JBookFinderApplication extends Application {
         stage.setTitle("Main Page");
         stage.show();
         stage.setOnCloseRequest(event -> Platform.exit());
-        var imagePath = FxUtils.class.getClassLoader().getResource("images/icon.jpg");
-        SwingUtilities.invokeLater(() -> {
-            System.out.println(FXTrayIcon.isSupported());
-            var icon = new FXTrayIcon(stage, imagePath);
-            icon.show();
-            icon.setTrayIconTooltip("dsafsadf");
+        Platform.runLater(() -> {
+            var imagePath = FxUtils.class.getClassLoader().getResource("images/icon.jpg");
+            configs.setFxTray(new FXTrayIcon(stage, imagePath));
+            var tray = configs.getFxTray();
+            tray.show();
+            tray.setTrayIconTooltip("JBookFinder");
+            tray.addExitItem(true);
         });
-//        booksRepo.createTable();
-//        booksRepo.updateBookRecords();
-//        configs.setHostServices(getHostServices());
+        booksRepo.createTable();
+        booksRepo.updateBookRecords();
+        configs.setHostServices(getHostServices());
     }
 
     // Todo: refactorings

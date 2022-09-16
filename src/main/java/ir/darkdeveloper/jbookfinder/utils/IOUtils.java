@@ -46,7 +46,7 @@ public class IOUtils {
                 if (!file.isDirectory() && !filesNotToDelete.contains(file.getName()))
                     file.delete();
 
-        FxUtils.showNotification(stage, "Cleared cache", "Caches Deleted", "Image caches deleted");
+        configs.getFxTray().showInfoMessage("Image caches deleted");
     }
 
 
