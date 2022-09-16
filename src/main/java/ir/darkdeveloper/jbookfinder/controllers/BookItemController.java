@@ -41,6 +41,8 @@ public class BookItemController implements FXMLController {
     private ImageView bookImage;
 
     private BookModel bookModel;
+    private Stage stage;
+
     private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
 
@@ -51,12 +53,12 @@ public class BookItemController implements FXMLController {
 
     @Override
     public void setStage(Stage stage) {
-
+        this.stage = stage;
     }
 
     @Override
     public Stage getStage() {
-        return null;
+        return stage;
     }
 
 
@@ -84,7 +86,7 @@ public class BookItemController implements FXMLController {
             return;
 
         if (!downloadBtn.getText().equals("Open Book")) {
-            bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
+            bookUtils.downloadBookAndAddProgress(stage, bookModel, operationVbox);
             return;
         }
 

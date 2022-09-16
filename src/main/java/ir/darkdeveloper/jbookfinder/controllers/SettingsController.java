@@ -92,7 +92,7 @@ public class SettingsController implements FXMLController {
 
     @FXML
     private void clearCache() {
-        ioUtils.deleteCachedImages(notToDeleteBooks);
+        ioUtils.deleteCachedImages(notToDeleteBooks, stage);
         labelImageCache.setText(String.valueOf(ioUtils.getFolderSize(new File(configs.getBookCoverLocation()))));
     }
 
@@ -109,7 +109,7 @@ public class SettingsController implements FXMLController {
                 ioUtils.saveConfigs(selectedDir.getPath());
                 labelLocation.setText(configs.getSaveLocation());
             } else
-                FxUtils.showNotification("notif", "Directory is not empty", "Directory must be empty");
+                FxUtils.showNotification(FxUtils.getStageFromEvent(e), "notif", "Directory is not empty", "Directory must be empty");
         }
     }
 

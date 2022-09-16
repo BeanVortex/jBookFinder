@@ -6,6 +6,7 @@ import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import javafx.concurrent.Task;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,15 +21,17 @@ public class BookDownloadTask extends Task<Void> {
     private final BookModel bookModel;
     private final VBox operationVbox;
     private final String fileName;
+    private final Stage stage;
     private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
     private final BooksRepo booksRepo = BooksRepo.getInstance();
 
 
-    public BookDownloadTask(BookModel bookModel, VBox operationVbox, String fileName) {
+    public BookDownloadTask(BookModel bookModel, VBox operationVbox, String fileName, Stage stage) {
         this.bookModel = bookModel;
         this.operationVbox = operationVbox;
         this.fileName = fileName;
+        this.stage = stage;
     }
 
     @Override
@@ -64,7 +67,7 @@ public class BookDownloadTask extends Task<Void> {
 
     @Override
     protected void succeeded() {
-        bookUtils.completeDownload(operationVbox);
+        bookUtils.completeDownload(stage, operationVbox);
     }
 
     @Override

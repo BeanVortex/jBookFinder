@@ -29,6 +29,7 @@ javafx {
 
 
 dependencies {
+    implementation 'com.dustinredmond.fxtrayicon:FXTrayIcon:3.3.0'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'org.xerial:sqlite-jdbc:3.39.3.0'
@@ -42,6 +43,3 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-jar {
-    mainClassName = 'ir.darkdeveloper.jbookfinder.AppLauncher'
-}

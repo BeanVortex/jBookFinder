@@ -66,8 +66,8 @@ public class BookUtils {
         }
     }
 
-    public void downloadBookAndAddProgress(BookModel bookModel, VBox operationVbox) {
-        var downTask = downloadBook(bookModel, operationVbox);
+    public void downloadBookAndAddProgress(Stage stage, BookModel bookModel, VBox operationVbox) {
+        var downTask = downloadBook(stage, bookModel, operationVbox);
         if (downTask != null)
             addProgress(operationVbox, downTask);
     }
@@ -101,16 +101,16 @@ public class BookUtils {
         }
     }
 
-    private BookDownloadTask downloadBook(BookModel bookModel, VBox operationVbox) {
+    private BookDownloadTask downloadBook(Stage stage, BookModel bookModel, VBox operationVbox) {
 
         var fileName = getFileName(bookModel);
         var file = new File(configs.getSaveLocation() + File.separator + fileName);
         if (file.exists()) {
             addProgress(operationVbox, null);
-            completeDownload(operationVbox);
+            completeDownload(stage, operationVbox);
             return null;
         } else {
-            var downTask = new BookDownloadTask(bookModel, operationVbox, fileName);
+            var downTask = new BookDownloadTask(bookModel, operationVbox, fileName, stage);
             var taskT = new Thread(downTask);
             taskT.setDaemon(true);
             taskT.start();
@@ -138,14 +138,14 @@ public class BookUtils {
                 .replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + "." + bookModel.getFileFormat();
     }
 
-    public void completeDownload(VBox operationVbox) {
+    public void completeDownload(Stage stage, VBox operationVbox) {
         operationVbox.getChildren().remove(1);
         operationVbox.getChildren().get(0).setDisable(false);
         if (operationVbox.getChildren().size() == 2)
             operationVbox.getChildren().get(1).setDisable(false);
         var downloadBtn = (Button) operationVbox.getChildren().get(0);
         downloadBtn.setText("Open Book");
-        FxUtils.showNotification("download", "Book Downloaded", "I downloaded the book");
+        FxUtils.showNotification(stage, "download", "Book Downloaded", "I downloaded the book");
     }
 
     public void setDataForDetails(HBox root, BookModel bookModel) {

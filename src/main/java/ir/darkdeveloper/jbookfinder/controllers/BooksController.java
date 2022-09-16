@@ -77,6 +77,7 @@ public class BooksController implements FXMLController, ThemeObserver {
                                 itemParents.add(root);
                                 BookItemController itemController = fxmlLoader.getController();
                                 itemController.setBookModel(book);
+                                itemController.setStage(stage);
                                 booksList.add(book);
                                 updateValue(root);
                             } catch (Exception e) {
@@ -131,7 +132,7 @@ public class BooksController implements FXMLController, ThemeObserver {
 
     @FXML
     private void clearImageCache() {
-        ioUtils.deleteCachedImages(booksList);
+        ioUtils.deleteCachedImages(booksList, stage);
     }
 
     @FXML

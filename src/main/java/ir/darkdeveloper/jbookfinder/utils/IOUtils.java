@@ -2,6 +2,7 @@ package ir.darkdeveloper.jbookfinder.utils;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
@@ -28,7 +29,7 @@ public class IOUtils {
     }
 
 
-    public void deleteCachedImages(List<BookModel> notToDeleteBooks) {
+    public void deleteCachedImages(List<BookModel> notToDeleteBooks, Stage stage) {
         var path = configs.getBookCoverLocation();
 
         var filesNotToDelete = new ArrayList<String>();
@@ -45,7 +46,7 @@ public class IOUtils {
                 if (!file.isDirectory() && !filesNotToDelete.contains(file.getName()))
                     file.delete();
 
-        FxUtils.showNotification("Cleared cache", "Caches Deleted", "Image caches deleted");
+        FxUtils.showNotification(stage, "Cleared cache", "Caches Deleted", "Image caches deleted");
     }
 
 
