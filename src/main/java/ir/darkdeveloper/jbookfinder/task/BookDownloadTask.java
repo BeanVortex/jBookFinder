@@ -6,7 +6,6 @@ import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import javafx.concurrent.Task;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,22 +15,19 @@ import java.nio.file.Paths;
 
 public class BookDownloadTask extends Task<Void> {
 
-    // Todo: stop thread when scene changed
 
     private final BookModel bookModel;
     private final VBox operationVbox;
     private final String fileName;
-    private final Stage stage;
     private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
     private final BooksRepo booksRepo = BooksRepo.getInstance();
 
 
-    public BookDownloadTask(BookModel bookModel, VBox operationVbox, String fileName, Stage stage) {
+    public BookDownloadTask(BookModel bookModel, VBox operationVbox, String fileName) {
         this.bookModel = bookModel;
         this.operationVbox = operationVbox;
         this.fileName = fileName;
-        this.stage = stage;
     }
 
     @Override

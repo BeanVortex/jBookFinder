@@ -31,18 +31,19 @@ public class JBookFinderApplication extends Application {
         stage.setOnCloseRequest(event -> Platform.exit());
         Platform.runLater(() -> {
             var imagePath = FxUtils.class.getClassLoader().getResource("images/icon.jpg");
-            configs.setFxTray(new FXTrayIcon(stage, imagePath));
-            var tray = configs.getFxTray();
-            tray.show();
-            tray.setTrayIconTooltip("JBookFinder");
-            tray.addExitItem(true);
+            if (imagePath != null) {
+                configs.setFxTray(new FXTrayIcon(stage, imagePath));
+                var tray = configs.getFxTray();
+                tray.show();
+                tray.setTrayIconTooltip("JBookFinder");
+                tray.addExitItem(true);
+            }
         });
         booksRepo.createTable();
-        booksRepo.updateBookRecords();
+        booksRepo.updateBookExistenceRecords();
         configs.setHostServices(getHostServices());
     }
 
-    // Todo: refactorings
 
     @Override
     public void stop() {

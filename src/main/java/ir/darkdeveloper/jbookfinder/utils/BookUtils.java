@@ -66,8 +66,8 @@ public class BookUtils {
         }
     }
 
-    public void downloadBookAndAddProgress(Stage stage, BookModel bookModel, VBox operationVbox) {
-        var downTask = downloadBook(stage, bookModel, operationVbox);
+    public void downloadBookAndAddProgress(BookModel bookModel, VBox operationVbox) {
+        var downTask = downloadBook(bookModel, operationVbox);
         if (downTask != null)
             addProgress(operationVbox, downTask);
     }
@@ -101,7 +101,7 @@ public class BookUtils {
         }
     }
 
-    private BookDownloadTask downloadBook(Stage stage, BookModel bookModel, VBox operationVbox) {
+    private BookDownloadTask downloadBook(BookModel bookModel, VBox operationVbox) {
 
         var fileName = getFileName(bookModel);
         var file = new File(configs.getSaveLocation() + File.separator + fileName);
@@ -110,7 +110,7 @@ public class BookUtils {
             completeDownload(operationVbox);
             return null;
         } else {
-            var downTask = new BookDownloadTask(bookModel, operationVbox, fileName, stage);
+            var downTask = new BookDownloadTask(bookModel, operationVbox, fileName);
             var taskT = new Thread(downTask);
             taskT.setDaemon(true);
             taskT.start();

@@ -2,6 +2,7 @@ package ir.darkdeveloper.jbookfinder.controllers;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.event.ActionEvent;
@@ -36,6 +37,7 @@ public class SettingsController implements FXMLController {
 
     private final Configs configs = Configs.getInstance();
     private final IOUtils ioUtils = IOUtils.getInstance();
+    private final BooksRepo booksRepo = BooksRepo.getInstance();
 
     private List<BookModel> notToDeleteBooks;
     private Stage stage;
@@ -108,6 +110,7 @@ public class SettingsController implements FXMLController {
                 ioUtils.createSaveLocation();
                 ioUtils.saveConfigs(selectedDir.getPath());
                 labelLocation.setText(configs.getSaveLocation());
+                booksRepo.updateBooksPath(configs.getSaveLocation());
             } else
                 configs.getFxTray().showErrorMessage("Directory is not empty");
         }

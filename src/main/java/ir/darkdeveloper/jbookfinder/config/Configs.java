@@ -87,6 +87,10 @@ public class Configs {
         return hostServices;
     }
 
+    public String getBookCoverDirName() {
+        return bookCoverDirName;
+    }
+
     public void setHostServices(HostServices hostServices) {
         Configs.hostServices = hostServices;
     }

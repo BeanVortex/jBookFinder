@@ -44,7 +44,7 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
             return;
 
         if (!downloadBtn.getText().equals("Open Book")) {
-            bookUtils.downloadBookAndAddProgress(stage, bookModel, operationVbox);
+            bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
             return;
         }
 

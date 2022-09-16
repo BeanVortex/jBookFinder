@@ -86,7 +86,7 @@ public class BookItemController implements FXMLController {
             return;
 
         if (!downloadBtn.getText().equals("Open Book")) {
-            bookUtils.downloadBookAndAddProgress(stage, bookModel, operationVbox);
+            bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
             return;
         }
 

@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder.repo;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 
 import java.io.File;
@@ -13,6 +14,7 @@ import static ir.darkdeveloper.jbookfinder.repo.DBHelper.*;
 public class BooksRepo {
 
     private static BooksRepo booksRepo;
+    private final Configs configs = Configs.getInstance();
 
     private BooksRepo() {
 
@@ -125,13 +127,40 @@ public class BooksRepo {
                 fileFormat, imageUrl, mirror, imagePath, filePath);
     }
 
-    public void updateBookRecords() {
+    public void updateBookExistenceRecords() {
         var books = booksRepo.getBooks();
         books.forEach(book -> {
-            var file = new File(book.getMirror());
+            var file = new File(book.getFilePath());
             if (!file.exists())
                 booksRepo.deleteBook(Integer.valueOf(book.getId()));
         });
+    }
 
+    public void updateBooksPath(BookModel book) {
+        var sql = "UPDATE " + TABLE_NAME + " SET " + COL_FILE_PATH + "=\"" + book.getFilePath() + "\","
+                + COL_IMAGE_PATH + "=\"" + book.getImagePath()
+                + "\" WHERE id=" + book.getId() + ";";
+        try (var con = dbHelper.openConnection();
+             var stmt = con.createStatement()) {
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateBooksPath(String newPath) {
+        var books = getBooks();
+        books.forEach(book -> {
+            var filePathWithName = book.getFilePath();
+            var imagePathWithName = book.getImagePath();
+            var fileName = filePathWithName.substring(filePathWithName.lastIndexOf(File.separatorChar) + 1);
+            var imageName = imagePathWithName.substring(imagePathWithName.lastIndexOf(File.separatorChar) + 1);
+
+            var filePath = newPath + File.separator + fileName;
+            var imagePath = newPath + File.separator + configs.getBookCoverDirName() + File.separator + imageName;
+            book.setFilePath(filePath);
+            book.setImagePath(imagePath);
+            updateBooksPath(book);
+        });
     }
 }
