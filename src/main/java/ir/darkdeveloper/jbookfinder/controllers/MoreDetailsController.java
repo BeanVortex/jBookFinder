@@ -7,13 +7,17 @@ import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class MoreDetailsController implements FXMLController, ThemeObserver {
 
@@ -28,6 +32,7 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
 
     private Stage stage;
     private BookModel bookModel;
+    private boolean fromLibrary;
 
     private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
@@ -43,6 +48,17 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
     private void downloadBook() {
         if (bookModel == null)
             return;
+
+        if (fromLibrary){
+            var filePath = bookModel.getFilePath();
+            if (!new File(filePath).exists()) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Book not found");
+                alert.setHeaderText("Book file does not exist");
+                alert.show();
+                return;
+            }
+        }
 
         if (!downloadBtn.getText().equals("Open Book")) {
             bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
@@ -95,5 +111,10 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
                 downloadBtn.getStyleClass().add("button-light");
             downloadBtn.getStyleClass().remove("button-dark");
         }
+    }
+
+    public void setFromLibrary(boolean fromLibrary) {
+        this.fromLibrary = fromLibrary;
+        downloadBtn.setText("Open Book");
     }
 }

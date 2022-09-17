@@ -8,7 +8,6 @@ import ir.darkdeveloper.jbookfinder.task.BookDownloadTask;
 import ir.darkdeveloper.jbookfinder.task.ImageFetchTask;
 import ir.darkdeveloper.jbookfinder.task.ScraperTask;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -28,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,11 +90,10 @@ public class BookUtils {
             var progressBar = (ProgressBar) progressBox.getChildren().get(0);
             var progressLabel = (Label) progressBox.getChildren().get(1);
             var imageView = (ImageView) progressBox.getChildren().get(2);
-            var imagePath = this.getClass().getClassLoader().getResource("icons/close.png").toExternalForm();
+            var imagePath = Objects.requireNonNull(this.getClass().getClassLoader().getResource("icons/close.png")).toExternalForm();
             imageView.setImage(new Image(imagePath));
             imageView.setFitWidth(24);
             imageView.setFitHeight(24);
-            imageView.setStyle("-fx-cursor: hand");
             imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 downTask.cancel(true);
                 operationVbox.getChildren().get(0).setDisable(false);
@@ -126,7 +125,6 @@ public class BookUtils {
             e.printStackTrace();
         }
     }
-
 
 
     public void fetchAndSetImageAsync(String imageUrl, String title, ImageView bookImage,
@@ -254,7 +252,7 @@ public class BookUtils {
     }
 
 
-    public void showDetails(BookModel bookModel) {
+    public void showDetails(BookModel bookModel, boolean fromLibrary) {
         try {
             var stage = new Stage();
             var fxmlLoader = new FXMLLoader(getResource("fxml/bookItemDetails.fxml"));
@@ -263,6 +261,7 @@ public class BookUtils {
             detailsController.setStage(stage);
             detailsController.setBookModel(bookModel);
             detailsController.initStage();
+            detailsController.setFromLibrary(fromLibrary);
             configs.getThemeSubject().addObserver(detailsController);
             var scene = new Scene(root);
             stage.setScene(scene);

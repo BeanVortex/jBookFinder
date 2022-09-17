@@ -5,21 +5,23 @@ import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
-import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 public class LibraryItemController implements FXMLController, ThemeObserver {
 
 
+    @FXML
+    private ImageView deleteBtn;
     @FXML
     private VBox operationVbox;
     @FXML
@@ -60,6 +62,32 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
     @Override
     public void initialize() {
         updateTheme(configs.getTheme());
+        var imagePath = Objects.requireNonNull(this.getClass().getClassLoader().getResource("icons/close.png"))
+                .toExternalForm();
+        deleteBtn.setImage(new Image(imagePath));
+        deleteBtn.setFitHeight(22);
+        deleteBtn.setFitWidth(22);
+
+        deleteBookAction();
+
+    }
+
+    private void deleteBookAction() {
+
+        deleteBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            var alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Book deleting");
+            alert.setHeaderText("You are deleting the book");
+            alert.setContentText("Are you sure about this?");
+            var buttonTypeOpt = alert.showAndWait();
+            buttonTypeOpt.ifPresent(buttonType -> {
+                if (buttonType == ButtonType.OK) {
+                    repo.deleteBook(bookModel.getId());
+                    libraryController.initialize();
+                } else if (buttonType == ButtonType.CANCEL)
+                    alert.close();
+            });
+        });
     }
 
     @Override
@@ -119,7 +147,7 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
 
     @FXML
     private void moreDetails() {
-        bookUtils.showDetails(bookModel);
+        bookUtils.showDetails(bookModel, true);
     }
 
 
@@ -128,9 +156,9 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
         List.of(detailsBtn, downloadBtn)
                 .forEach(btn -> {
                     if (configs.getTheme().equals("dark")) {
+                        btn.getStyleClass().remove("button-dark");
                         if (!btn.getStyleClass().contains("button-light"))
                             btn.getStyleClass().add("button-light");
-                        btn.getStyleClass().remove("button-dark");
                     } else {
                         if (!btn.getStyleClass().contains("button-dark"))
                             btn.getStyleClass().add("button-dark");

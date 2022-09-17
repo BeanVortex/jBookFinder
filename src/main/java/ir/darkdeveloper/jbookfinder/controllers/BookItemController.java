@@ -97,7 +97,7 @@ public class BookItemController implements FXMLController {
 
     @FXML
     public void moreDetails() {
-        bookUtils.showDetails(bookModel);
+        bookUtils.showDetails(bookModel, false);
     }
 
 }

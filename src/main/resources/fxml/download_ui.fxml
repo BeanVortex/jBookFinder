@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <HBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
       spacing="8"
       alignment="CENTER"
       prefHeight="400.0" prefWidth="600.0">
 
     <ProgressBar/>
     <Label/>
-    <ImageView/>
+    <ImageView style="-fx-cursor: hand"/>
 
 </HBox>

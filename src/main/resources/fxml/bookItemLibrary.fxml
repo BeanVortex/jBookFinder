@@ -16,7 +16,7 @@
         <ProgressIndicator fx:id="imageProgress"/>
         <ImageView fx:id="bookImage"/>
     </VBox>
-    <VBox prefHeight="300.0" prefWidth="210.0" spacing="10" style="-fx-padding: 15;">
+    <VBox prefHeight="320.0" prefWidth="210.0" spacing="10" style="-fx-padding: 15;">
         <Label fx:id="bookTitle" text="Title"/>
         <Label fx:id="bookAuthor" text="Author"/>
         <Label fx:id="bookPublisher" text="Publisher"/>
@@ -28,6 +28,7 @@
         <VBox alignment="CENTER" prefHeight="162.0" prefWidth="180.0" spacing="15" fx:id="operationVbox">
             <Button onAction="#showBook" fx:id="downloadBtn" text="Open Book"/>
             <Button onAction="#moreDetails" fx:id="detailsBtn" text="More details"/>
+            <ImageView fx:id="deleteBtn" style="-fx-cursor: hand" />
         </VBox>
     </VBox>
 
