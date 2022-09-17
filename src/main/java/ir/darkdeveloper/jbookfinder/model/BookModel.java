@@ -10,6 +10,7 @@ import lombok.*;
 @ToString
 public class BookModel {
     private String id;
+    private String bookId;
     private String author;
     private String title;
     private String publisher;
@@ -23,10 +24,10 @@ public class BookModel {
     private String imagePath;
     private String filePath;
 
-    public BookModel(String id, String author, String title, String publisher, String year,
+    public BookModel(String bookId, String author, String title, String publisher, String year,
                      String pages, String language, String size, String fileFormat,
                      String mirror) {
-        this.id = id;
+        this.bookId = bookId;
         this.author = author;
         this.title = title;
         this.publisher = publisher;

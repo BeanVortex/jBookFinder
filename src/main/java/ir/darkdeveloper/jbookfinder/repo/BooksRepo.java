@@ -34,6 +34,7 @@ public class BooksRepo {
 
     public void insertBook(BookModel book) {
         var sql = "INSERT INTO " + TABLE_NAME + " (" +
+                COL_BOOK_ID + "," +
                 COL_AUTHOR + "," +
                 COL_TITLE + "," +
                 COL_PUBLISHER + "," +
@@ -47,6 +48,7 @@ public class BooksRepo {
                 COL_IMAGE_PATH + "," +
                 COL_FILE_PATH +
                 ") VALUES(\"" +
+                book.getBookId() + "\",\"" +
                 book.getAuthor() + "\",\"" +
                 book.getTitle() + "\",\"" +
                 book.getPublisher() + "\",\"" +
@@ -68,8 +70,8 @@ public class BooksRepo {
         }
     }
 
-    public BookModel findByTitle(String cleanedTitle) {
-        var sql = "SELECT * FROM " + TABLE_NAME + " WHERE title=\"" + cleanedTitle + "\";";
+    public BookModel findByBookId(String bookId) {
+        var sql = "SELECT * FROM " + TABLE_NAME + " WHERE book_id=\"" + bookId + "\";";
         try (var con = dbHelper.openConnection();
              var stmt = con.createStatement();
              var rs = stmt.executeQuery(sql)) {
@@ -111,6 +113,7 @@ public class BooksRepo {
 
     private BookModel createBook(ResultSet rs) throws SQLException {
         var id = rs.getInt(COL_ID);
+        var book_id = rs.getString(COL_BOOK_ID);
         var author = rs.getString(COL_AUTHOR);
         var title = rs.getString(COL_TITLE);
         var publisher = rs.getString(COL_PUBLISHER);
@@ -123,7 +126,7 @@ public class BooksRepo {
         var mirror = rs.getString(COL_MIRROR);
         var imagePath = rs.getString(COL_IMAGE_PATH);
         var filePath = rs.getString(COL_FILE_PATH);
-        return new BookModel(String.valueOf(id), author, title, publisher, year, pages, language, size,
+        return new BookModel(String.valueOf(id),book_id, author, title, publisher, year, pages, language, size,
                 fileFormat, imageUrl, mirror, imagePath, filePath);
     }
 

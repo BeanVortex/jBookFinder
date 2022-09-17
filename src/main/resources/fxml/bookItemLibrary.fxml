@@ -26,8 +26,8 @@
         <Label fx:id="bookYear" text="Year"/>
         <Label fx:id="bookLanguage" text="Language"/>
         <VBox alignment="CENTER" prefHeight="162.0" prefWidth="180.0" spacing="15">
-            <Button onAction="#showBook" text="Open Book"/>
-            <Button onAction="#moreDetails" text="More details"/>
+            <Button onAction="#showBook" fx:id="downloadBtn" text="Open Book"/>
+            <Button onAction="#moreDetails" fx:id="detailsBtn" text="More details"/>
         </VBox>
     </VBox>
 

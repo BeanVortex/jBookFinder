@@ -3,6 +3,7 @@ package ir.darkdeveloper.jbookfinder.controllers;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.fxml.FXML;
@@ -30,12 +31,12 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
 
     private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
+    private final BooksRepo repo = BooksRepo.getInstance();
 
     @Override
     public void initialize() {
         updateTheme(configs.getTheme());
     }
-
 
 
     @FXML
@@ -48,7 +49,9 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
             return;
         }
 
-        System.out.println("Show Book");
+        bookModel = repo.findByBookId(bookModel.getBookId());
+        var hostServices = configs.getHostServices();
+        hostServices.showDocument(bookModel.getFilePath());
     }
 
     @Override
@@ -65,7 +68,7 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
         this.bookModel = bookModel;
     }
 
-    public void initStage(){
+    public void initStage() {
         stage.setMinWidth(itemBox.getMinWidth());
         stage.setMinHeight(itemBox.getMinHeight());
         bookUtils.setDataForDetails(itemBox, bookModel);
@@ -82,9 +85,15 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
         if (theme.equals("light")) {
             itemBox.setBackground(Background.fill(Paint.valueOf("#fff")));
             labels.forEach(label -> label.setTextFill(Paint.valueOf("#333")));
+            if (!downloadBtn.getStyleClass().contains("button-dark"))
+                downloadBtn.getStyleClass().add("button-dark");
+            downloadBtn.getStyleClass().remove("button-light");
         } else {
             itemBox.setBackground(Background.fill(Paint.valueOf("#333")));
             labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
+            if (!downloadBtn.getStyleClass().contains("button-light"))
+                downloadBtn.getStyleClass().add("button-light");
+            downloadBtn.getStyleClass().remove("button-dark");
         }
     }
 }

@@ -2,6 +2,7 @@ package ir.darkdeveloper.jbookfinder.controllers;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -89,7 +90,6 @@ public class BookItemController implements FXMLController {
             bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
             return;
         }
-
         var hostServices = configs.getHostServices();
         hostServices.showDocument(bookModel.getFilePath());
     }

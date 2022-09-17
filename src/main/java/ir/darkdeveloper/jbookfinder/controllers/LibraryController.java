@@ -60,6 +60,7 @@ public class LibraryController implements FXMLController, ThemeObserver {
                 itemParents.add(root);
                 LibraryItemController itemController = fxmlLoader.getController();
                 itemController.setBookModel(book);
+                configs.getThemeSubject().addObserver(itemController);
                 booksContainer.getChildren().add(root);
             } catch (IOException e) {
                 e.printStackTrace();

@@ -12,6 +12,7 @@ public class DBHelper {
     static final String TABLE_NAME = "books";
 
     static final String COL_ID = "id";
+    static final String COL_BOOK_ID = "book_id";
     static final String COL_AUTHOR = "author";
     static final String COL_TITLE = "title";
     static final String COL_PUBLISHER = "publisher";
@@ -36,6 +37,7 @@ public class DBHelper {
     void createTable() {
         var createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
                 + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COL_BOOK_ID + " VARCHAR unique ,"
                 + COL_AUTHOR + " VARCHAR unique ,"
                 + COL_TITLE + " VARCHAR unique ,"
                 + COL_PUBLISHER + " VARCHAR,"

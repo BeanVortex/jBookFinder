@@ -1,18 +1,27 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
+import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
+import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class LibraryItemController implements FXMLController {
+import java.util.List;
+
+public class LibraryItemController implements FXMLController, ThemeObserver {
 
 
+    @FXML
+    private Button detailsBtn;
+    @FXML
+    private Button downloadBtn;
     @FXML
     private ProgressIndicator imageProgress;
     @FXML
@@ -44,7 +53,7 @@ public class LibraryItemController implements FXMLController {
 
     @Override
     public void initialize() {
-
+        updateTheme(configs.getTheme());
     }
 
     @Override
@@ -91,4 +100,19 @@ public class LibraryItemController implements FXMLController {
     }
 
 
+    @Override
+    public void updateTheme(String theme) {
+        List.of(detailsBtn, downloadBtn)
+                .forEach(btn -> {
+                    if (configs.getTheme().equals("dark")) {
+                        if (!btn.getStyleClass().contains("button-light"))
+                            btn.getStyleClass().add("button-light");
+                        btn.getStyleClass().remove("button-dark");
+                    } else {
+                        if (!btn.getStyleClass().contains("button-dark"))
+                            btn.getStyleClass().add("button-dark");
+                        btn.getStyleClass().remove("button-light");
+                    }
+                });
+    }
 }
