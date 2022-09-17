@@ -28,7 +28,6 @@ public class JBookFinderApplication extends Application {
         stage.setMinHeight(480);
         stage.setTitle("Main Page");
         stage.show();
-        stage.setOnCloseRequest(event -> Platform.exit());
         Platform.runLater(() -> {
             var imagePath = FxUtils.class.getClassLoader().getResource("images/icon.jpg");
             if (imagePath != null) {
@@ -39,6 +38,7 @@ public class JBookFinderApplication extends Application {
                 tray.addExitItem(true);
             }
         });
+        stage.setOnCloseRequest(event -> Platform.exit());
         booksRepo.createTable();
         booksRepo.updateBookExistenceRecords();
         configs.setHostServices(getHostServices());

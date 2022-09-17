@@ -5,8 +5,8 @@ public class AppLauncher {
         JBookFinderApplication.main(args);
     }
 
-    // Todo: when connection lost or interrupted , delete corrupted downloaded file
-    // Todo: cancel button for searching and downloading
+    // Todo: delete book
     // Todo: stop thread when scene changed
+    // Todo: download file again when the file does not exist in library (using db)
     // Todo: refactorings
 }

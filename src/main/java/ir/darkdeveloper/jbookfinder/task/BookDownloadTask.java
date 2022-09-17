@@ -36,21 +36,26 @@ public class BookDownloadTask extends Task<Void> {
 
         var urlConnection = new URL(mirror).openConnection();
         var fileSize = urlConnection.getContentLength();
+        var filePath = Paths.get(configs.getSaveLocation() + File.separator + fileName);
         try (var is = urlConnection.getInputStream();
-             var os = Files.newOutputStream(Paths.get(configs.getSaveLocation() + File.separator + fileName))) {
+             var os = Files.newOutputStream(filePath)) {
             long nRead = 0L;
             var buf = new byte[8192];
             int n;
             while ((n = is.read(buf)) > 0) {
+                if (isCancelled())
+                    break;
                 os.write(buf, 0, n);
                 nRead += n;
                 updateProgress(nRead, fileSize);
             }
+
+            if (isCancelled())
+                Files.delete(filePath);
+
             var imagePath = configs.getBookCoverLocation() +
                     bookUtils.getImageFileName(bookModel.getImageUrl(), bookModel.getTitle());
-            var filePath = configs.getSaveLocation() + File.separator +
-                    bookUtils.getImageFileName("." + bookModel.getFileFormat(), bookModel.getTitle());
-            bookModel.setFilePath(filePath);
+            bookModel.setFilePath(filePath.toString());
             bookModel.setImagePath(imagePath);
             booksRepo.insertBook(bookModel);
         } catch (IOException e) {

@@ -8,6 +8,7 @@ import ir.darkdeveloper.jbookfinder.task.BookDownloadTask;
 import ir.darkdeveloper.jbookfinder.task.ImageFetchTask;
 import ir.darkdeveloper.jbookfinder.task.ScraperTask;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -18,6 +19,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -67,56 +69,65 @@ public class BookUtils {
     }
 
     public void downloadBookAndAddProgress(BookModel bookModel, VBox operationVbox) {
-        var downTask = downloadBook(bookModel, operationVbox);
-        if (downTask != null)
-            addProgress(operationVbox, downTask);
-    }
-
-    private void addProgress(VBox operationVbox, BookDownloadTask downTask) {
-        var progressBox = new HBox();
-        var progressLabel = new Label();
-        var progressBar = new ProgressBar();
-        progressBox.setSpacing(8);
-        progressLabel.setText("0 %");
-        if (configs.getTheme().equals("dark"))
-            progressLabel.setTextFill(Paint.valueOf("#fff"));
-        else
-            progressLabel.setTextFill(Paint.valueOf("#333"));
-        progressBox.getChildren().addAll(progressBar, progressLabel);
-        progressBox.setAlignment(Pos.CENTER);
-
-        operationVbox.getChildren().add(1, progressBox);
-        operationVbox.getChildren().get(0).setDisable(true);
-        if (operationVbox.getChildren().size() == 3) {
-            operationVbox.getChildren().get(2).setDisable(true);
-        }
-
-
-        if (downTask != null) {
-            progressBar.progressProperty().bind(downTask.progressProperty());
-            progressBar.progressProperty().addListener((o, ol, newVal) -> {
-                var percentage = (int) (newVal.doubleValue() * 100);
-                progressLabel.setText(percentage + " %");
-            });
-        }
-    }
-
-    private BookDownloadTask downloadBook(BookModel bookModel, VBox operationVbox) {
-
         var fileName = getFileName(bookModel);
         var file = new File(configs.getSaveLocation() + File.separator + fileName);
         if (file.exists()) {
-            addProgress(operationVbox, null);
+            addProgressAndCancel(operationVbox, null);
             completeDownload(operationVbox);
-            return null;
         } else {
             var downTask = new BookDownloadTask(bookModel, operationVbox, fileName);
+            addProgressAndCancel(operationVbox, downTask);
             var taskT = new Thread(downTask);
             taskT.setDaemon(true);
             taskT.start();
-            return downTask;
         }
     }
+
+    private void addProgressAndCancel(VBox operationVbox, BookDownloadTask downTask) {
+        try {
+
+            var loader = new FXMLLoader(getResource("fxml/download_ui.fxml"));
+            HBox progressBox = loader.load();
+            var progressBar = (ProgressBar) progressBox.getChildren().get(0);
+            var progressLabel = (Label) progressBox.getChildren().get(1);
+            var imageView = (ImageView) progressBox.getChildren().get(2);
+            var imagePath = this.getClass().getClassLoader().getResource("icons/close.png").toExternalForm();
+            imageView.setImage(new Image(imagePath));
+            imageView.setFitWidth(24);
+            imageView.setFitHeight(24);
+            imageView.setStyle("-fx-cursor: hand");
+            imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                downTask.cancel(true);
+                operationVbox.getChildren().get(0).setDisable(false);
+                if (operationVbox.getChildren().size() == 3)
+                    operationVbox.getChildren().get(2).setDisable(false);
+                operationVbox.getChildren().remove(progressBox);
+            });
+
+            progressLabel.setText("0 %");
+            if (configs.getTheme().equals("dark"))
+                progressLabel.setTextFill(Paint.valueOf("#fff"));
+            else
+                progressLabel.setTextFill(Paint.valueOf("#333"));
+
+            operationVbox.getChildren().add(1, progressBox);
+            operationVbox.getChildren().get(0).setDisable(true);
+            if (operationVbox.getChildren().size() == 3)
+                operationVbox.getChildren().get(2).setDisable(true);
+
+            if (downTask != null) {
+                progressBar.progressProperty().bind(downTask.progressProperty());
+                progressBar.progressProperty().addListener((o, ol, newVal) -> {
+                    var percentage = (int) (newVal.doubleValue() * 100);
+                    progressLabel.setText(percentage + " %");
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     public void fetchAndSetImageAsync(String imageUrl, String title, ImageView bookImage,
@@ -203,8 +214,22 @@ public class BookUtils {
     }
 
 
-    public void searchTheBookWithScrapper(Stage stage, String text) {
-        var scrapper = new ScraperTask(text, 1);
+    public void createSearchUI(String text, StackPane stackPane, Parent rootBox, ActionEvent e) {
+        createSearchUI(text, stackPane, rootBox, getStageFromEvent(e));
+    }
+
+    public void createSearchUI(String text, StackPane stackPane, Parent rootBox, Stage stage) {
+        var trimmedText = text.trim();
+        var progress = new ProgressIndicator();
+        var btnCancel = new Button("Cancel");
+        var vbox = new VBox(progress, btnCancel);
+        vbox.setSpacing(10);
+        vbox.setAlignment(Pos.CENTER);
+        rootBox.setDisable(true);
+        stackPane.getChildren().add(vbox);
+
+
+        var scrapper = new ScraperTask(trimmedText, 1);
         scrapper.valueProperty().addListener((obs, old, booksFlux) -> {
             var booksController = FxUtils.
                     switchSceneAndGetController(stage, "books.fxml", BooksController.class);
@@ -218,32 +243,17 @@ public class BookUtils {
             booksController.resizeListViewByStage(stage);
         });
 
+        btnCancel.setOnAction(event -> {
+            scrapper.cancel(true);
+            stackPane.getChildren().remove(vbox);
+            rootBox.setDisable(false);
+        });
+
         var thread = new Thread(scrapper);
         thread.setDaemon(true);
         thread.start();
     }
 
-
-    public void createSearchUI(String text, StackPane stackPane, Parent rootBox, ActionEvent e) {
-        createSearchUI(text, stackPane, rootBox, getStageFromEvent(e));
-    }
-
-    public void createSearchUI(String text, StackPane stackPane, Parent rootBox, Stage stage) {
-        var trimmedText = text.trim();
-        var progress = new ProgressIndicator();
-        var btnCancel = new Button("Cancel");
-        btnCancel.setOnAction(this::cancelSearch);
-        var vbox = new VBox(progress, btnCancel);
-        vbox.setSpacing(10);
-        vbox.setAlignment(Pos.CENTER);
-        rootBox.setDisable(true);
-        stackPane.getChildren().add(vbox);
-        bookUtils.searchTheBookWithScrapper(stage, trimmedText);
-    }
-
-
-    private void cancelSearch(ActionEvent e) {
-    }
 
     public void showDetails(BookModel bookModel) {
         try {
