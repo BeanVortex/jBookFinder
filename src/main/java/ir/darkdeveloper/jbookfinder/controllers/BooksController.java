@@ -126,6 +126,7 @@ public class BooksController implements FXMLController, ThemeObserver {
         var text = fieldSearch.getText();
         if (!text.isBlank())
             bookUtils.createSearchUI(text, rootPane, rootVbox, e);
+        updateTheme(configs.getTheme());
     }
 
 
