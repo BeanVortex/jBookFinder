@@ -52,12 +52,14 @@ public class BookDownloadTask extends Task<Void> {
 
             if (isCancelled())
                 Files.delete(filePath);
+            else {
+                var imagePath = configs.getBookCoverLocation() +
+                        bookUtils.getImageFileName(bookModel.getImageUrl(), bookModel.getTitle());
+                bookModel.setFilePath(filePath.toString());
+                bookModel.setImagePath(imagePath);
+                booksRepo.insertBook(bookModel);
+            }
 
-            var imagePath = configs.getBookCoverLocation() +
-                    bookUtils.getImageFileName(bookModel.getImageUrl(), bookModel.getTitle());
-            bookModel.setFilePath(filePath.toString());
-            bookModel.setImagePath(imagePath);
-            booksRepo.insertBook(bookModel);
         } catch (IOException e) {
             e.printStackTrace();
             failed();

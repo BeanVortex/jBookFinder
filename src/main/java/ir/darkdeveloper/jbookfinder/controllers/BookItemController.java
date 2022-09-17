@@ -49,7 +49,6 @@ public class BookItemController implements FXMLController {
 
     @Override
     public void initialize() {
-
     }
 
     @Override
@@ -87,7 +86,7 @@ public class BookItemController implements FXMLController {
             return;
 
         if (!downloadBtn.getText().equals("Open Book")) {
-            bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
+            bookUtils.downloadBookAndAddProgress(bookModel, operationVbox, stage);
             return;
         }
         var hostServices = configs.getHostServices();

@@ -68,7 +68,7 @@ public class BookUtils {
         }
     }
 
-    public void downloadBookAndAddProgress(BookModel bookModel, VBox operationVbox) {
+    public void downloadBookAndAddProgress(BookModel bookModel, VBox operationVbox, Stage stage) {
         var fileName = getFileName(bookModel);
         var file = new File(configs.getSaveLocation() + File.separator + fileName);
         if (file.exists()) {
@@ -77,6 +77,7 @@ public class BookUtils {
         } else {
             var downTask = new BookDownloadTask(bookModel, operationVbox, fileName);
             addProgressAndCancel(operationVbox, downTask);
+            stage.sceneProperty().addListener((obs, old, newV) -> downTask.cancel());
             var taskT = new Thread(downTask);
             taskT.setDaemon(true);
             taskT.start();

@@ -49,7 +49,7 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
         if (bookModel == null)
             return;
 
-        if (fromLibrary){
+        if (fromLibrary) {
             var filePath = bookModel.getFilePath();
             if (!new File(filePath).exists()) {
                 var alert = new Alert(Alert.AlertType.ERROR);
@@ -61,7 +61,7 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
         }
 
         if (!downloadBtn.getText().equals("Open Book")) {
-            bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
+            bookUtils.downloadBookAndAddProgress(bookModel, operationVbox, stage);
             return;
         }
 

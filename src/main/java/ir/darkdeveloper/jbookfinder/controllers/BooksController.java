@@ -33,8 +33,6 @@ public class BooksController implements FXMLController, ThemeObserver {
     @FXML
     private StackPane rootPane;
     @FXML
-    private MenuBar menuBar;
-    @FXML
     private TextField fieldSearch;
     @FXML
     private FlowPane booksContainer;
@@ -110,7 +108,6 @@ public class BooksController implements FXMLController, ThemeObserver {
 
     @FXML
     private void getBack() {
-        var stage = (Stage) menuBar.getScene().getWindow();
         FxUtils.switchSceneToMain(stage, "main.fxml");
     }
 

@@ -14,6 +14,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 
@@ -82,8 +85,13 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
             var buttonTypeOpt = alert.showAndWait();
             buttonTypeOpt.ifPresent(buttonType -> {
                 if (buttonType == ButtonType.OK) {
-                    repo.deleteBook(bookModel.getId());
-                    libraryController.initialize();
+                    try {
+                        repo.deleteBook(bookModel.getId());
+                        Files.delete(Paths.get(bookModel.getFilePath()));
+                        libraryController.initialize();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else if (buttonType == ButtonType.CANCEL)
                     alert.close();
             });
@@ -134,9 +142,9 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
             alert.setContentText("Would you like to download it again?\ncancel to delete the record");
             var buttonTypeOpt = alert.showAndWait();
             buttonTypeOpt.ifPresent(buttonType -> {
-                if (buttonType == ButtonType.OK) {
-                    bookUtils.downloadBookAndAddProgress(bookModel, operationVbox);
-                } else if (buttonType == ButtonType.CANCEL) {
+                if (buttonType == ButtonType.OK)
+                    bookUtils.downloadBookAndAddProgress(bookModel, operationVbox, stage);
+                else if (buttonType == ButtonType.CANCEL) {
                     repo.deleteBook(bookModel.getId());
                     libraryController.initialize();
                 }
