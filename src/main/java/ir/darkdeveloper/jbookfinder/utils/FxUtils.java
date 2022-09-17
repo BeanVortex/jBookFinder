@@ -1,6 +1,5 @@
 package ir.darkdeveloper.jbookfinder.utils;
 
-import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import ir.darkdeveloper.jbookfinder.controllers.FXMLController;
 import ir.darkdeveloper.jbookfinder.controllers.MainController;
 import javafx.event.ActionEvent;
@@ -11,12 +10,10 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class FxUtils {
 
@@ -25,7 +22,7 @@ public class FxUtils {
         try {
             var loader = new FXMLLoader(getResource("fxml/" + fxmlFilename));
             Parent root = loader.load();
-            var scene = new Scene(root);
+            var scene = new Scene(root, stage.getWidth(), stage.getHeight());
             MainController controller = loader.getController();
             controller.setStage(stage);
             scene.setOnKeyPressed(event -> {
@@ -36,17 +33,6 @@ public class FxUtils {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
-
-    public static <T extends FXMLController> T getFxmlController(String fxmlFilename, Class<T> tClass) {
-        var loader = new FXMLLoader(getResource("fxml/" + fxmlFilename));
-        try {
-            loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        var fxmlController = loader.getController();
-        return tClass.cast(fxmlController);
     }
 
 
@@ -66,7 +52,7 @@ public class FxUtils {
         try {
             var loader = new FXMLLoader(FxUtils.getResource("fxml/" + fxmlFilename));
             Parent root = loader.load();
-            var scene = new Scene(root);
+            var scene = new Scene(root, stage.getWidth(), stage.getHeight());
             stage.setScene(scene);
             return tClass.cast(loader.getController());
         } catch (Exception ex) {

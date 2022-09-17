@@ -6,7 +6,7 @@ public class AppLauncher {
     }
 
     // Todo: when connection lost or interrupted , delete corrupted downloaded file
-    // Todo: scene size changes when switching
+    // Todo: cancel button for searching and downloading
     // Todo: stop thread when scene changed
     // Todo: refactorings
 }
