@@ -85,7 +85,6 @@ public class BookUtils {
 
     private void addProgressAndCancel(VBox operationVbox, BookDownloadTask downTask) {
         try {
-
             var loader = new FXMLLoader(getResource("fxml/download_ui.fxml"));
             HBox progressBox = loader.load();
             var progressBar = (ProgressBar) progressBox.getChildren().get(0);

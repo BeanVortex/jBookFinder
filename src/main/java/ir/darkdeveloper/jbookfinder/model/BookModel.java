@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class BookModel {
-    private String id;
+    private Integer id;
     private String bookId;
     private String author;
     private String title;

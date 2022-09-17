@@ -126,7 +126,7 @@ public class BooksRepo {
         var mirror = rs.getString(COL_MIRROR);
         var imagePath = rs.getString(COL_IMAGE_PATH);
         var filePath = rs.getString(COL_FILE_PATH);
-        return new BookModel(String.valueOf(id),book_id, author, title, publisher, year, pages, language, size,
+        return new BookModel(id, book_id, author, title, publisher, year, pages, language, size,
                 fileFormat, imageUrl, mirror, imagePath, filePath);
     }
 

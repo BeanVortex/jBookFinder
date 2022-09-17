@@ -51,6 +51,7 @@ public class LibraryController implements FXMLController, ThemeObserver {
 
     @Override
     public void initialize() {
+        booksContainer.getChildren().clear();
         var fetchedBooks = booksRepo.getBooks();
         booksList = new ArrayList<>(fetchedBooks);
         fetchedBooks.forEach(book -> {
@@ -60,6 +61,7 @@ public class LibraryController implements FXMLController, ThemeObserver {
                 itemParents.add(root);
                 LibraryItemController itemController = fxmlLoader.getController();
                 itemController.setBookModel(book);
+                itemController.setLibController(this);
                 configs.getThemeSubject().addObserver(itemController);
                 booksContainer.getChildren().add(root);
             } catch (IOException e) {

@@ -7,6 +7,6 @@ public class AppLauncher {
 
     // Todo: delete book
     // Todo: stop thread when scene changed
-    // Todo: download file again when the file does not exist in library (using db)
+    // Todo: if file exists but record of it not, then move the file in folder called prevDownloads
     // Todo: refactorings
 }
