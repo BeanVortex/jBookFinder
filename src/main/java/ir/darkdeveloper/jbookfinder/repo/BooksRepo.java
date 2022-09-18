@@ -135,7 +135,7 @@ public class BooksRepo {
         books.forEach(book -> {
             var file = new File(book.getFilePath());
             if (!file.exists())
-                booksRepo.deleteBook(Integer.valueOf(book.getId()));
+                booksRepo.deleteBook(book.getId());
         });
     }
 
@@ -165,5 +165,20 @@ public class BooksRepo {
             book.setImagePath(imagePath);
             updateBooksPath(book);
         });
+    }
+
+    public boolean doesBookExist(String fileTitle) {
+        var sql = "SELECT (COUNT(*) > 0) AS found FROM " + TABLE_NAME + " WHERE file_path like '%" + fileTitle + "%';";
+        try (var con = dbHelper.openConnection();
+             var stmt = con.prepareStatement(sql);
+             var res = stmt.executeQuery()) {
+            if (res.next()) {
+                var found = res.getInt(1);
+                return found == 1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

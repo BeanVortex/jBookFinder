@@ -2,10 +2,13 @@ package ir.darkdeveloper.jbookfinder.utils;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
+import java.awt.*;
 import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -16,6 +19,7 @@ public class IOUtils {
 
     private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
+    private final BooksRepo repo = BooksRepo.getInstance();
     private static final Logger log = Logger.getLogger(IOUtils.class.getName());
 
     private IOUtils() {
@@ -119,6 +123,27 @@ public class IOUtils {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void moveUnRecordedFiles() throws IOException {
+        var saveDir = new File(configs.getSaveLocation());
+        var files = saveDir.listFiles();
+        if (files != null) {
+            for (var file : files) {
+                if (file.isFile()) {
+                    var fileName = file.getName();
+                    var title = fileName.substring(0, fileName.lastIndexOf('.'));
+                    if (!repo.doesBookExist(title)) {
+                        var unrecordedDir = new File(configs.getSaveLocation() + File.separator + "unrecorded_books");
+                        unrecordedDir.mkdir();
+                        var destFile = new File(unrecordedDir.getPath() + File.separator + file.getName());
+                        if (!file.renameTo(destFile))
+                            if (destFile.exists())
+                                Files.delete(file.toPath());
+                    }
+                }
+            }
         }
     }
 

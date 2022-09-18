@@ -9,6 +9,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class JBookFinderApplication extends Application {
 
     private final IOUtils ioUtils = IOUtils.getInstance();
@@ -20,7 +22,7 @@ public class JBookFinderApplication extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException {
         ioUtils.readConfig();
         ioUtils.createSaveLocation();
         FxUtils.switchSceneToMain(stage, "main.fxml");
@@ -41,6 +43,7 @@ public class JBookFinderApplication extends Application {
         stage.setOnCloseRequest(event -> Platform.exit());
         booksRepo.createTable();
         booksRepo.updateBookExistenceRecords();
+        ioUtils.moveUnRecordedFiles();
         configs.setHostServices(getHostServices());
     }
 

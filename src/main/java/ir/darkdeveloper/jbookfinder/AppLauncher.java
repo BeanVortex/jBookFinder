@@ -6,6 +6,5 @@ public class AppLauncher {
     }
 
     // Todo: app icon
-    // Todo: if file exists but record of it not, then move the file in folder called prevDownloads
     // Todo: refactorings
 }
