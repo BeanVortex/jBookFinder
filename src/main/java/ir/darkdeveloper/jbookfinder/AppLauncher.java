@@ -5,7 +5,7 @@ public class AppLauncher {
         JBookFinderApplication.main(args);
     }
 
-    // Todo: do not delete images of saved books
+    // Todo: change file name saving algorithm
     // Todo: app icon
     // Todo: refactorings
 }

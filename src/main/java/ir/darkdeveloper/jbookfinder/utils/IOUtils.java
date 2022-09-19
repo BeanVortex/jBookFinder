@@ -33,15 +33,17 @@ public class IOUtils {
     }
 
 
-    public void deleteCachedImages(List<BookModel> notToDeleteBooks, Stage stage) {
+    public void deleteCachedImages(List<BookModel> notToDeleteBooks) {
         var path = configs.getBookCoverLocation();
+        if (notToDeleteBooks == null)
+            notToDeleteBooks = new ArrayList<>();
+        notToDeleteBooks.addAll(repo.getBooks());
 
         var filesNotToDelete = new ArrayList<String>();
-        if (notToDeleteBooks != null)
-            notToDeleteBooks.forEach(book -> {
-                var imageFileName = bookUtils.getImageFileName(book.getImageUrl(), book.getTitle());
-                filesNotToDelete.add(imageFileName);
-            });
+        notToDeleteBooks.forEach(book -> {
+            var imageFileName = bookUtils.getImageFileName(book.getImageUrl(), book.getTitle());
+            filesNotToDelete.add(imageFileName);
+        });
 
         var dir = new File(path);
         var files = dir.listFiles();

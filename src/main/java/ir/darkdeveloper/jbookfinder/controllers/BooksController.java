@@ -131,7 +131,7 @@ public class BooksController implements FXMLController, ThemeObserver {
 
     @FXML
     private void clearImageCache() {
-        ioUtils.deleteCachedImages(booksList, stage);
+        ioUtils.deleteCachedImages(booksList);
     }
 
     @FXML

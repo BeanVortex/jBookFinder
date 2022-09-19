@@ -95,7 +95,7 @@ public class SettingsController implements FXMLController, ThemeObserver {
 
     @FXML
     private void clearCache() {
-        ioUtils.deleteCachedImages(notToDeleteBooks, stage);
+        ioUtils.deleteCachedImages(notToDeleteBooks);
         labelImageCache.setText(String.valueOf(ioUtils.getFolderSize(new File(configs.getBookCoverLocation()))));
     }
 
