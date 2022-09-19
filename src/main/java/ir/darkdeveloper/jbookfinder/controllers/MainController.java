@@ -41,10 +41,9 @@ public class MainController implements FXMLController {
     private void showSettings() {
         var controller = (SettingsController) FxUtils
                 .newStageAndReturnController("settings.fxml", 450, 500);
-        if (controller != null) {
-            var stage = controller.getStage();
-            controller.resizeLinesByStage(stage);
-        }
+        if (controller != null)
+            configs.getThemeSubject().addObserver(controller);
+
     }
 
     @Override

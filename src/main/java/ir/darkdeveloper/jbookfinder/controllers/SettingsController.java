@@ -1,6 +1,7 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
+import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
@@ -20,7 +21,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.List;
 
-public class SettingsController implements FXMLController {
+public class SettingsController implements FXMLController, ThemeObserver {
 
     @FXML
     private Line line1;
@@ -41,22 +42,16 @@ public class SettingsController implements FXMLController {
 
     private List<BookModel> notToDeleteBooks;
     private Stage stage;
+    private List<Label> labels;
 
 
     @Override
     public void initialize() {
+        labels = FxUtils.getAllNodes(parent, Label.class);
         labelImageCache.setText(String.valueOf(ioUtils.getFolderSize(new File(configs.getBookCoverLocation()))));
         labelLocation.setText(configs.getSaveLocation());
-        var labels = FxUtils.getAllNodes(parent, Label.class);
 
-        if (configs.getTheme().equals("light")) {
-            circleTheme.setFill(Paint.valueOf("#333"));
-            parent.setBackground(Background.fill(Paint.valueOf("#fff")));
-        } else {
-            circleTheme.setFill(Paint.valueOf("#fff"));
-            parent.setBackground(Background.fill(Paint.valueOf("#333")));
-            labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
-        }
+        updateTheme(configs.getTheme());
 
         circleTheme.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (configs.getTheme().equals("light")) {
@@ -80,6 +75,7 @@ public class SettingsController implements FXMLController {
     @Override
     public void setStage(Stage stage) {
         this.stage = stage;
+        resizeLinesByStage();
     }
 
     @Override
@@ -117,12 +113,24 @@ public class SettingsController implements FXMLController {
     }
 
 
-    public void resizeLinesByStage(Stage stage) {
+    public void resizeLinesByStage() {
         stage.widthProperty().addListener((obs, old, newVal) -> parent.setPrefWidth((Double) newVal));
-        var padding = parent.getPadding().getRight() + parent.getPadding().getLeft();
         parent.prefWidthProperty().addListener((obs, old, newValue) -> {
+            var padding = parent.getPadding().getRight() + parent.getPadding().getLeft();
             line1.setEndX((Double) newValue - padding);
             line2.setEndX((Double) newValue - padding);
         });
+    }
+
+    @Override
+    public void updateTheme(String theme) {
+        if (configs.getTheme().equals("light")) {
+            circleTheme.setFill(Paint.valueOf("#333"));
+            parent.setBackground(Background.fill(Paint.valueOf("#fff")));
+        } else {
+            circleTheme.setFill(Paint.valueOf("#fff"));
+            parent.setBackground(Background.fill(Paint.valueOf("#333")));
+            labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
+        }
     }
 }

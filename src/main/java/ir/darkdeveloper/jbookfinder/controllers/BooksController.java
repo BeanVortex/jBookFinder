@@ -114,8 +114,10 @@ public class BooksController implements FXMLController, ThemeObserver {
     public void showSettings() {
         var controller = (SettingsController) FxUtils
                 .newStageAndReturnController("settings.fxml", 450, 500);
-        if (controller != null)
+        if (controller != null) {
             controller.setNotToDeleteBooks(booksList);
+            configs.getThemeSubject().addObserver(controller);
+        }
     }
 
     @FXML
