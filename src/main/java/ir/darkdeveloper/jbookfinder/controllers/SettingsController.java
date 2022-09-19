@@ -8,6 +8,7 @@ import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -23,6 +24,10 @@ import java.util.List;
 
 public class SettingsController implements FXMLController, ThemeObserver {
 
+    @FXML
+    private Button btnClear;
+    @FXML
+    private Button btnChangeDir;
     @FXML
     private Line line1;
     @FXML
@@ -132,5 +137,19 @@ public class SettingsController implements FXMLController, ThemeObserver {
             parent.setBackground(Background.fill(Paint.valueOf("#333")));
             labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
         }
+
+        List.of(btnChangeDir, btnClear)
+                .forEach(btn -> {
+                    if (configs.getTheme().equals("dark")) {
+                        btn.getStyleClass().remove("button-dark");
+                        if (!btn.getStyleClass().contains("button-light"))
+                            btn.getStyleClass().add("button-light");
+                    } else {
+                        if (!btn.getStyleClass().contains("button-dark"))
+                            btn.getStyleClass().add("button-dark");
+                        btn.getStyleClass().remove("button-light");
+                    }
+                });
+
     }
 }

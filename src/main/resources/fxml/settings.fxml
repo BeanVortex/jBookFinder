@@ -14,12 +14,12 @@
         <HBox prefWidth="430" alignment="CENTER">
             <Label styleClass="settingDescription" text="Current Location: " fx:id="labelLocation"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="change" onAction="#changeSaveDir"/>
+            <Button text="change" onAction="#changeSaveDir" fx:id="btnChangeDir"/>
         </HBox>
         <HBox prefWidth="430" alignment="CENTER">
             <Label styleClass="settingDescription" text="Image caches: " fx:id="labelImageCache"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="clear" onAction="#clearCache"/>
+            <Button text="clear" onAction="#clearCache" fx:id="btnClear"/>
         </HBox>
     </VBox>
 

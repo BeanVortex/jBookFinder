@@ -6,7 +6,6 @@ public class AppLauncher {
     }
 
     // Todo: do not delete images of saved books
-    // Todo: setting ui buttons
     // Todo: app icon
     // Todo: refactorings
 }
