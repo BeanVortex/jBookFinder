@@ -139,12 +139,12 @@ public class BookUtils {
 
     public String getImageFileName(String imageUrl, String title) {
         var fileExt = imageUrl.substring(imageUrl.lastIndexOf('.'));
-        return title.replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + fileExt;
+        return title.replaceAll("[~\\-{}'&%$!^():/\"\\[\\]]", "_") + fileExt;
     }
 
     public String getFileName(BookModel bookModel) {
         return bookModel.getTitle()
-                .replaceAll("[^A-Za-z0-9()\\[\\]]", "_") + "." + bookModel.getFileFormat();
+                .replaceAll("[~\\-{}'&%$!^():/\"\\[\\]]", "_") + "." + bookModel.getFileFormat();
     }
 
     public void completeDownload(VBox operationVbox) {
