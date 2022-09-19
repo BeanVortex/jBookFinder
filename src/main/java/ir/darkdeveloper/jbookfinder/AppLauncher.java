@@ -5,7 +5,5 @@ public class AppLauncher {
         JBookFinderApplication.main(args);
     }
 
-    //
-    // Todo: app icon
     // Todo: refactorings
 }

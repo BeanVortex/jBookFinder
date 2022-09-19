@@ -5,6 +5,7 @@ import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
+import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -79,6 +80,10 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
 
         deleteBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             var alert = new Alert(Alert.AlertType.CONFIRMATION);
+            var alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            var logoPath = FxUtils.class.getClassLoader().getResource("images/logo.png");
+            if (logoPath != null)
+                alertStage.getIcons().add(new Image(logoPath.toExternalForm()));
             alert.setTitle("Book deleting");
             alert.setHeaderText("You are deleting the book");
             alert.setContentText("Are you sure about this?");
@@ -137,6 +142,10 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
             hostServices.showDocument(filePath);
         } else {
             var alert = new Alert(Alert.AlertType.CONFIRMATION);
+            var alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            var logoPath = FxUtils.class.getClassLoader().getResource("images/logo.png");
+            if (logoPath != null)
+                alertStage.getIcons().add(new Image(logoPath.toExternalForm()));
             alert.setTitle("Book not found");
             alert.setHeaderText("Book file does not exist");
             alert.setContentText("Would you like to download it again?\ncancel to delete the record");

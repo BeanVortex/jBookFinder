@@ -9,8 +9,8 @@ import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -53,6 +53,10 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
             var filePath = bookModel.getFilePath();
             if (!new File(filePath).exists()) {
                 var alert = new Alert(Alert.AlertType.ERROR);
+                var alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                var logoPath = FxUtils.class.getClassLoader().getResource("images/logo.png");
+                if (logoPath != null)
+                    alertStage.getIcons().add(new Image(logoPath.toExternalForm()));
                 alert.setTitle("Book not found");
                 alert.setHeaderText("Book file does not exist");
                 alert.show();

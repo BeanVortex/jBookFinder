@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
@@ -70,6 +71,9 @@ public class FxUtils {
             controller.setStage(stage);
             var scene = new Scene(root);
             stage.setScene(scene);
+            var logoPath = FxUtils.class.getClassLoader().getResource("images/logo.png");
+            if (logoPath != null)
+                stage.getIcons().add(new Image(logoPath.toExternalForm()));
             stage.setMinWidth(minWidth);
             stage.setMinHeight(minHeight);
             stage.show();
