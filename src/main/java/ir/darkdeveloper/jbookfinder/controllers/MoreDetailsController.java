@@ -19,6 +19,8 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
+import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
+
 public class MoreDetailsController implements FXMLController, ThemeObserver {
 
 
@@ -54,7 +56,7 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
             if (!new File(filePath).exists()) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 var alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                var logoPath = FxUtils.class.getClassLoader().getResource("images/logo.png");
+                var logoPath = getResource("images/logo.png");
                 if (logoPath != null)
                     alertStage.getIcons().add(new Image(logoPath.toExternalForm()));
                 alert.setTitle("Book not found");

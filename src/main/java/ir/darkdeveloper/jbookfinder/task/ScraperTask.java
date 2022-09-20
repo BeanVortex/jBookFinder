@@ -67,7 +67,7 @@ public class ScraperTask extends Task<Flux<BookModel>> {
     private Flux<BookModel> cleanAndFetchOtherData(List<BookModel> books) {
         var baseURL = configs.getImageBaseUrl();
         if (books.isEmpty()) {
-            configs.getFxTray().showErrorMessage("No books found");
+//            configs.getFxTray().showErrorMessage("No books found");
             failed();
             return Flux.empty();
         }

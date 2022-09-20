@@ -112,8 +112,9 @@ public class SettingsController implements FXMLController, ThemeObserver {
                 ioUtils.saveConfigs(selectedDir.getPath());
                 labelLocation.setText(configs.getSaveLocation());
                 booksRepo.updateBooksPath(configs.getSaveLocation());
-            } else
-                configs.getFxTray().showErrorMessage("Directory is not empty");
+            } else {
+            }
+//                configs.getFxTray().showErrorMessage("Directory is not empty");
         }
     }
 

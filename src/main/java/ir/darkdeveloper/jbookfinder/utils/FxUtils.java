@@ -71,7 +71,7 @@ public class FxUtils {
             controller.setStage(stage);
             var scene = new Scene(root);
             stage.setScene(scene);
-            var logoPath = FxUtils.class.getClassLoader().getResource("images/logo.png");
+            var logoPath = getResource("images/logo.png");
             if (logoPath != null)
                 stage.getIcons().add(new Image(logoPath.toExternalForm()));
             stage.setMinWidth(minWidth);
@@ -85,7 +85,7 @@ public class FxUtils {
     }
 
     public static URL getResource(String path) {
-        return FxUtils.class.getClassLoader().getResource(path);
+        return FxUtils.class.getClassLoader().getResource("ir/darkdeveloper/jbookfinder/" + path);
     }
 
     public static <T> List<T> getAllNodes(Parent root, Class<T> tClass) {

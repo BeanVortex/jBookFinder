@@ -45,7 +45,7 @@ public class LibraryController implements FXMLController, ThemeObserver {
     private void showSettings() {
         var controller = (SettingsController) FxUtils
                 .newStageAndReturnController("settings.fxml", 450, 500);
-        if (controller != null){
+        if (controller != null) {
             controller.setNotToDeleteBooks(booksList);
             configs.getThemeSubject().addObserver(controller);
         }
@@ -53,6 +53,9 @@ public class LibraryController implements FXMLController, ThemeObserver {
 
     @Override
     public void initialize() {
+    }
+
+    private void initAfterStageSet() {
         booksContainer.getChildren().clear();
         var fetchedBooks = booksRepo.getBooks();
         booksList = new ArrayList<>(fetchedBooks);
@@ -64,6 +67,7 @@ public class LibraryController implements FXMLController, ThemeObserver {
                 LibraryItemController itemController = fxmlLoader.getController();
                 itemController.setBookModel(book);
                 itemController.setLibController(this);
+                itemController.setStage(stage);
                 configs.getThemeSubject().addObserver(itemController);
                 booksContainer.getChildren().add(root);
             } catch (IOException e) {
@@ -83,6 +87,7 @@ public class LibraryController implements FXMLController, ThemeObserver {
     @Override
     public void setStage(Stage stage) {
         this.stage = stage;
+        initAfterStageSet();
     }
 
     @Override

@@ -3,10 +3,8 @@ package ir.darkdeveloper.jbookfinder.utils;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
-import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
-import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -52,7 +50,7 @@ public class IOUtils {
                 if (!file.isDirectory() && !filesNotToDelete.contains(file.getName()))
                     file.delete();
 
-        configs.getFxTray().showInfoMessage("Image caches deleted");
+//        configs.getFxTray().showInfoMessage("Image caches deleted");
     }
 
 

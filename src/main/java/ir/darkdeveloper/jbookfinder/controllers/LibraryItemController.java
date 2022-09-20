@@ -19,7 +19,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
+
+import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
 
 public class LibraryItemController implements FXMLController, ThemeObserver {
 
@@ -66,8 +67,7 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
     @Override
     public void initialize() {
         updateTheme(configs.getTheme());
-        var imagePath = Objects.requireNonNull(this.getClass().getClassLoader().getResource("icons/close.png"))
-                .toExternalForm();
+        var imagePath = getResource("icons/close.png").toExternalForm();
         deleteBtn.setImage(new Image(imagePath));
         deleteBtn.setFitHeight(22);
         deleteBtn.setFitWidth(22);
@@ -81,7 +81,7 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
         deleteBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             var alert = new Alert(Alert.AlertType.CONFIRMATION);
             var alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-            var logoPath = FxUtils.class.getClassLoader().getResource("images/logo.png");
+            var logoPath = getResource("images/logo.png");
             if (logoPath != null)
                 alertStage.getIcons().add(new Image(logoPath.toExternalForm()));
             alert.setTitle("Book deleting");

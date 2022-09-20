@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -91,7 +90,7 @@ public class BookUtils {
             var progressBar = (ProgressBar) progressBox.getChildren().get(0);
             var progressLabel = (Label) progressBox.getChildren().get(1);
             var imageView = (ImageView) progressBox.getChildren().get(2);
-            var imagePath = Objects.requireNonNull(this.getClass().getClassLoader().getResource("icons/close.png")).toExternalForm();
+            var imagePath = getResource("icons/close.png").toExternalForm();
             imageView.setImage(new Image(imagePath));
             imageView.setFitWidth(24);
             imageView.setFitHeight(24);
@@ -154,7 +153,7 @@ public class BookUtils {
             operationVbox.getChildren().get(1).setDisable(false);
         var downloadBtn = (Button) operationVbox.getChildren().get(0);
         downloadBtn.setText("Open Book");
-        configs.getFxTray().showInfoMessage("Book download");
+//        configs.getFxTray().showInfoMessage("Book download");
     }
 
     public void setDataForDetails(HBox root, BookModel bookModel) {
