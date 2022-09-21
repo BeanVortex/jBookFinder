@@ -43,14 +43,14 @@ public class BookDownloadTask extends Task<Void> {
             var buf = new byte[8192];
             int n;
             while ((n = is.read(buf)) > 0) {
-                if (isCancelled())
+                if (!configs.isBackgroundDownload() && isCancelled())
                     break;
                 os.write(buf, 0, n);
                 nRead += n;
                 updateProgress(nRead, fileSize);
             }
 
-            if (isCancelled())
+            if (!configs.isBackgroundDownload() && isCancelled())
                 Files.delete(filePath);
             else {
                 var imagePath = configs.getBookCoverLocation() +
@@ -58,6 +58,7 @@ public class BookDownloadTask extends Task<Void> {
                 bookModel.setFilePath(filePath.toString());
                 bookModel.setImagePath(imagePath);
                 booksRepo.insertBook(bookModel);
+                succeeded();
             }
 
         } catch (IOException e) {
@@ -70,7 +71,7 @@ public class BookDownloadTask extends Task<Void> {
 
     @Override
     protected void succeeded() {
-        bookUtils.completeDownload(operationVbox);
+        bookUtils.completeDownload(operationVbox, bookModel.getTitle());
     }
 
     @Override

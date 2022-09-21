@@ -44,9 +44,7 @@ public class JBookFinder extends Application {
         booksRepo.createTable();
         booksRepo.updateBookExistenceRecords();
         ioUtils.moveUnRecordedFiles();
-        configs.setHostServices(
-
-                getHostServices());
+        configs.setHostServices(getHostServices());
     }
 
 
@@ -54,8 +52,6 @@ public class JBookFinder extends Application {
     public void stop() {
         System.out.println("stopped");
         Platform.exit();
-//        if (configs.getFxTray() != null)
-//            configs.getFxTray().hide();
     }
 
     public static URL getResource(String path) {

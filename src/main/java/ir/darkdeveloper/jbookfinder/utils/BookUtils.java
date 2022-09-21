@@ -7,6 +7,7 @@ import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.task.BookDownloadTask;
 import ir.darkdeveloper.jbookfinder.task.ImageFetchTask;
 import ir.darkdeveloper.jbookfinder.task.ScraperTask;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -73,7 +74,7 @@ public class BookUtils {
         var file = new File(configs.getSaveLocation() + File.separator + fileName);
         if (file.exists()) {
             addProgressAndCancel(operationVbox, null);
-            completeDownload(operationVbox);
+            completeDownload(operationVbox, bookModel.getTitle());
         } else {
             var downTask = new BookDownloadTask(bookModel, operationVbox, fileName);
             addProgressAndCancel(operationVbox, downTask);
@@ -147,17 +148,19 @@ public class BookUtils {
                 .replaceAll("[~\\-{}'&%$!^():/\"\\[\\]]", "_") + "." + bookModel.getFileFormat();
     }
 
-    public void completeDownload(VBox operationVbox) {
+    public void completeDownload(VBox operationVbox, String bookTitle) {
+        Platform.runLater(
+                () -> Notifications.create()
+                        .title("Operation complete")
+                        .text("Book " + bookTitle.substring(bookTitle.length() / 2) + " downloaded successfully")
+                        .showInformation()
+        );
         operationVbox.getChildren().remove(1);
         operationVbox.getChildren().get(0).setDisable(false);
         if (operationVbox.getChildren().size() == 2)
             operationVbox.getChildren().get(1).setDisable(false);
         var downloadBtn = (Button) operationVbox.getChildren().get(0);
         downloadBtn.setText("Open Book");
-        Notifications.create()
-                .title("Operation complete")
-                .text("Book downloaded successfully")
-                .showInformation();
     }
 
     public void setDataForDetails(HBox root, BookModel bookModel) {
