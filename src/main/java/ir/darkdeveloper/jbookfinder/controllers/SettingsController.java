@@ -9,6 +9,7 @@ import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -27,6 +28,8 @@ import java.util.List;
 public class SettingsController implements FXMLController, ThemeObserver {
 
     @FXML
+    private CheckBox downCheck;
+    @FXML
     private Button btnClear;
     @FXML
     private Button btnChangeDir;
@@ -34,6 +37,8 @@ public class SettingsController implements FXMLController, ThemeObserver {
     private Line line1;
     @FXML
     private Line line2;
+    @FXML
+    private Line line3;
     @FXML
     private VBox parent;
     @FXML
@@ -74,6 +79,13 @@ public class SettingsController implements FXMLController, ThemeObserver {
                 labels.forEach(label -> label.setTextFill(Paint.valueOf("#111")));
                 configs.setTheme("light");
             }
+            ioUtils.saveConfigs(null);
+        });
+
+        downCheck.setSelected(configs.isBackgroundDownload());
+
+        downCheck.setOnAction(event -> {
+            configs.setBackgroundDownload(downCheck.isSelected());
             ioUtils.saveConfigs(null);
         });
 
@@ -130,6 +142,7 @@ public class SettingsController implements FXMLController, ThemeObserver {
             var padding = parent.getPadding().getRight() + parent.getPadding().getLeft();
             line1.setEndX((Double) newValue - padding);
             line2.setEndX((Double) newValue - padding);
+            line3.setEndX((Double) newValue - padding);
         });
     }
 

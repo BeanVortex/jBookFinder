@@ -86,6 +86,9 @@ public class IOUtils {
             log.info("not created dir: " + dirPath);
     }
 
+    /**
+     * @param savePath new location for saving books, pass null for other setting updates
+     * */
     public void saveConfigs(String savePath) {
         try {
             var prevSaveLocation = configs.getSaveLocation();
@@ -101,7 +104,9 @@ public class IOUtils {
             var writer = new FileWriter(file);
             writer.append("save_location=").append(configs.getSaveLocation())
                     .append("\n")
-                    .append("theme=").append(configs.getTheme());
+                    .append("theme=").append(configs.getTheme())
+                    .append("\n")
+                    .append("background_download=").append(String.valueOf(configs.isBackgroundDownload()));
             writer.flush();
             writer.close();
             moveAndDeletePreviousData(prevBookCoverLocation, configs.getBookCoverLocation());
@@ -124,6 +129,7 @@ public class IOUtils {
                     switch (key) {
                         case "save_location" -> configs.setSaveLocation(value);
                         case "theme" -> configs.setTheme(value);
+                        case "background_download" -> configs.setBackgroundDownload(Boolean.parseBoolean(value));
                     }
                 }
             }

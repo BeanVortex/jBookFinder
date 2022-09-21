@@ -38,6 +38,20 @@
 
     <Line endX="450" stroke="lightgray" fx:id="line2"/>
 
+    <VBox prefWidth="270" spacing="10">
+        <Label styleClass="settingTile" text="Download"/>
+        <VBox>
+            <HBox alignment="CENTER">
+                <Label styleClass="settingDescription" text="download book even leaving the search area"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <CheckBox fx:id="downCheck"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <Line endX="450" stroke="lightgray" fx:id="line3"/>
+
+
     <Region VBox.vgrow="ALWAYS"/>
 
     <VBox alignment="CENTER">

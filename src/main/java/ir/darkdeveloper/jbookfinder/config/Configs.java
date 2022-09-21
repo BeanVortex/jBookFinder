@@ -9,6 +9,8 @@ public class Configs {
 
     private static Configs configs;
 
+    private static boolean backgroundDownload = false;
+
     private static String saveLocation = System.getProperty("user.home")
             + File.separator + "Downloads"
             + File.separator + "JBookFinder";
@@ -42,7 +44,6 @@ public class Configs {
             configs = new Configs();
         return configs;
     }
-
 
 
     public String getSaveLocation() {
@@ -96,7 +97,15 @@ public class Configs {
         return unrecordedDirName;
     }
 
-    public String getUnrecordedLocation(){
+    public String getUnrecordedLocation() {
         return unrecordedLocation;
+    }
+
+    public void setBackgroundDownload(boolean backgroundDownload) {
+        Configs.backgroundDownload = backgroundDownload;
+    }
+
+    public boolean isBackgroundDownload() {
+        return backgroundDownload;
     }
 }
