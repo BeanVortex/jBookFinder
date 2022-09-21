@@ -86,6 +86,7 @@ public class IOUtils {
         try {
             var prevSaveLocation = configs.getSaveLocation();
             var prevBookCoverLocation = configs.getBookCoverLocation();
+            var prevUnrecordedLocation = configs.getUnrecordedLocation();
             if (savePath != null)
                 configs.setSaveLocation(savePath);
 
@@ -100,6 +101,7 @@ public class IOUtils {
             writer.flush();
             writer.close();
             moveAndDeletePreviousData(prevBookCoverLocation, configs.getBookCoverLocation());
+            moveAndDeletePreviousData(prevUnrecordedLocation, configs.getUnrecordedLocation());
             moveAndDeletePreviousData(prevSaveLocation, configs.getSaveLocation());
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,7 +137,7 @@ public class IOUtils {
                     var fileName = file.getName();
                     var title = fileName.substring(0, fileName.lastIndexOf('.'));
                     if (!repo.doesBookExist(title)) {
-                        var unrecordedDir = new File(configs.getSaveLocation() + File.separator + "unrecorded_books");
+                        var unrecordedDir = new File(configs.getSaveLocation() + File.separator + configs.getUnRecordedDirName());
                         unrecordedDir.mkdir();
                         var destFile = new File(unrecordedDir.getPath() + File.separator + file.getName());
                         if (!file.renameTo(destFile))

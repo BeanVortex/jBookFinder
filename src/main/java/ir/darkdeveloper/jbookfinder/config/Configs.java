@@ -15,6 +15,11 @@ public class Configs {
             + File.separator + "JBookFinder";
 
     private static final String bookCoverDirName = "book_covers";
+    private static final String unrecordedDirName = "unrecorded_books";
+    private static String unrecordedLocation = saveLocation
+            + File.separator
+            + unrecordedDirName
+            + File.separator;
     private static String bookCoverLocation = saveLocation
             + File.separator
             + bookCoverDirName
@@ -56,6 +61,7 @@ public class Configs {
     public void setSaveLocation(String saveLocation) {
         Configs.saveLocation = saveLocation;
         Configs.bookCoverLocation = saveLocation + File.separator + bookCoverDirName + File.separator;
+        Configs.unrecordedLocation = saveLocation + File.separator + unrecordedDirName + File.separator;
     }
 
     public String getBookCoverLocation() {
@@ -93,5 +99,13 @@ public class Configs {
 
     public void setHostServices(HostServices hostServices) {
         Configs.hostServices = hostServices;
+    }
+
+    public String getUnRecordedDirName() {
+        return unrecordedDirName;
+    }
+
+    public String getUnrecordedLocation(){
+        return unrecordedLocation;
     }
 }
