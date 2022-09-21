@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
     id 'org.beryx.jlink' version '2.24.1'
 }
 
@@ -25,18 +25,18 @@ repositories {
 }
 
 application {
-    mainClass = 'ir.darkdeveloper.jbookfinder.AppLauncher'
+    mainClass = 'ir.darkdeveloper.jbookfinder.JBookFinder'
     mainModule = 'ir.darkdeveloper.jbookfinder'
 }
 
 javafx {
     version = "18-ea+6"
-    modules = ['javafx.controls', 'javafx.fxml']
+    modules = ['javafx.controls', 'javafx.fxml', "javafx.graphics"]
 }
 
 
 dependencies {
-    implementation 'com.dustinredmond.fxtrayicon:FXTrayIcon:3.3.0'
+//    implementation 'com.dustinredmond.fxtrayicon:FXTrayIcon:3.3.0'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'org.xerial:sqlite-jdbc:3.39.3.0'
@@ -55,6 +55,18 @@ jlink {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
     launcher {
         name = 'JBookFinder'
+    }
+    jpackage {
+//        if (org.gradle.internal.os.OperatingSystem.current().windows) {
+//            appVersion = version
+//            installerName = 'JBookFinder Installer'
+//            installerType = 'exe'
+//            installerOptions = ['--win-menu', '--win-shortcut']
+////            imageOptions = ['--icon', 'src/main/resources/ir/darkdeveloper/jbookfinder/icons/logo.ico']
+//        }
+    }
+    mergedModule {
+        excludeProvides servicePattern: 'reactor.blockhound.*'
     }
 }
 

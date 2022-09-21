@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 
 public class LibraryController implements FXMLController, ThemeObserver {
 
@@ -55,13 +56,13 @@ public class LibraryController implements FXMLController, ThemeObserver {
     public void initialize() {
     }
 
-    private void initAfterStageSet() {
+    public void initAfterStageSet() {
         booksContainer.getChildren().clear();
         var fetchedBooks = booksRepo.getBooks();
         booksList = new ArrayList<>(fetchedBooks);
         fetchedBooks.forEach(book -> {
             try {
-                var fxmlLoader = new FXMLLoader(FxUtils.getResource("fxml/bookItemLibrary.fxml"));
+                var fxmlLoader = new FXMLLoader(getResource("fxml/bookItemLibrary.fxml"));
                 HBox root = fxmlLoader.load();
                 itemParents.add(root);
                 LibraryItemController itemController = fxmlLoader.getController();

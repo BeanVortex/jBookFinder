@@ -1,7 +1,6 @@
 package ir.darkdeveloper.jbookfinder.task;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
-import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.concurrent.Task;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
@@ -13,6 +12,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+
+import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 
 public class ImageFetchTask extends Task<File> {
 
@@ -55,7 +56,7 @@ public class ImageFetchTask extends Task<File> {
         try {
             var finalFile = file;
             if (file == null)
-                finalFile = new File(FxUtils.getResource("images/blank.png").toExternalForm());
+                finalFile = new File(getResource("images/blank.png").toExternalForm());
             var inputStream = new FileInputStream(finalFile);
             var image = new Image(inputStream);
             imageBox.getChildren().remove(imageProgress);

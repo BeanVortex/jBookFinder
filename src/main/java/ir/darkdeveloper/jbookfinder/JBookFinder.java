@@ -8,12 +8,18 @@ import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
-public class JBookFinderApplication extends Application {
 
+public class JBookFinder extends Application {
+
+    // Todo: bug opening books in books controller after dir change
+    // Todo: also move unrecorded books with dir changing
+    // Todo: credits
     // Todo: make fxTray modular
     // Todo: refactorings
 
@@ -31,24 +37,24 @@ public class JBookFinderApplication extends Application {
         ioUtils.readConfig();
         ioUtils.createSaveLocation();
         FxUtils.switchSceneToMain(stage, "main.fxml");
-
-        var logoPath = FxUtils.getResource("images/logo.png");
-        stage.setMinWidth(850);
-//        if (logoPath != null) {
-//            stage.getIcons().add(new Image(logoPath.toExternalForm()));
-////            Platform.runLater(() -> {
-////                if (configs.getFxTray() == null) {
-////                    configs.setFxTray(new FXTrayIcon(stage, logoPath));
-////                    var tray = configs.getFxTray();
-////                    tray.show();
-////                    tray.setTrayIconTooltip("JBookFinder");
-////                    tray.addExitItem("Exit App", e -> {
-////                        Platform.exit();
-////                        tray.hide();
-////                    });
-////                }
-////            });
+        var logoPath = getResource("images/logo.png");
+        if (logoPath != null) {
+            stage.getIcons().add(new Image(logoPath.toExternalForm()));
+        }
+//            Platform.runLater(() -> {
+//                if (configs.getFxTray() == null) {
+//                    configs.setFxTray(new FXTrayIcon(stage, logoPath));
+//                    var tray = configs.getFxTray();
+//                    tray.show();
+//                    tray.setTrayIconTooltip("JBookFinder");
+//                    tray.addExitItem("Exit App", e -> {
+//                        Platform.exit();
+//                        tray.hide();
+//                    });
+//                }
+//            });
 //        }
+        stage.setMinWidth(850);
         stage.setMinHeight(480);
         stage.setTitle("Main Page");
         stage.show();
@@ -67,4 +73,9 @@ public class JBookFinderApplication extends Application {
 //        if (configs.getFxTray() != null)
 //            configs.getFxTray().hide();
     }
+
+    public static URL getResource(String path) {
+        return JBookFinder.class.getResource(path);
+    }
+
 }

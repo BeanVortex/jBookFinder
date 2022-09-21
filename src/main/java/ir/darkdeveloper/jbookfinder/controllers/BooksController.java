@@ -21,6 +21,7 @@ import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.List;
+import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 
 
 public class BooksController implements FXMLController, ThemeObserver {
@@ -68,7 +69,7 @@ public class BooksController implements FXMLController, ThemeObserver {
             protected HBox call() {
                 books.subscribe(book -> {
                             try {
-                                var fxmlLoader = new FXMLLoader(FxUtils.getResource("fxml/bookItem.fxml"));
+                                var fxmlLoader = new FXMLLoader(getResource("fxml/bookItem.fxml"));
                                 HBox root = fxmlLoader.load();
                                 itemParents.add(root);
                                 BookItemController itemController = fxmlLoader.getController();

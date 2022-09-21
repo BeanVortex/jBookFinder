@@ -16,6 +16,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
+
 public class FxUtils {
 
 
@@ -51,7 +53,7 @@ public class FxUtils {
 
     public static <T extends FXMLController> T switchSceneAndGetController(Stage stage, String fxmlFilename, Class<T> tClass) {
         try {
-            var loader = new FXMLLoader(FxUtils.getResource("fxml/" + fxmlFilename));
+            var loader = new FXMLLoader(getResource("fxml/" + fxmlFilename));
             Parent root = loader.load();
             var scene = new Scene(root, stage.getWidth(), stage.getHeight());
             stage.setScene(scene);
@@ -82,10 +84,6 @@ public class FxUtils {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static URL getResource(String path) {
-        return FxUtils.class.getClassLoader().getResource("ir/darkdeveloper/jbookfinder/" + path);
     }
 
     public static <T> List<T> getAllNodes(Parent root, Class<T> tClass) {

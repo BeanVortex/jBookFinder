@@ -20,7 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
+import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 
 public class LibraryItemController implements FXMLController, ThemeObserver {
 
@@ -93,7 +93,7 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
                     try {
                         repo.deleteBook(bookModel.getId());
                         Files.delete(Paths.get(bookModel.getFilePath()));
-                        libraryController.initialize();
+                        libraryController.initAfterStageSet();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

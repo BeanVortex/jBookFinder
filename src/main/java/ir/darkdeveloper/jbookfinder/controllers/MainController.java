@@ -10,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
 public class MainController implements FXMLController {
 
 
@@ -47,8 +48,7 @@ public class MainController implements FXMLController {
     }
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     @Override
     public void setStage(Stage stage) {

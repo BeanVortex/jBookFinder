@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
-import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
+import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 
 public class MoreDetailsController implements FXMLController, ThemeObserver {
 
@@ -121,6 +121,7 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
 
     public void setFromLibrary(boolean fromLibrary) {
         this.fromLibrary = fromLibrary;
-        downloadBtn.setText("Open Book");
+        if (fromLibrary)
+            downloadBtn.setText("Open Book");
     }
 }

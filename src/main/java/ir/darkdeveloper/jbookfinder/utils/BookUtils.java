@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getResource;
+import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getStageFromEvent;
 
 
@@ -264,9 +264,13 @@ public class BookUtils {
             detailsController.setFromLibrary(fromLibrary);
             configs.getThemeSubject().addObserver(detailsController);
             var scene = new Scene(root);
+            var logoPath = getResource("images/logo.png");
+            if (logoPath != null) {
+                stage.getIcons().add(new Image(logoPath.toExternalForm()));
+            }
             stage.setScene(scene);
             stage.setWidth(800);
-            stage.show();
+            stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }

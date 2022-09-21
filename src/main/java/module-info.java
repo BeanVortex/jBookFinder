@@ -1,4 +1,4 @@
-module jbookfinder {
+module ir.darkdeveloper.jbookfinder {
 
     requires java.base;
     requires javafx.controls;
@@ -13,7 +13,9 @@ module jbookfinder {
     requires java.desktop;
     requires jdk.crypto.cryptoki;
 
-
+    opens ir.darkdeveloper.jbookfinder to javafx.fxml;
     opens ir.darkdeveloper.jbookfinder.controllers to javafx.fxml;
+
     exports ir.darkdeveloper.jbookfinder;
+
 }
