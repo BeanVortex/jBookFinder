@@ -2,6 +2,7 @@ package ir.darkdeveloper.jbookfinder.controllers;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,6 +11,8 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class BookItemController implements FXMLController {
 
@@ -45,6 +48,7 @@ public class BookItemController implements FXMLController {
 
     private final BookUtils bookUtils = BookUtils.getInstance();
     private final Configs configs = Configs.getInstance();
+    private final BooksRepo repo = BooksRepo.getInstance();
 
     @Override
     public void initialize() {
@@ -88,8 +92,13 @@ public class BookItemController implements FXMLController {
             bookUtils.downloadBookAndAddProgress(bookModel, operationVbox, stage);
             return;
         }
+        var filePath = bookModel.getFilePath();
+        if (filePath == null || !new File(filePath).exists()){
+            bookModel = repo.findByBookId(bookModel.getBookId());
+            filePath = bookModel.getFilePath();
+        }
         var hostServices = configs.getHostServices();
-        hostServices.showDocument(bookModel.getFilePath());
+        hostServices.showDocument(filePath);
     }
 
 

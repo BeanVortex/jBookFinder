@@ -18,7 +18,6 @@ import java.net.URL;
 public class JBookFinder extends Application {
 
     // Todo: do not exec sql query from lib after downloading already recorded book
-    // Todo: bug opening books in books controller after dir change
     // Todo: credits
     // Todo: make fxTray modular
     // Todo: refactorings

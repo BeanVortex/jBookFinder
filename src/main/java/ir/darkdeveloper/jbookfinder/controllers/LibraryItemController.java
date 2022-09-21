@@ -137,6 +137,10 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
         if (bookModel == null)
             return;
         var filePath = bookModel.getFilePath();
+        if (filePath == null || !new File(filePath).exists()){
+            bookModel = repo.findByBookId(bookModel.getBookId());
+            filePath = bookModel.getFilePath();
+        }
         if (new File(filePath).exists()) {
             var hostServices = configs.getHostServices();
             hostServices.showDocument(filePath);
