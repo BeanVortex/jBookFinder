@@ -12,7 +12,6 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,7 @@ public class FxUtils {
                     controller.searchTheBook(stage);
             });
             stage.setScene(scene);
+            stage.setTitle("JBookFinder");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -47,16 +47,18 @@ public class FxUtils {
         return null;
     }
 
-    public static <T extends FXMLController> T switchSceneAndGetController(ActionEvent e, String fxmlFilename, Class<T> tClass) {
-        return switchSceneAndGetController(getStageFromEvent(e), fxmlFilename, tClass);
+    public static <T extends FXMLController> T switchSceneAndGetController(
+            ActionEvent e, String fxmlFilename, String stageTitle, Class<T> tClass) {
+        return switchSceneAndGetController(getStageFromEvent(e), fxmlFilename, stageTitle, tClass);
     }
 
-    public static <T extends FXMLController> T switchSceneAndGetController(Stage stage, String fxmlFilename, Class<T> tClass) {
+    public static <T extends FXMLController> T switchSceneAndGetController(Stage stage, String fxmlFilename, String stageTitle, Class<T> tClass) {
         try {
             var loader = new FXMLLoader(getResource("fxml/" + fxmlFilename));
             Parent root = loader.load();
             var scene = new Scene(root, stage.getWidth(), stage.getHeight());
             stage.setScene(scene);
+            stage.setTitle("JBookFinder - " + stageTitle);
             return tClass.cast(loader.getController());
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -64,7 +66,7 @@ public class FxUtils {
         }
     }
 
-    public static FXMLController newStageAndReturnController(String fxmlFilename, double minWidth, double minHeight) {
+    public static FXMLController newStageAndReturnController(String fxmlFilename, String stageTitle, double minWidth, double minHeight) {
         try {
             var stage = new Stage();
             var loader = new FXMLLoader(getResource("fxml/" + fxmlFilename));
@@ -76,6 +78,7 @@ public class FxUtils {
             var logoPath = getResource("images/logo.png");
             if (logoPath != null)
                 stage.getIcons().add(new Image(logoPath.toExternalForm()));
+            stage.setTitle("JBookFinder - " + stageTitle);
             stage.setMinWidth(minWidth);
             stage.setMinHeight(minHeight);
             stage.show();

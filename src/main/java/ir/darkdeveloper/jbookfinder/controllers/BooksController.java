@@ -21,6 +21,7 @@ import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 
 
@@ -113,7 +114,7 @@ public class BooksController implements FXMLController, ThemeObserver {
 
     public void showSettings() {
         var controller = (SettingsController) FxUtils
-                .newStageAndReturnController("settings.fxml", 450, 500);
+                .newStageAndReturnController("settings.fxml", "Settings",450, 500);
         if (controller != null) {
             controller.setNotToDeleteBooks(booksList);
             configs.getThemeSubject().addObserver(controller);
@@ -142,7 +143,8 @@ public class BooksController implements FXMLController, ThemeObserver {
 
     @FXML
     private void openLibrary(ActionEvent e) {
-        var controller = FxUtils.switchSceneAndGetController(e, "library.fxml", LibraryController.class);
+        var controller = FxUtils
+                .switchSceneAndGetController(e, "library.fxml", "Library", LibraryController.class);
         if (controller != null) {
             controller.setStage(stage);
             controller.resizeListViewByStage();

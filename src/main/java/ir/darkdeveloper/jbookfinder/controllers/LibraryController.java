@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 
 public class LibraryController implements FXMLController, ThemeObserver {
@@ -45,7 +46,7 @@ public class LibraryController implements FXMLController, ThemeObserver {
     @FXML
     private void showSettings() {
         var controller = (SettingsController) FxUtils
-                .newStageAndReturnController("settings.fxml", 450, 500);
+                .newStageAndReturnController("settings.fxml", "Settings", 450, 500);
         if (controller != null) {
             controller.setNotToDeleteBooks(booksList);
             configs.getThemeSubject().addObserver(controller);

@@ -53,7 +53,6 @@ public class JBookFinder extends Application {
 //        }
         stage.setMinWidth(850);
         stage.setMinHeight(480);
-        stage.setTitle("Main Page");
         stage.show();
         stage.setOnCloseRequest(event -> Platform.exit());
         booksRepo.createTable();

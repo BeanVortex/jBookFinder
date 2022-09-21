@@ -229,7 +229,7 @@ public class BookUtils {
         var scrapper = new ScraperTask(trimmedText, 1);
         scrapper.valueProperty().addListener((obs, old, booksFlux) -> {
             var booksController = FxUtils.
-                    switchSceneAndGetController(stage, "books.fxml", BooksController.class);
+                    switchSceneAndGetController(stage, "books.fxml", "Book Search", BooksController.class);
             if (booksController == null) {
                 log.log(Level.WARNING, "Books controller is null");
                 return;
