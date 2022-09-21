@@ -17,7 +17,7 @@ import java.net.URL;
 
 public class JBookFinder extends Application {
 
-    // Todo: make fxTray modular
+    // Todo: add an option to download with leaving books controller(setting option)
     // Todo: refactorings
 
 
@@ -35,22 +35,8 @@ public class JBookFinder extends Application {
         ioUtils.createSaveLocation();
         FxUtils.switchSceneToMain(stage, "main.fxml");
         var logoPath = getResource("images/logo.png");
-        if (logoPath != null) {
+        if (logoPath != null)
             stage.getIcons().add(new Image(logoPath.toExternalForm()));
-        }
-//            Platform.runLater(() -> {
-//                if (configs.getFxTray() == null) {
-//                    configs.setFxTray(new FXTrayIcon(stage, logoPath));
-//                    var tray = configs.getFxTray();
-//                    tray.show();
-//                    tray.setTrayIconTooltip("JBookFinder");
-//                    tray.addExitItem("Exit App", e -> {
-//                        Platform.exit();
-//                        tray.hide();
-//                    });
-//                }
-//            });
-//        }
         stage.setMinWidth(850);
         stage.setMinHeight(480);
         stage.show();
@@ -58,7 +44,9 @@ public class JBookFinder extends Application {
         booksRepo.createTable();
         booksRepo.updateBookExistenceRecords();
         ioUtils.moveUnRecordedFiles();
-        configs.setHostServices(getHostServices());
+        configs.setHostServices(
+
+                getHostServices());
     }
 
 

@@ -19,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 
 import java.io.File;
 import java.util.List;
@@ -114,8 +115,11 @@ public class SettingsController implements FXMLController, ThemeObserver {
                 labelLocation.setText(configs.getSaveLocation());
                 booksRepo.updateBooksPath(configs.getSaveLocation());
             } else {
+                Notifications.create()
+                        .title("Not Empty Dir")
+                        .text("Directory must be empty")
+                        .showError();
             }
-//                configs.getFxTray().showErrorMessage("Directory is not empty");
         }
     }
 

@@ -22,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -153,7 +154,10 @@ public class BookUtils {
             operationVbox.getChildren().get(1).setDisable(false);
         var downloadBtn = (Button) operationVbox.getChildren().get(0);
         downloadBtn.setText("Open Book");
-//        configs.getFxTray().showInfoMessage("Book download");
+        Notifications.create()
+                .title("Operation complete")
+                .text("Book downloaded successfully")
+                .showInformation();
     }
 
     public void setDataForDetails(HBox root, BookModel bookModel) {

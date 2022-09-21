@@ -4,6 +4,7 @@ import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import org.apache.commons.io.FileUtils;
+import org.controlsfx.control.Notifications;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -50,7 +51,10 @@ public class IOUtils {
                 if (!file.isDirectory() && !filesNotToDelete.contains(file.getName()))
                     file.delete();
 
-//        configs.getFxTray().showInfoMessage("Image caches deleted");
+        Notifications.create()
+                .title("Operation complete")
+                .text("Image caches deleted")
+                .showInformation();
     }
 
 

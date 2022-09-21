@@ -2,7 +2,9 @@ package ir.darkdeveloper.jbookfinder.task;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
+import org.controlsfx.control.Notifications;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import reactor.core.publisher.Flux;
@@ -67,7 +69,10 @@ public class ScraperTask extends Task<Flux<BookModel>> {
     private Flux<BookModel> cleanAndFetchOtherData(List<BookModel> books) {
         var baseURL = configs.getImageBaseUrl();
         if (books.isEmpty()) {
-//            configs.getFxTray().showErrorMessage("No books found");
+            Platform.runLater(() -> Notifications.create()
+                    .title("Search Failed")
+                    .text("No books found")
+                    .showWarning());
             failed();
             return Flux.empty();
         }

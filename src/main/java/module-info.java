@@ -8,7 +8,7 @@ module ir.darkdeveloper.jbookfinder {
     requires java.sql;
     requires reactor.core;
     requires org.apache.commons.io;
-//    requires FXTrayIcon;
+    requires org.controlsfx.controls;
     requires org.jsoup;
     requires java.desktop;
     requires jdk.crypto.cryptoki;
