@@ -38,22 +38,11 @@
 
     <Line endX="450" stroke="lightgray" fx:id="line2"/>
 
-    <!--    <VBox prefWidth="270" spacing="10">-->
-    <!--        <Label styleClass="settingTile" text="Search configs"/>-->
-    <!--        <VBox>-->
-    <!--            <HBox alignment="CENTER">-->
-    <!--                <Label styleClass="settingDescription" text="Search book type:"/>-->
-    <!--                <Region HBox.hgrow="ALWAYS"/>-->
-    <!--                <SplitMenuButton text="Non-fiction/Sci-tech" fx:id="bookTypeMenu">-->
-    <!--                    <items>-->
-    <!--                        <MenuItem text="Non-fiction/Sci-tech"/>-->
-    <!--                        <MenuItem text="Fiction"/>-->
-    <!--                        <MenuItem text="Scientific articles"/>-->
-    <!--                    </items>-->
-    <!--                </SplitMenuButton>-->
-    <!--            </HBox>-->
-    <!--        </VBox>-->
-    <!--    </VBox>-->
+    <Region VBox.vgrow="ALWAYS"/>
 
+    <VBox alignment="CENTER">
+        <Label styleClass="settingDescription" text="Developed by DarkDeveloper 2022"/>
+        <Hyperlink text="https://github.com/DarkDeveloper-arch/jBookFinder" onAction="#openGithubPage"/>
+    </VBox>
 
 </VBox>

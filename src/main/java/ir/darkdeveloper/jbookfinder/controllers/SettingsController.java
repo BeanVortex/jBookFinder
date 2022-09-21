@@ -9,6 +9,7 @@ import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -152,5 +153,11 @@ public class SettingsController implements FXMLController, ThemeObserver {
                     }
                 });
 
+    }
+
+    @FXML
+    private void openGithubPage(ActionEvent e) {
+        var hyperlink = (Hyperlink) e.getSource();
+        configs.getHostServices().showDocument(hyperlink.getText());
     }
 }
