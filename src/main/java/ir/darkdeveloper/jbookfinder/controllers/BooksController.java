@@ -40,9 +40,7 @@ public class BooksController implements FXMLController, ThemeObserver {
 
     private final List<BookModel> booksList = new ArrayList<>();
     private final List<HBox> itemParents = new ArrayList<>();
-    private final IOUtils ioUtils = IOUtils.getInstance();
     private final BookUtils bookUtils = BookUtils.getInstance();
-    private final Configs configs = Configs.getInstance();
 
     private Stage stage;
 
@@ -63,7 +61,7 @@ public class BooksController implements FXMLController, ThemeObserver {
     public void showSearch(Flux<BookModel> books, String text) {
         fieldSearch.setText(text);
         booksContainer.requestFocus();
-        updateTheme(configs.getTheme());
+        updateTheme(Configs.getTheme());
 
         var task = new Task<HBox>() {
             @Override
@@ -91,7 +89,7 @@ public class BooksController implements FXMLController, ThemeObserver {
         task.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 booksContainer.getChildren().add(newValue);
-                updateTheme(configs.getTheme());
+                updateTheme(Configs.getTheme());
             }
         });
 
@@ -114,10 +112,10 @@ public class BooksController implements FXMLController, ThemeObserver {
 
     public void showSettings() {
         var controller = (SettingsController) FxUtils
-                .newStageAndReturnController("settings.fxml", "Settings",450, 500);
+                .newStageAndReturnController("settings.fxml", "Settings", 450, 500);
         if (controller != null) {
             controller.setNotToDeleteBooks(booksList);
-            configs.getThemeSubject().addObserver(controller);
+            Configs.getThemeSubject().addObserver(controller);
         }
     }
 
@@ -125,14 +123,14 @@ public class BooksController implements FXMLController, ThemeObserver {
     private void searchTheBook(ActionEvent e) {
         var text = fieldSearch.getText();
         if (!text.isBlank())
-            bookUtils.createSearchUI(text, rootPane, rootVbox, e);
-        updateTheme(configs.getTheme());
+            bookUtils.createSearchUIAndSearch(text, rootPane, rootVbox, e);
+        updateTheme(Configs.getTheme());
     }
 
 
     @FXML
     private void clearImageCache() {
-        ioUtils.deleteCachedImages(booksList);
+        IOUtils.deleteCachedImages(booksList);
     }
 
     @FXML
@@ -148,24 +146,14 @@ public class BooksController implements FXMLController, ThemeObserver {
         if (controller != null) {
             controller.setStage(stage);
             controller.resizeListViewByStage();
-            configs.getThemeSubject().addObserver(controller);
+            Configs.getThemeSubject().addObserver(controller);
         }
     }
 
     @Override
     public void updateTheme(String theme) {
-        bookUtils.updateThemeForBooks(theme, booksContainer, contentVbox, itemParents);
+        FxUtils.updateThemeForBooks(theme, booksContainer, contentVbox, itemParents);
         var allButtons = FxUtils.getAllNodes(rootPane, Button.class);
-        allButtons.forEach(button -> {
-            if (configs.getTheme().equals("dark")) {
-                if (!button.getStyleClass().contains("button-light"))
-                    button.getStyleClass().add("button-light");
-                button.getStyleClass().remove("button-dark");
-            } else {
-                if (!button.getStyleClass().contains("button-dark"))
-                    button.getStyleClass().add("button-dark");
-                button.getStyleClass().remove("button-light");
-            }
-        });
+        FxUtils.updateButtonTheme(allButtons);
     }
 }

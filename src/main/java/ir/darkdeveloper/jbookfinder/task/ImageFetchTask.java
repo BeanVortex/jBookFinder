@@ -22,7 +22,6 @@ public class ImageFetchTask extends Task<File> {
     private final String fileName;
     private final VBox imageBox;
     private final ProgressIndicator imageProgress;
-    private final Configs configs = Configs.getInstance();
 
     private File file;
 
@@ -38,7 +37,7 @@ public class ImageFetchTask extends Task<File> {
     protected File call() throws Exception {
         if (imageUrl == null)
             return null;
-        var imageFile = new File(configs.getBookCoverLocation() + fileName);
+        var imageFile = new File(Configs.getBookCoverLocation() + fileName);
         if (imageFile.exists()) {
             file = imageFile;
             return imageFile;

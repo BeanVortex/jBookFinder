@@ -27,10 +27,9 @@ public class DBHelper {
     static final String COL_FILE_PATH = "file_path";
 
     private static final Logger log = Logger.getLogger(DBHelper.class.getName());
-    private final Configs configs = Configs.getInstance();
 
     Connection openConnection() throws SQLException {
-        var path = configs.getConfigLocation() + "JBookFinder.db";
+        var path = Configs.getConfigLocation() + "JBookFinder.db";
         return DriverManager.getConnection("jdbc:sqlite:" + path);
     }
 

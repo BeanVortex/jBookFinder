@@ -22,7 +22,6 @@ public class MainController implements FXMLController {
     private TextField fieldSearch;
 
     private final BookUtils bookUtils = BookUtils.getInstance();
-    private final Configs configs = Configs.getInstance();
     private Stage stage;
 
     @FXML
@@ -33,7 +32,7 @@ public class MainController implements FXMLController {
     public void searchTheBook(Stage stage) {
         var text = fieldSearch.getText();
         if (!text.isBlank())
-            bookUtils.createSearchUI(text, rootPane, rootVbox, stage);
+            bookUtils.createSearchUIAndSearch(text, rootPane, rootVbox, stage);
 
     }
 
@@ -43,7 +42,7 @@ public class MainController implements FXMLController {
         var controller = (SettingsController) FxUtils
                 .newStageAndReturnController("settings.fxml", "Settings", 450, 500);
         if (controller != null)
-            configs.getThemeSubject().addObserver(controller);
+            Configs.getThemeSubject().addObserver(controller);
 
     }
 
@@ -66,7 +65,7 @@ public class MainController implements FXMLController {
         if (controller != null) {
             controller.setStage(stage);
             controller.resizeListViewByStage();
-            configs.getThemeSubject().addObserver(controller);
+            Configs.getThemeSubject().addObserver(controller);
         }
     }
 }

@@ -7,8 +7,6 @@ import java.io.File;
 
 public class Configs {
 
-    private static Configs configs;
-
     private static boolean backgroundDownload = false;
 
     private static String saveLocation = System.getProperty("user.home")
@@ -36,76 +34,66 @@ public class Configs {
     private static HostServices hostServices;
 
 
-    private Configs() {
-    }
-
-    public static Configs getInstance() {
-        if (configs == null)
-            configs = new Configs();
-        return configs;
-    }
-
-
-    public String getSaveLocation() {
+    public static String getSaveLocation() {
         return saveLocation;
     }
 
-    public void setSaveLocation(String saveLocation) {
+    public static void setSaveLocation(String saveLocation) {
         Configs.saveLocation = saveLocation;
         Configs.bookCoverLocation = saveLocation + File.separator + bookCoverDirName + File.separator;
         Configs.unrecordedLocation = saveLocation + File.separator + unrecordedDirName + File.separator;
     }
 
-    public String getBookCoverLocation() {
+    public static String getBookCoverLocation() {
         return bookCoverLocation;
     }
 
-    public String getImageBaseUrl() {
+    public static String getImageBaseUrl() {
         return imageBaseUrl;
     }
 
-    public String getTheme() {
+    public static String getTheme() {
         return theme;
     }
 
-    public void setTheme(String theme) {
+    public static void setTheme(String theme) {
         Configs.theme = theme;
         themeSubject.notifyAllObservers(theme);
     }
 
-    public String getConfigLocation() {
+    public static String getConfigLocation() {
         return configLocation;
     }
 
-    public ThemeSubject getThemeSubject() {
+    public static ThemeSubject getThemeSubject() {
         return themeSubject;
     }
 
-    public HostServices getHostServices() {
+    public static HostServices getHostServices() {
         return hostServices;
     }
 
-    public String getBookCoverDirName() {
+    public static String getBookCoverDirName() {
         return bookCoverDirName;
     }
 
-    public void setHostServices(HostServices hostServices) {
+    public static void setHostServices(HostServices hostServices) {
         Configs.hostServices = hostServices;
     }
 
-    public String getUnRecordedDirName() {
+    public static String getUnRecordedDirName() {
         return unrecordedDirName;
     }
 
-    public String getUnrecordedLocation() {
+    public static String getUnrecordedLocation() {
         return unrecordedLocation;
     }
 
-    public void setBackgroundDownload(boolean backgroundDownload) {
+    public static void setBackgroundDownload(boolean backgroundDownload) {
         Configs.backgroundDownload = backgroundDownload;
     }
 
-    public boolean isBackgroundDownload() {
+    public static boolean isBackgroundDownload() {
         return backgroundDownload;
     }
 }

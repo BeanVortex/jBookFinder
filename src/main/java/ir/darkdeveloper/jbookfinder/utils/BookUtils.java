@@ -2,7 +2,6 @@ package ir.darkdeveloper.jbookfinder.utils;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.controllers.BooksController;
-import ir.darkdeveloper.jbookfinder.controllers.MoreDetailsController;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.task.BookDownloadTask;
 import ir.darkdeveloper.jbookfinder.task.ImageFetchTask;
@@ -12,7 +11,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -26,8 +24,6 @@ import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,14 +34,12 @@ import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getStageFromEvent;
 
 public class BookUtils {
 
-    private final Configs configs = Configs.getInstance();
 
     private static BookUtils bookUtils;
 
     private static final Logger log = Logger.getLogger(BookUtils.class.getName());
 
     private BookUtils() {
-
     }
 
     public static BookUtils getInstance() {
@@ -54,24 +48,10 @@ public class BookUtils {
         return bookUtils;
     }
 
-    public void updateThemeForBooks(String theme, FlowPane booksContainer, VBox contentVbox, List<HBox> itemParents) {
-        var labels = FxUtils.getAllNodes(booksContainer, Label.class);
-        if (theme.equals("light")) {
-            booksContainer.setBackground(Background.fill(Paint.valueOf("#fff")));
-            contentVbox.setBackground(Background.fill(Paint.valueOf("#fff")));
-            itemParents.forEach(parent -> parent.setBackground(Background.fill(Paint.valueOf("#fff"))));
-            labels.forEach(label -> label.setTextFill(Paint.valueOf("#333")));
-        } else {
-            booksContainer.setBackground(Background.fill(Paint.valueOf("#333")));
-            contentVbox.setBackground(Background.fill(Paint.valueOf("#333")));
-            itemParents.forEach(parent -> parent.setBackground(Background.fill(Paint.valueOf("#333"))));
-            labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
-        }
-    }
 
     public void downloadBookAndAddProgress(BookModel bookModel, VBox operationVbox, Stage stage) {
         var fileName = getFileName(bookModel);
-        var file = new File(configs.getSaveLocation() + File.separator + fileName);
+        var file = new File(Configs.getSaveLocation() + File.separator + fileName);
         if (file.exists()) {
             addProgressAndCancel(operationVbox, null);
             completeDownload(operationVbox, bookModel.getTitle());
@@ -105,7 +85,7 @@ public class BookUtils {
             });
 
             progressLabel.setText("0 %");
-            if (configs.getTheme().equals("dark"))
+            if (Configs.getTheme().equals("dark"))
                 progressLabel.setTextFill(Paint.valueOf("#fff"));
             else
                 progressLabel.setTextFill(Paint.valueOf("#333"));
@@ -163,48 +143,6 @@ public class BookUtils {
         downloadBtn.setText("Open Book");
     }
 
-    public void setDataForDetails(HBox root, BookModel bookModel) {
-        var imageBox = (VBox) root.getChildren().get(0);
-        var imageProgress = (ProgressIndicator) imageBox.getChildren().get(0);
-        var imageView = (ImageView) imageBox.getChildren().get(1);
-        try {
-            var imageUrl = bookModel.getImageUrl();
-            var title = bookModel.getTitle();
-            var file = new File(configs.getBookCoverLocation() + getImageFileName(imageUrl, title));
-            var is = new FileInputStream(file);
-            imageBox.getChildren().remove(imageProgress);
-            imageView.setFitHeight(imageBox.getPrefHeight());
-            imageView.setFitWidth(imageBox.getPrefWidth());
-            imageView.setImage(new Image(is));
-            is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception ignored) {
-        }
-
-        var vBox = (VBox) root.getChildren().get(1);
-        var bookTitle = (Label) vBox.getChildren().get(0);
-        var bookAuthor = (Label) vBox.getChildren().get(1);
-        var bookPublisher = (Label) vBox.getChildren().get(2);
-        var bookFormat = (Label) vBox.getChildren().get(3);
-        var bookSize = (Label) vBox.getChildren().get(4);
-        var bookPages = (Label) vBox.getChildren().get(5);
-        var bookYear = (Label) vBox.getChildren().get(6);
-        var bookLanguage = (Label) vBox.getChildren().get(7);
-        var operationVbox = (VBox) vBox.getChildren().get(8);
-
-        if (operationVbox.getChildren().size() == 2) {
-            var detailsBtn = operationVbox.getChildren().get(1);
-            detailsBtn.setVisible(false);
-            detailsBtn.setDisable(true);
-        }
-
-        displayData(bookTitle, bookAuthor, bookPublisher,
-                bookFormat, bookSize, bookPages, bookYear,
-                bookLanguage, bookModel);
-
-    }
-
     public void displayData(Label bookTitle, Label bookAuthor, Label bookPublisher, Label bookFormat, Label bookSize,
                             Label bookPages, Label bookYear, Label bookLanguage, BookModel bookModel) {
         bookTitle.setText("Title: " + bookModel.getTitle());
@@ -218,11 +156,11 @@ public class BookUtils {
     }
 
 
-    public void createSearchUI(String text, StackPane stackPane, Parent rootBox, ActionEvent e) {
-        createSearchUI(text, stackPane, rootBox, getStageFromEvent(e));
+    public void createSearchUIAndSearch(String text, StackPane stackPane, Parent rootBox, ActionEvent e) {
+        createSearchUIAndSearch(text, stackPane, rootBox, getStageFromEvent(e));
     }
 
-    public void createSearchUI(String text, StackPane stackPane, Parent rootBox, Stage stage) {
+    public void createSearchUIAndSearch(String text, StackPane stackPane, Parent rootBox, Stage stage) {
         var trimmedText = text.trim();
         var progress = new ProgressIndicator();
         var btnCancel = new Button("Cancel");
@@ -241,7 +179,7 @@ public class BookUtils {
                 log.log(Level.WARNING, "Books controller is null");
                 return;
             }
-            configs.getThemeSubject().addObserver(booksController);
+            Configs.getThemeSubject().addObserver(booksController);
             booksController.setStage(stage);
             booksController.showSearch(booksFlux, text);
             booksController.resizeListViewByStage(stage);
@@ -258,30 +196,5 @@ public class BookUtils {
         thread.start();
     }
 
-
-    public void showDetails(BookModel bookModel, boolean fromLibrary) {
-        try {
-            var stage = new Stage();
-            var fxmlLoader = new FXMLLoader(getResource("fxml/bookItemDetails.fxml"));
-            HBox root = fxmlLoader.load();
-            MoreDetailsController detailsController = fxmlLoader.getController();
-            detailsController.setStage(stage);
-            detailsController.setBookModel(bookModel);
-            detailsController.initStage();
-            detailsController.setFromLibrary(fromLibrary);
-            configs.getThemeSubject().addObserver(detailsController);
-            var scene = new Scene(root);
-            var logoPath = getResource("images/logo.png");
-            if (logoPath != null) {
-                stage.getIcons().add(new Image(logoPath.toExternalForm()));
-            }
-            stage.setScene(scene);
-            stage.setWidth(800);
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 }
 

@@ -13,26 +13,13 @@ import static ir.darkdeveloper.jbookfinder.repo.DBHelper.*;
 
 public class BooksRepo {
 
-    private static BooksRepo booksRepo;
-    private final Configs configs = Configs.getInstance();
-
-    private BooksRepo() {
-
-    }
-
-    public static BooksRepo getInstance() {
-        if (booksRepo == null)
-            booksRepo = new BooksRepo();
-        return booksRepo;
-    }
-
     private static final DBHelper dbHelper = new DBHelper();
 
-    public void createTable() {
+    public static void createTable() {
         dbHelper.createTable();
     }
 
-    public void insertBook(BookModel book) {
+    public static void insertBook(BookModel book) {
         var sql = "INSERT INTO " + TABLE_NAME + " (" +
                 COL_BOOK_ID + "," +
                 COL_AUTHOR + "," +
@@ -70,7 +57,7 @@ public class BooksRepo {
         }
     }
 
-    public BookModel findByBookId(String bookId) {
+    public static BookModel findByBookId(String bookId) {
         var sql = "SELECT * FROM " + TABLE_NAME + " WHERE book_id=\"" + bookId + "\";";
         try (var con = dbHelper.openConnection();
              var stmt = con.createStatement();
@@ -84,7 +71,7 @@ public class BooksRepo {
         return null;
     }
 
-    public void deleteBook(Integer id) {
+    public static void deleteBook(Integer id) {
         var sql = "DELETE FROM " + TABLE_NAME + " WHERE id=" + id + ";";
         try (var con = dbHelper.openConnection();
              var stmt = con.createStatement()) {
@@ -95,7 +82,7 @@ public class BooksRepo {
     }
 
 
-    public List<BookModel> getBooks() {
+    public static List<BookModel> getBooks() {
         var sql = "SELECT * FROM " + TABLE_NAME + ";";
         try (var con = dbHelper.openConnection();
              var stmt = con.createStatement();
@@ -111,7 +98,7 @@ public class BooksRepo {
         return null;
     }
 
-    private BookModel createBook(ResultSet rs) throws SQLException {
+    private static BookModel createBook(ResultSet rs) throws SQLException {
         var id = rs.getInt(COL_ID);
         var book_id = rs.getString(COL_BOOK_ID);
         var author = rs.getString(COL_AUTHOR);
@@ -130,16 +117,17 @@ public class BooksRepo {
                 fileFormat, imageUrl, mirror, imagePath, filePath);
     }
 
-    public void updateBookExistenceRecords() {
-        var books = booksRepo.getBooks();
-        books.forEach(book -> {
-            var file = new File(book.getFilePath());
-            if (!file.exists())
-                booksRepo.deleteBook(book.getId());
-        });
+    public static void updateBookExistenceRecords() {
+        var books = getBooks();
+        if (books != null)
+            books.forEach(book -> {
+                var file = new File(book.getFilePath());
+                if (!file.exists())
+                    deleteBook(book.getId());
+            });
     }
 
-    public void updateBooksPath(BookModel book) {
+    public static void updateBooksPath(BookModel book) {
         var sql = "UPDATE " + TABLE_NAME + " SET " + COL_FILE_PATH + "=\"" + book.getFilePath() + "\","
                 + COL_IMAGE_PATH + "=\"" + book.getImagePath()
                 + "\" WHERE id=" + book.getId() + ";";
@@ -151,23 +139,24 @@ public class BooksRepo {
         }
     }
 
-    public void updateBooksPath(String newPath) {
+    public static void updateBooksPath(String newPath) {
         var books = getBooks();
-        books.forEach(book -> {
-            var filePathWithName = book.getFilePath();
-            var imagePathWithName = book.getImagePath();
-            var fileName = filePathWithName.substring(filePathWithName.lastIndexOf(File.separatorChar) + 1);
-            var imageName = imagePathWithName.substring(imagePathWithName.lastIndexOf(File.separatorChar) + 1);
+        if (books != null)
+            books.forEach(book -> {
+                var filePathWithName = book.getFilePath();
+                var imagePathWithName = book.getImagePath();
+                var fileName = filePathWithName.substring(filePathWithName.lastIndexOf(File.separatorChar) + 1);
+                var imageName = imagePathWithName.substring(imagePathWithName.lastIndexOf(File.separatorChar) + 1);
 
-            var filePath = newPath + File.separator + fileName;
-            var imagePath = newPath + File.separator + configs.getBookCoverDirName() + File.separator + imageName;
-            book.setFilePath(filePath);
-            book.setImagePath(imagePath);
-            updateBooksPath(book);
-        });
+                var filePath = newPath + File.separator + fileName;
+                var imagePath = newPath + File.separator + Configs.getBookCoverDirName() + File.separator + imageName;
+                book.setFilePath(filePath);
+                book.setImagePath(imagePath);
+                updateBooksPath(book);
+            });
     }
 
-    public boolean doesBookExist(String fileTitle) {
+    public static boolean doesBookExist(String fileTitle) {
         var sql = "SELECT (COUNT(*) > 0) AS found FROM " + TABLE_NAME + " WHERE file_path like '%" + fileTitle + "%';";
         try (var con = dbHelper.openConnection();
              var stmt = con.prepareStatement(sql);

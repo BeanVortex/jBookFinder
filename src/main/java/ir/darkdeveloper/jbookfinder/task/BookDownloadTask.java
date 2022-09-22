@@ -20,8 +20,6 @@ public class BookDownloadTask extends Task<Void> {
     private final VBox operationVbox;
     private final String fileName;
     private final BookUtils bookUtils = BookUtils.getInstance();
-    private final Configs configs = Configs.getInstance();
-    private final BooksRepo booksRepo = BooksRepo.getInstance();
 
 
     public BookDownloadTask(BookModel bookModel, VBox operationVbox, String fileName) {
@@ -36,28 +34,28 @@ public class BookDownloadTask extends Task<Void> {
 
         var urlConnection = new URL(mirror).openConnection();
         var fileSize = urlConnection.getContentLength();
-        var filePath = Paths.get(configs.getSaveLocation() + File.separator + fileName);
+        var filePath = Paths.get(Configs.getSaveLocation() + File.separator + fileName);
         try (var is = urlConnection.getInputStream();
              var os = Files.newOutputStream(filePath)) {
             long nRead = 0L;
             var buf = new byte[8192];
             int n;
             while ((n = is.read(buf)) > 0) {
-                if (!configs.isBackgroundDownload() && isCancelled())
+                if (!Configs.isBackgroundDownload() && isCancelled())
                     break;
                 os.write(buf, 0, n);
                 nRead += n;
                 updateProgress(nRead, fileSize);
             }
 
-            if (!configs.isBackgroundDownload() && isCancelled())
+            if (!Configs.isBackgroundDownload() && isCancelled())
                 Files.delete(filePath);
             else {
-                var imagePath = configs.getBookCoverLocation() +
+                var imagePath = Configs.getBookCoverLocation() +
                         bookUtils.getImageFileName(bookModel.getImageUrl(), bookModel.getTitle());
                 bookModel.setFilePath(filePath.toString());
                 bookModel.setImagePath(imagePath);
-                booksRepo.insertBook(bookModel);
+                BooksRepo.insertBook(bookModel);
                 succeeded();
             }
 
@@ -83,7 +81,7 @@ public class BookDownloadTask extends Task<Void> {
         var fileExt = bookModel.getFileFormat();
 
         try {
-            var file = new File(configs.getSaveLocation() + File.separator + fileName + "." + fileExt);
+            var file = new File(Configs.getSaveLocation() + File.separator + fileName + "." + fileExt);
             if (file.exists())
                 Files.delete(Paths.get(file.getPath()));
         } catch (IOException ex) {

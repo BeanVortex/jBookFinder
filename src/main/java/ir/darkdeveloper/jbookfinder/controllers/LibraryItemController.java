@@ -57,8 +57,6 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
     private ImageView bookImage;
 
     private final BookUtils bookUtils = BookUtils.getInstance();
-    private final Configs configs = Configs.getInstance();
-    private final BooksRepo repo = BooksRepo.getInstance();
 
     private BookModel bookModel;
     private Stage stage;
@@ -66,7 +64,7 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
 
     @Override
     public void initialize() {
-        updateTheme(configs.getTheme());
+        updateTheme(Configs.getTheme());
         var imagePath = getResource("icons/close.png").toExternalForm();
         deleteBtn.setImage(new Image(imagePath));
         deleteBtn.setFitHeight(22);
@@ -91,7 +89,7 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
             buttonTypeOpt.ifPresent(buttonType -> {
                 if (buttonType == ButtonType.OK) {
                     try {
-                        repo.deleteBook(bookModel.getId());
+                        BooksRepo.deleteBook(bookModel.getId());
                         Files.delete(Paths.get(bookModel.getFilePath()));
                         libraryController.initAfterStageSet();
                     } catch (IOException e) {
@@ -138,11 +136,13 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
             return;
         var filePath = bookModel.getFilePath();
         if (filePath == null || !new File(filePath).exists()){
-            bookModel = repo.findByBookId(bookModel.getBookId());
-            filePath = bookModel.getFilePath();
+            bookModel = BooksRepo.findByBookId(bookModel.getBookId());
+            if (bookModel != null)
+                filePath = bookModel.getFilePath();
+
         }
-        if (new File(filePath).exists()) {
-            var hostServices = configs.getHostServices();
+        if (filePath != null && new File(filePath).exists()) {
+            var hostServices = Configs.getHostServices();
             hostServices.showDocument(filePath);
         } else {
             var alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -158,7 +158,7 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
                 if (buttonType == ButtonType.OK)
                     bookUtils.downloadBookAndAddProgress(bookModel, operationVbox, stage);
                 else if (buttonType == ButtonType.CANCEL) {
-                    repo.deleteBook(bookModel.getId());
+                    BooksRepo.deleteBook(bookModel.getId());
                     libraryController.initialize();
                 }
             });
@@ -168,24 +168,13 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
 
     @FXML
     private void moreDetails() {
-        bookUtils.showDetails(bookModel, true);
+        FxUtils.showMoreDetailsStage(bookModel, true);
     }
 
 
     @Override
     public void updateTheme(String theme) {
-        List.of(detailsBtn, downloadBtn)
-                .forEach(btn -> {
-                    if (configs.getTheme().equals("dark")) {
-                        btn.getStyleClass().remove("button-dark");
-                        if (!btn.getStyleClass().contains("button-light"))
-                            btn.getStyleClass().add("button-light");
-                    } else {
-                        if (!btn.getStyleClass().contains("button-dark"))
-                            btn.getStyleClass().add("button-dark");
-                        btn.getStyleClass().remove("button-light");
-                    }
-                });
+        FxUtils.updateButtonTheme(List.of(detailsBtn,downloadBtn));
     }
 
     public void setLibController(LibraryController libraryController) {

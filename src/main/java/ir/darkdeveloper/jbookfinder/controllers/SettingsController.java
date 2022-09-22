@@ -48,9 +48,6 @@ public class SettingsController implements FXMLController, ThemeObserver {
     @FXML
     private Label labelLocation;
 
-    private final Configs configs = Configs.getInstance();
-    private final IOUtils ioUtils = IOUtils.getInstance();
-    private final BooksRepo booksRepo = BooksRepo.getInstance();
 
     private List<BookModel> notToDeleteBooks;
     private Stage stage;
@@ -60,33 +57,33 @@ public class SettingsController implements FXMLController, ThemeObserver {
     @Override
     public void initialize() {
         labels = FxUtils.getAllNodes(parent, Label.class);
-        labelImageCache.setText(String.valueOf(ioUtils.getFolderSize(new File(configs.getBookCoverLocation()))));
-        labelLocation.setText(configs.getSaveLocation());
+        labelImageCache.setText(IOUtils.getFolderSize(new File(Configs.getBookCoverLocation())));
+        labelLocation.setText(Configs.getSaveLocation());
 
-        updateTheme(configs.getTheme());
+        updateTheme(Configs.getTheme());
 
         circleTheme.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            if (configs.getTheme().equals("light")) {
+            if (Configs.getTheme().equals("light")) {
                 circleTheme.setFill(Paint.valueOf("#fff"));
                 circleTheme.setStroke(Paint.valueOf("#333"));
                 parent.setBackground(Background.fill(Paint.valueOf("#333")));
                 labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
-                configs.setTheme("dark");
+                Configs.setTheme("dark");
             } else {
                 circleTheme.setFill(Paint.valueOf("#333"));
                 circleTheme.setStroke(Paint.valueOf("#fff"));
                 parent.setBackground(Background.fill(Paint.valueOf("#fff")));
                 labels.forEach(label -> label.setTextFill(Paint.valueOf("#111")));
-                configs.setTheme("light");
+                Configs.setTheme("light");
             }
-            ioUtils.saveConfigs(null);
+            IOUtils.saveConfigs(null);
         });
 
-        downCheck.setSelected(configs.isBackgroundDownload());
+        downCheck.setSelected(Configs.isBackgroundDownload());
 
         downCheck.setOnAction(event -> {
-            configs.setBackgroundDownload(downCheck.isSelected());
-            ioUtils.saveConfigs(null);
+            Configs.setBackgroundDownload(downCheck.isSelected());
+            IOUtils.saveConfigs(null);
         });
 
     }
@@ -109,23 +106,23 @@ public class SettingsController implements FXMLController, ThemeObserver {
 
     @FXML
     private void clearCache() {
-        ioUtils.deleteCachedImages(notToDeleteBooks);
-        labelImageCache.setText(String.valueOf(ioUtils.getFolderSize(new File(configs.getBookCoverLocation()))));
+        IOUtils.deleteCachedImages(notToDeleteBooks);
+        labelImageCache.setText(IOUtils.getFolderSize(new File(Configs.getBookCoverLocation())));
     }
 
     @FXML
     private void changeSaveDir(ActionEvent e) {
         var dirChooser = new DirectoryChooser();
         dirChooser.setTitle("Select books save location");
-        dirChooser.setInitialDirectory(new File(configs.getSaveLocation()));
+        dirChooser.setInitialDirectory(new File(Configs.getSaveLocation()));
         var selectedDir = dirChooser.showDialog(FxUtils.getStageFromEvent(e));
         if (selectedDir != null) {
             var files = selectedDir.listFiles();
             if (files != null && files.length == 0) {
-                ioUtils.createSaveLocation();
-                ioUtils.saveConfigs(selectedDir.getPath());
-                labelLocation.setText(configs.getSaveLocation());
-                booksRepo.updateBooksPath(configs.getSaveLocation());
+                IOUtils.createSaveLocation();
+                IOUtils.saveConfigs(selectedDir.getPath());
+                labelLocation.setText(Configs.getSaveLocation());
+                BooksRepo.updateBooksPath(Configs.getSaveLocation());
             } else {
                 Notifications.create()
                         .title("Not Empty Dir")
@@ -148,7 +145,7 @@ public class SettingsController implements FXMLController, ThemeObserver {
 
     @Override
     public void updateTheme(String theme) {
-        if (configs.getTheme().equals("light")) {
+        if (Configs.getTheme().equals("light")) {
             circleTheme.setFill(Paint.valueOf("#333"));
             parent.setBackground(Background.fill(Paint.valueOf("#fff")));
         } else {
@@ -157,24 +154,12 @@ public class SettingsController implements FXMLController, ThemeObserver {
             labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
         }
 
-        List.of(btnChangeDir, btnClear)
-                .forEach(btn -> {
-                    if (configs.getTheme().equals("dark")) {
-                        btn.getStyleClass().remove("button-dark");
-                        if (!btn.getStyleClass().contains("button-light"))
-                            btn.getStyleClass().add("button-light");
-                    } else {
-                        if (!btn.getStyleClass().contains("button-dark"))
-                            btn.getStyleClass().add("button-dark");
-                        btn.getStyleClass().remove("button-light");
-                    }
-                });
-
+        FxUtils.updateButtonTheme(List.of(btnChangeDir, btnClear));
     }
 
     @FXML
     private void openGithubPage(ActionEvent e) {
         var hyperlink = (Hyperlink) e.getSource();
-        configs.getHostServices().showDocument(hyperlink.getText());
+        Configs.getHostServices().showDocument(hyperlink.getText());
     }
 }

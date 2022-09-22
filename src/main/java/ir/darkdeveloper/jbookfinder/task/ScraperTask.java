@@ -15,7 +15,6 @@ import java.util.List;
 
 public class ScraperTask extends Task<Flux<BookModel>> {
 
-    private final Configs configs = Configs.getInstance();
     private final String bookName;
     private final int pageNumber;
 
@@ -67,7 +66,7 @@ public class ScraperTask extends Task<Flux<BookModel>> {
      * Fetches download link and image link
      */
     private Flux<BookModel> cleanAndFetchOtherData(List<BookModel> books) {
-        var baseURL = configs.getImageBaseUrl();
+        var baseURL = Configs.getImageBaseUrl();
         if (books.isEmpty()) {
             Platform.runLater(() -> Notifications.create()
                     .title("Search Failed")

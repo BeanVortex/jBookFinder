@@ -1,14 +1,24 @@
 package ir.darkdeveloper.jbookfinder.utils;
 
+import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.controllers.FXMLController;
 import ir.darkdeveloper.jbookfinder.controllers.MainController;
+import ir.darkdeveloper.jbookfinder.controllers.MoreDetailsController;
+import ir.darkdeveloper.jbookfinder.model.BookModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -101,6 +111,60 @@ public class FxUtils {
                 nodes.add(tClass.cast(node));
             if (node instanceof Parent p)
                 addAllDescendents(p, nodes, tClass);
+        }
+    }
+
+    public static void showMoreDetailsStage(BookModel bookModel, boolean fromLibrary) {
+        try {
+            var stage = new Stage();
+            var fxmlLoader = new FXMLLoader(getResource("fxml/bookItemDetails.fxml"));
+            HBox root = fxmlLoader.load();
+            MoreDetailsController detailsController = fxmlLoader.getController();
+            detailsController.setStage(stage);
+            detailsController.setBookModel(bookModel);
+            detailsController.initStage();
+            detailsController.setFromLibrary(fromLibrary);
+            Configs.getThemeSubject().addObserver(detailsController);
+            var scene = new Scene(root);
+            var logoPath = getResource("images/logo.png");
+            if (logoPath != null) {
+                stage.getIcons().add(new Image(logoPath.toExternalForm()));
+            }
+            stage.setScene(scene);
+            stage.setWidth(800);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void updateButtonTheme(List<Button> buttons) {
+        buttons.forEach(btn -> {
+            if (Configs.getTheme().equals("dark")) {
+                btn.getStyleClass().remove("button-dark");
+                if (!btn.getStyleClass().contains("button-light"))
+                    btn.getStyleClass().add("button-light");
+            } else {
+                if (!btn.getStyleClass().contains("button-dark"))
+                    btn.getStyleClass().add("button-dark");
+                btn.getStyleClass().remove("button-light");
+            }
+        });
+    }
+
+    public static void updateThemeForBooks(String theme, FlowPane booksContainer, VBox contentVbox, List<HBox> itemParents) {
+        var labels = FxUtils.getAllNodes(booksContainer, Label.class);
+        if (theme.equals("light")) {
+            booksContainer.setBackground(Background.fill(Paint.valueOf("#fff")));
+            contentVbox.setBackground(Background.fill(Paint.valueOf("#fff")));
+            itemParents.forEach(parent -> parent.setBackground(Background.fill(Paint.valueOf("#fff"))));
+            labels.forEach(label -> label.setTextFill(Paint.valueOf("#333")));
+        } else {
+            booksContainer.setBackground(Background.fill(Paint.valueOf("#333")));
+            contentVbox.setBackground(Background.fill(Paint.valueOf("#333")));
+            itemParents.forEach(parent -> parent.setBackground(Background.fill(Paint.valueOf("#333"))));
+            labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
         }
     }
 }

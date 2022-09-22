@@ -10,7 +10,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -18,6 +20,9 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.List;
 
 import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 
@@ -37,12 +42,10 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
     private boolean fromLibrary;
 
     private final BookUtils bookUtils = BookUtils.getInstance();
-    private final Configs configs = Configs.getInstance();
-    private final BooksRepo repo = BooksRepo.getInstance();
 
     @Override
     public void initialize() {
-        updateTheme(configs.getTheme());
+        updateTheme(Configs.getTheme());
     }
 
 
@@ -71,9 +74,11 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
             return;
         }
 
-        bookModel = repo.findByBookId(bookModel.getBookId());
-        var hostServices = configs.getHostServices();
-        hostServices.showDocument(bookModel.getFilePath());
+        bookModel = BooksRepo.findByBookId(bookModel.getBookId());
+        var hostServices = Configs.getHostServices();
+        if (bookModel != null)
+            hostServices.showDocument(bookModel.getFilePath());
+
     }
 
     @Override
@@ -93,7 +98,7 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
     public void initStage() {
         stage.setMinWidth(itemBox.getMinWidth());
         stage.setMinHeight(itemBox.getMinHeight());
-        bookUtils.setDataForDetails(itemBox, bookModel);
+        setDataForDetails(itemBox, bookModel);
         var vBox = (VBox) itemBox.getChildren().get(1);
         vBox.setPrefWidth(800);
         stage.heightProperty().addListener((o, ol, newVal) -> vBox.setPrefHeight((Double) newVal));
@@ -103,19 +108,14 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
     @Override
     public void updateTheme(String theme) {
         var labels = FxUtils.getAllNodes(itemBox, Label.class);
+        FxUtils.updateButtonTheme(List.of(downloadBtn));
 
         if (theme.equals("light")) {
             itemBox.setBackground(Background.fill(Paint.valueOf("#fff")));
             labels.forEach(label -> label.setTextFill(Paint.valueOf("#333")));
-            if (!downloadBtn.getStyleClass().contains("button-dark"))
-                downloadBtn.getStyleClass().add("button-dark");
-            downloadBtn.getStyleClass().remove("button-light");
         } else {
             itemBox.setBackground(Background.fill(Paint.valueOf("#333")));
             labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
-            if (!downloadBtn.getStyleClass().contains("button-light"))
-                downloadBtn.getStyleClass().add("button-light");
-            downloadBtn.getStyleClass().remove("button-dark");
         }
     }
 
@@ -124,4 +124,48 @@ public class MoreDetailsController implements FXMLController, ThemeObserver {
         if (fromLibrary)
             downloadBtn.setText("Open Book");
     }
+
+
+    public void setDataForDetails(HBox root, BookModel bookModel) {
+        var imageBox = (VBox) root.getChildren().get(0);
+        var imageProgress = (ProgressIndicator) imageBox.getChildren().get(0);
+        var imageView = (ImageView) imageBox.getChildren().get(1);
+        try {
+            var imageUrl = bookModel.getImageUrl();
+            var title = bookModel.getTitle();
+            var file = new File(Configs.getBookCoverLocation() + bookUtils.getImageFileName(imageUrl, title));
+            var is = new FileInputStream(file);
+            imageBox.getChildren().remove(imageProgress);
+            imageView.setFitHeight(imageBox.getPrefHeight());
+            imageView.setFitWidth(imageBox.getPrefWidth());
+            imageView.setImage(new Image(is));
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception ignored) {
+        }
+
+        var vBox = (VBox) root.getChildren().get(1);
+        var bookTitle = (Label) vBox.getChildren().get(0);
+        var bookAuthor = (Label) vBox.getChildren().get(1);
+        var bookPublisher = (Label) vBox.getChildren().get(2);
+        var bookFormat = (Label) vBox.getChildren().get(3);
+        var bookSize = (Label) vBox.getChildren().get(4);
+        var bookPages = (Label) vBox.getChildren().get(5);
+        var bookYear = (Label) vBox.getChildren().get(6);
+        var bookLanguage = (Label) vBox.getChildren().get(7);
+        var operationVbox = (VBox) vBox.getChildren().get(8);
+
+        if (operationVbox.getChildren().size() == 2) {
+            var detailsBtn = operationVbox.getChildren().get(1);
+            detailsBtn.setVisible(false);
+            detailsBtn.setDisable(true);
+        }
+
+        bookUtils.displayData(bookTitle, bookAuthor, bookPublisher,
+                bookFormat, bookSize, bookPages, bookYear,
+                bookLanguage, bookModel);
+
+    }
+
 }

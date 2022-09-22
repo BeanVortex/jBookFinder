@@ -4,7 +4,6 @@ import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
-import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,9 +31,6 @@ public class LibraryController implements FXMLController, ThemeObserver {
     private Stage stage;
 
     private final List<HBox> itemParents = new ArrayList<>();
-    private final BooksRepo booksRepo = BooksRepo.getInstance();
-    private final Configs configs = Configs.getInstance();
-    private final BookUtils bookUtils = BookUtils.getInstance();
     private List<BookModel> booksList;
 
     @FXML
@@ -49,7 +45,7 @@ public class LibraryController implements FXMLController, ThemeObserver {
                 .newStageAndReturnController("settings.fxml", "Settings", 450, 500);
         if (controller != null) {
             controller.setNotToDeleteBooks(booksList);
-            configs.getThemeSubject().addObserver(controller);
+            Configs.getThemeSubject().addObserver(controller);
         }
     }
 
@@ -59,24 +55,26 @@ public class LibraryController implements FXMLController, ThemeObserver {
 
     public void initAfterStageSet() {
         booksContainer.getChildren().clear();
-        var fetchedBooks = booksRepo.getBooks();
-        booksList = new ArrayList<>(fetchedBooks);
-        fetchedBooks.forEach(book -> {
-            try {
-                var fxmlLoader = new FXMLLoader(getResource("fxml/bookItemLibrary.fxml"));
-                HBox root = fxmlLoader.load();
-                itemParents.add(root);
-                LibraryItemController itemController = fxmlLoader.getController();
-                itemController.setBookModel(book);
-                itemController.setLibController(this);
-                itemController.setStage(stage);
-                configs.getThemeSubject().addObserver(itemController);
-                booksContainer.getChildren().add(root);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        updateTheme(configs.getTheme());
+        var fetchedBooks = BooksRepo.getBooks();
+        if (fetchedBooks != null) {
+            booksList = new ArrayList<>(fetchedBooks);
+            fetchedBooks.forEach(book -> {
+                try {
+                    var fxmlLoader = new FXMLLoader(getResource("fxml/bookItemLibrary.fxml"));
+                    HBox root = fxmlLoader.load();
+                    itemParents.add(root);
+                    LibraryItemController itemController = fxmlLoader.getController();
+                    itemController.setBookModel(book);
+                    itemController.setLibController(this);
+                    itemController.setStage(stage);
+                    Configs.getThemeSubject().addObserver(itemController);
+                    booksContainer.getChildren().add(root);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        updateTheme(Configs.getTheme());
     }
 
     public void resizeListViewByStage() {
@@ -99,6 +97,6 @@ public class LibraryController implements FXMLController, ThemeObserver {
 
     @Override
     public void updateTheme(String theme) {
-        bookUtils.updateThemeForBooks(theme, booksContainer, contentVbox, itemParents);
+        FxUtils.updateThemeForBooks(theme, booksContainer, contentVbox, itemParents);
     }
 }

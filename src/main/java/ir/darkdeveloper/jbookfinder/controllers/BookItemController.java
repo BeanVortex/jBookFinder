@@ -4,6 +4,7 @@ import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
+import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -47,8 +48,6 @@ public class BookItemController implements FXMLController {
     private Stage stage;
 
     private final BookUtils bookUtils = BookUtils.getInstance();
-    private final Configs configs = Configs.getInstance();
-    private final BooksRepo repo = BooksRepo.getInstance();
 
     @Override
     public void initialize() {
@@ -63,7 +62,6 @@ public class BookItemController implements FXMLController {
     public Stage getStage() {
         return stage;
     }
-
 
     public void setBookModel(BookModel bookModel) {
         this.bookModel = bookModel;
@@ -82,7 +80,6 @@ public class BookItemController implements FXMLController {
         bookLanguage.managedProperty().bind(bookLanguage.visibleProperty());
     }
 
-
     @FXML
     private void downloadBook() {
         if (bookModel == null)
@@ -94,17 +91,18 @@ public class BookItemController implements FXMLController {
         }
         var filePath = bookModel.getFilePath();
         if (filePath == null || !new File(filePath).exists()){
-            bookModel = repo.findByBookId(bookModel.getBookId());
-            filePath = bookModel.getFilePath();
+            bookModel = BooksRepo.findByBookId(bookModel.getBookId());
+            if (bookModel != null)
+                filePath = bookModel.getFilePath();
+
         }
-        var hostServices = configs.getHostServices();
+        var hostServices = Configs.getHostServices();
         hostServices.showDocument(filePath);
     }
 
-
     @FXML
     public void moreDetails() {
-        bookUtils.showDetails(bookModel, false);
+        FxUtils.showMoreDetailsStage(bookModel, false);
     }
 
 }

@@ -1,6 +1,5 @@
 package ir.darkdeveloper.jbookfinder.utils;
 
-import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import org.apache.commons.io.FileUtils;
@@ -12,31 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static ir.darkdeveloper.jbookfinder.config.Configs.*;
+
 public class IOUtils {
 
-    private static IOUtils ioUtils;
-
-    private final BookUtils bookUtils = BookUtils.getInstance();
-    private final Configs configs = Configs.getInstance();
-    private final BooksRepo repo = BooksRepo.getInstance();
+    private static final BookUtils bookUtils = BookUtils.getInstance();
     private static final Logger log = Logger.getLogger(IOUtils.class.getName());
 
-    private IOUtils() {
-
-    }
-
-    public static IOUtils getInstance() {
-        if (ioUtils == null)
-            ioUtils = new IOUtils();
-        return ioUtils;
-    }
 
 
-    public void deleteCachedImages(List<BookModel> notToDeleteBooks) {
-        var path = configs.getBookCoverLocation();
+    public static void deleteCachedImages(List<BookModel> notToDeleteBooks) {
+        var path = getBookCoverLocation();
         if (notToDeleteBooks == null)
             notToDeleteBooks = new ArrayList<>();
-        notToDeleteBooks.addAll(repo.getBooks());
+        var fetchedBooks = BooksRepo.getBooks();
+        if (fetchedBooks != null)
+            notToDeleteBooks.addAll(fetchedBooks);
+
 
         var filesNotToDelete = new ArrayList<String>();
         notToDeleteBooks.forEach(book -> {
@@ -58,7 +49,7 @@ public class IOUtils {
     }
 
 
-    public String getFolderSize(File folder) {
+    public static String getFolderSize(File folder) {
         var sizeInBytes = FileUtils.sizeOfDirectory(folder);
         var sizeInMB = (float) sizeInBytes / 1_000_000;
         if (sizeInMB < 1) {
@@ -69,16 +60,16 @@ public class IOUtils {
     }
 
 
-    public void createSaveLocation() {
-        var saveLocation = configs.getSaveLocation();
-        var bookCoverLocation = configs.getBookCoverLocation();
-        var configLocation = configs.getConfigLocation();
+    public static void createSaveLocation() {
+        var saveLocation = getSaveLocation();
+        var bookCoverLocation = getBookCoverLocation();
+        var configLocation = getConfigLocation();
         mkdir(saveLocation);
         mkdir(bookCoverLocation);
         mkdir(configLocation);
     }
 
-    private void mkdir(String dirPath) {
+    private static void mkdir(String dirPath) {
         var file = new File(dirPath);
         if (file.mkdir())
             log.info("created dir: " + dirPath);
@@ -89,37 +80,37 @@ public class IOUtils {
     /**
      * @param savePath new location for saving books, pass null for other setting updates
      * */
-    public void saveConfigs(String savePath) {
+    public static void saveConfigs(String savePath) {
         try {
-            var prevSaveLocation = configs.getSaveLocation();
-            var prevBookCoverLocation = configs.getBookCoverLocation();
-            var prevUnrecordedLocation = configs.getUnrecordedLocation();
+            var prevSaveLocation = getSaveLocation();
+            var prevBookCoverLocation = getBookCoverLocation();
+            var prevUnrecordedLocation = getUnrecordedLocation();
             if (savePath != null)
-                configs.setSaveLocation(savePath);
+                setSaveLocation(savePath);
 
-            var file = new File(configs.getConfigLocation() + "config.cfg");
+            var file = new File(getConfigLocation() + "config.cfg");
             if (!file.exists())
                 file.createNewFile();
 
             var writer = new FileWriter(file);
-            writer.append("save_location=").append(configs.getSaveLocation())
+            writer.append("save_location=").append(getSaveLocation())
                     .append("\n")
-                    .append("theme=").append(configs.getTheme())
+                    .append("theme=").append(getTheme())
                     .append("\n")
-                    .append("background_download=").append(String.valueOf(configs.isBackgroundDownload()));
+                    .append("background_download=").append(String.valueOf(isBackgroundDownload()));
             writer.flush();
             writer.close();
-            moveAndDeletePreviousData(prevBookCoverLocation, configs.getBookCoverLocation());
-            moveAndDeletePreviousData(prevUnrecordedLocation, configs.getUnrecordedLocation());
-            moveAndDeletePreviousData(prevSaveLocation, configs.getSaveLocation());
+            moveAndDeletePreviousData(prevBookCoverLocation, getBookCoverLocation());
+            moveAndDeletePreviousData(prevUnrecordedLocation, getUnrecordedLocation());
+            moveAndDeletePreviousData(prevSaveLocation, getSaveLocation());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void readConfig() {
+    public static void readConfig() {
         try {
-            var file = new File(configs.getConfigLocation() + "config.cfg");
+            var file = new File(getConfigLocation() + "config.cfg");
             if (file.exists()) {
                 var reader = new BufferedReader(new FileReader(file));
                 String cfg;
@@ -127,9 +118,9 @@ public class IOUtils {
                     var key = cfg.split("=")[0];
                     var value = cfg.split("=")[1];
                     switch (key) {
-                        case "save_location" -> configs.setSaveLocation(value);
-                        case "theme" -> configs.setTheme(value);
-                        case "background_download" -> configs.setBackgroundDownload(Boolean.parseBoolean(value));
+                        case "save_location" -> setSaveLocation(value);
+                        case "theme" -> setTheme(value);
+                        case "background_download" -> setBackgroundDownload(Boolean.parseBoolean(value));
                     }
                 }
             }
@@ -138,16 +129,16 @@ public class IOUtils {
         }
     }
 
-    public void moveUnRecordedFiles() throws IOException {
-        var saveDir = new File(configs.getSaveLocation());
+    public static void moveUnRecordedFiles() throws IOException {
+        var saveDir = new File(getSaveLocation());
         var files = saveDir.listFiles();
         if (files != null) {
             for (var file : files) {
                 if (file.isFile()) {
                     var fileName = file.getName();
                     var title = fileName.substring(0, fileName.lastIndexOf('.'));
-                    if (!repo.doesBookExist(title)) {
-                        var unrecordedDir = new File(configs.getSaveLocation() + File.separator + configs.getUnRecordedDirName());
+                    if (!BooksRepo.doesBookExist(title)) {
+                        var unrecordedDir = new File(getSaveLocation() + File.separator + getUnRecordedDirName());
                         unrecordedDir.mkdir();
                         var destFile = new File(unrecordedDir.getPath() + File.separator + file.getName());
                         if (!file.renameTo(destFile))
@@ -159,7 +150,7 @@ public class IOUtils {
         }
     }
 
-    private void moveAndDeletePreviousData(String prevSaveLocation, String nextSaveLocation) {
+    private static void moveAndDeletePreviousData(String prevSaveLocation, String nextSaveLocation) {
         if (prevSaveLocation.equals(nextSaveLocation))
             return;
         var nextDir = new File(nextSaveLocation);
