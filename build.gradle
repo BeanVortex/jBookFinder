@@ -61,8 +61,8 @@ jlink {
             appVersion = version
             installerName = 'JBookFinder'
             installerType = 'exe'
-            installerOptions = ['--win-menu', '--win-shortcut']
-            imageOptions = [ '--icon', 'src/main/resources/ir/darkdeveloper/jbookfinder/icons/logo.ico']
+            installerOptions = ['--win-menu', '--win-shortcut', '--icon', 'src/main/resources/ir/darkdeveloper/jbookfinder/icons/logo.ico']
+            imageOptions = ['--icon', 'src/main/resources/ir/darkdeveloper/jbookfinder/icons/logo.ico']
         }
     }
     mergedModule {
