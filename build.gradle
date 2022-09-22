@@ -25,7 +25,7 @@ repositories {
 }
 
 application {
-    mainClass = 'ir.darkdeveloper.jbookfinder.JBookFinder'
+    mainClass = 'ir.darkdeveloper.jbookfinder.AppLauncher'
     mainModule = 'ir.darkdeveloper.jbookfinder'
 }
 
