@@ -124,12 +124,12 @@ public class BookUtils {
 
     public String getImageFileName(String imageUrl, String title) {
         var fileExt = imageUrl.substring(imageUrl.lastIndexOf('.'));
-        return title.replaceAll("[~\\-{}'&%$!^():/\"\\[\\]]", "_") + fileExt;
+        return title.replaceAll("[~\\-{}|'&%$!^():/\"\\[\\]]", "_") + fileExt;
     }
 
     public String getFileName(BookModel bookModel) {
         return bookModel.getTitle()
-                .replaceAll("[~\\-{}'&%$!^():/\"\\[\\]]", "_") + "." + bookModel.getFileFormat();
+                .replaceAll("[~\\-{}|'&%$!^():/\"\\[\\]]", "_") + "." + bookModel.getFileFormat();
     }
 
     public void completeDownload(VBox operationVbox, String bookTitle) {
@@ -164,6 +164,14 @@ public class BookUtils {
 
     public void createSearchUIAndSearch(String text, StackPane stackPane, Parent rootBox, Stage stage) {
         var trimmedText = text.trim();
+        var trimmedAllText = text.replaceAll("\\s+", "");
+        if (trimmedAllText.length() <= 2) {
+            Notifications.create()
+                    .title("Search warning")
+                    .text("Search query should be at least 3 characters")
+                    .showWarning();
+            return;
+        }
         var progress = new ProgressIndicator();
         var btnCancel = new Button("Cancel");
         var vbox = new VBox(progress, btnCancel);
