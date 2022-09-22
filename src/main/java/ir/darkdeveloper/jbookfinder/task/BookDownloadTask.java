@@ -56,7 +56,6 @@ public class BookDownloadTask extends Task<Void> {
                 bookModel.setFilePath(filePath.toString());
                 bookModel.setImagePath(imagePath);
                 BooksRepo.insertBook(bookModel);
-                succeeded();
             }
 
         } catch (IOException e) {
