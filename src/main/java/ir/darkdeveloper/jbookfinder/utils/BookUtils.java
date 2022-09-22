@@ -18,13 +18,14 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 
 import java.io.File;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,7 +59,10 @@ public class BookUtils {
         } else {
             var downTask = new BookDownloadTask(bookModel, operationVbox, fileName);
             addProgressAndCancel(operationVbox, downTask);
-            stage.sceneProperty().addListener((obs, old, newV) -> downTask.cancel());
+            stage.sceneProperty().addListener((obs, old, newV) -> {
+                if (!Configs.isBackgroundDownload())
+                    downTask.cancel();
+            });
             var taskT = new Thread(downTask);
             taskT.setDaemon(true);
             taskT.start();
@@ -129,12 +133,10 @@ public class BookUtils {
     }
 
     public void completeDownload(VBox operationVbox, String bookTitle) {
-        Platform.runLater(
-                () -> Notifications.create()
-                        .title("Operation complete")
-                        .text("Book " + bookTitle.substring(bookTitle.length() / 2) + " downloaded successfully")
-                        .showInformation()
-        );
+        Platform.runLater(() -> Notifications.create()
+                .title("Operation complete")
+                .text("Book " + bookTitle.substring(bookTitle.length() / 2) + " downloaded successfully")
+                .showInformation());
         operationVbox.getChildren().remove(1);
         operationVbox.getChildren().get(0).setDisable(false);
         if (operationVbox.getChildren().size() == 2)

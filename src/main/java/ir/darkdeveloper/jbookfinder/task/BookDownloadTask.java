@@ -41,14 +41,14 @@ public class BookDownloadTask extends Task<Void> {
             var buf = new byte[8192];
             int n;
             while ((n = is.read(buf)) > 0) {
-                if (!Configs.isBackgroundDownload() && isCancelled())
+                if (isCancelled())
                     break;
                 os.write(buf, 0, n);
                 nRead += n;
                 updateProgress(nRead, fileSize);
             }
 
-            if (!Configs.isBackgroundDownload() && isCancelled())
+            if (isCancelled())
                 Files.delete(filePath);
             else {
                 var imagePath = Configs.getBookCoverLocation() +

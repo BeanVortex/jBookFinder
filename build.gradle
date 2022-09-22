@@ -40,7 +40,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'org.xerial:sqlite-jdbc:3.39.3.0'
-    implementation 'io.projectreactor:reactor-core:3.4.22'
+    implementation 'io.projectreactor:reactor-core:3.4.23'
     implementation 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
@@ -57,13 +57,13 @@ jlink {
         name = 'JBookFinder'
     }
     jpackage {
-//        if (org.gradle.internal.os.OperatingSystem.current().windows) {
-//            appVersion = version
-//            installerName = 'JBookFinder Installer'
-//            installerType = 'exe'
-//            installerOptions = ['--win-menu', '--win-shortcut']
-////            imageOptions = ['--icon', 'src/main/resources/ir/darkdeveloper/jbookfinder/icons/logo.ico']
-//        }
+        if (org.gradle.internal.os.OperatingSystem.current().windows) {
+            appVersion = version
+            installerName = 'JBookFinder'
+            installerType = 'exe'
+            installerOptions = ['--win-menu', '--win-shortcut']
+            imageOptions = [ '--icon', 'src/main/resources/ir/darkdeveloper/jbookfinder/icons/logo.ico']
+        }
     }
     mergedModule {
         excludeProvides servicePattern: 'reactor.blockhound.*'
