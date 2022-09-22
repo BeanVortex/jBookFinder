@@ -60,7 +60,6 @@ jlink {
         if (org.gradle.internal.os.OperatingSystem.current().windows) {
             appVersion = version
             installerName = 'JBookFinder'
-            installerType = 'exe'
             installerOptions = ['--win-menu', '--win-shortcut', '--icon', 'src/main/resources/ir/darkdeveloper/jbookfinder/icons/logo.ico']
             imageOptions = ['--icon', 'src/main/resources/ir/darkdeveloper/jbookfinder/icons/logo.ico']
         }
