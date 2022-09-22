@@ -1,40 +1,39 @@
 
-
-
-#fieldSearch{
+#fieldSearch {
     -fx-padding: 10;
     -fx-font-size: 13;
 }
 
 
-.button:hover{
+.button:hover {
     -fx-cursor: hand;
 }
 
-.button{
+.button {
     -fx-padding: 8 16;
     -fx-font-size: 12;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-border-color: transparent;
-    -fx-effect: dropshadow(gaussian, rgba(101, 101, 101, 0.6), 9,0,0,2);
+    -fx-effect: dropshadow(gaussian, rgba(101, 101, 101, 0.6), 9, 0, 0, 2);
 }
 
-.button-dark{
+.button-dark {
     -fx-background-color: #333;
     -fx-text-fill: white;
 }
 
-.button-light{
+.button-light {
     -fx-background-color: white;
     -fx-text-fill: #333;
 }
 
-.button-dark:pressed{
+.button-dark:pressed {
     -fx-background-color: white;
     -fx-text-fill: #333;
 }
-.button-light:pressed{
+
+.button-light:pressed {
     -fx-background-color: #e6e6e6;
     -fx-text-fill: #333;
 }

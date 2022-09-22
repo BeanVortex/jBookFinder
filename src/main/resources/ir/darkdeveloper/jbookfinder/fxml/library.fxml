@@ -17,7 +17,7 @@
     </MenuBar>
 
     <VBox fx:id="contentVbox" spacing="5" alignment="CENTER" style="-fx-padding: 5 0 0 0">
-        <ScrollPane hbarPolicy="NEVER" minWidth="850">
+        <ScrollPane hbarPolicy="NEVER" minWidth="850" fx:id="scroll">
             <FlowPane fx:id="booksContainer" alignment="TOP_CENTER" hgap="15" prefWidth="850" vgap="25"/>
         </ScrollPane>
     </VBox>

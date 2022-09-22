@@ -29,7 +29,7 @@
                 <Button text="Library" alignment="BASELINE_RIGHT" onAction="#openLibrary"/>
             </HBox>
 
-            <ScrollPane hbarPolicy="NEVER" minWidth="850">
+            <ScrollPane hbarPolicy="NEVER" minWidth="850" fx:id="scroll">
                 <FlowPane fx:id="booksContainer" alignment="TOP_CENTER" hgap="15" prefWidth="850" vgap="25"/>
             </ScrollPane>
         </VBox>

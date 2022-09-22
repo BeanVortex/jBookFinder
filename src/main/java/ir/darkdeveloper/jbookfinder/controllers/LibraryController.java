@@ -8,6 +8,7 @@ import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -21,6 +22,8 @@ import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 
 public class LibraryController implements FXMLController, ThemeObserver {
 
+    @FXML
+    private ScrollPane scroll;
     @FXML
     private MenuBar menuBar;
     @FXML
@@ -51,6 +54,11 @@ public class LibraryController implements FXMLController, ThemeObserver {
 
     @Override
     public void initialize() {
+        final double SPEED = 0.003;
+        scroll.getContent().setOnScroll(scrollEvent -> {
+            double deltaY = scrollEvent.getDeltaY() * SPEED;
+            scroll.setVvalue(scroll.getVvalue() - deltaY);
+        });
     }
 
     public void initAfterStageSet() {
