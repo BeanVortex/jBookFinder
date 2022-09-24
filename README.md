@@ -2,7 +2,7 @@
 
 Search any book in category of science, technology and non fiction.
 
-![[main](imgs/main.png "main page")]
+![main](imgs/main.png "main page")
 
 JBookFinder finds books these formats: 
 - pdf
@@ -13,13 +13,13 @@ JBookFinder finds books these formats:
 
 You can directly download books. JBookFinder by default saves the books in Downloads folder
 
-![[books](imgs/books.png "Found books page")]
+![books](imgs/books.png "Found books page")
 
 ## Library
 
 Downloaded books are managed by the application, you can go to the library section and study your books:
 
-![[library](imgs/books.png "library page")]
+![library](imgs/library.png "library page")
 
 ## Settings
 
@@ -28,4 +28,4 @@ Downloaded books are managed by the application, you can go to the library secti
 - Also you can change theme(light/dark)
 - By default when you are downloading a book, if you search another book or leave the downloading section, downloading will stop, you can change this behaviour.
 
-![[settings](imgs/settings.png "settings page")]
+![settings](imgs/settings.png "settings page")
