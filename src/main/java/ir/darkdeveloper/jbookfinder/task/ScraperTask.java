@@ -7,6 +7,7 @@ import javafx.concurrent.Task;
 import org.controlsfx.control.Notifications;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class ScraperTask extends Task<Flux<BookModel>> {
 
     private final String bookName;
     private final int pageNumber;
+
 
     public ScraperTask(String bookName, int pageNumber) {
         this.bookName = bookName;
@@ -33,6 +35,7 @@ public class ScraperTask extends Task<Flux<BookModel>> {
                 doc = Jsoup.connect("https://libgen.rs/search.php")
                         .data("req", bookName)
                         .data("page", String.valueOf(pageNumber))
+                        .data("res", Configs.getResultCount())
                         .userAgent("Mozilla")
                         .get();
                 break;
@@ -45,30 +48,39 @@ public class ScraperTask extends Task<Flux<BookModel>> {
         if (doc == null)
             throw new RuntimeException("Not Found");
 
-        var listOfData = doc.select("table.c").get(0).select("tr > td").stream().skip(11).toList();
+        var listOfData = doc.select("table.c").get(0)
+                .select("tr > td")
+                .stream().skip(11).toList();
         var books = new ArrayList<BookModel>();
 
         for (int i = 0; i < listOfData.size(); i += 13) {
             if (i < listOfData.size() + 10) {
                 var fileFormat = listOfData.get(i + 8).text();
-                if (fileFormat.equals("pdf") || fileFormat.equals("epub") || fileFormat.equals("rar")) {
-
-                    var titleLinks = listOfData.get(i + 2).getElementsByTag("a");
-                    String title = titleLinks.get(0).text();
-                    if (titleLinks.size() == 2)
-                        title = titleLinks.get(1).text();
-
-                    var book = new BookModel(listOfData.get(i).text(), listOfData.get(i + 1).text(),
-                            title, listOfData.get(i + 3).text(), listOfData.get(i + 4).text(),
-                            listOfData.get(i + 5).text(), listOfData.get(i + 6).text(), listOfData.get(i + 7).text(),
-                            listOfData.get(i + 8).text(),
-                            listOfData.get(i + 9).select("a").attr("href"));
-                    books.add(book);
+                    switch (Configs.getFilterResult()) {
+                    case "pdf,rar,epub" -> {
+                        switch (fileFormat) {
+                            case "pdf", "rar", "epub" -> addBooks(listOfData, i, books);
+                        }
+                    }
+                    case "All files" -> addBooks(listOfData, i, books);
                 }
             }
         }
         return cleanAndFetchOtherData(books);
+    }
 
+    private void addBooks(List<Element> listOfData, int i, List<BookModel> books) {
+        var titleLinks = listOfData.get(i + 2).getElementsByTag("a");
+        String title = titleLinks.get(0).text();
+        if (titleLinks.size() == 2)
+            title = titleLinks.get(1).text();
+
+        var book = new BookModel(listOfData.get(i).text(), listOfData.get(i + 1).text(),
+                title, listOfData.get(i + 3).text(), listOfData.get(i + 4).text(),
+                listOfData.get(i + 5).text(), listOfData.get(i + 6).text(), listOfData.get(i + 7).text(),
+                listOfData.get(i + 8).text(),
+                listOfData.get(i + 9).select("a").attr("href"));
+        books.add(book);
     }
 
 

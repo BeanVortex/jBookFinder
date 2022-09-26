@@ -4,11 +4,14 @@ import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.Notifications;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -57,11 +60,6 @@ public class BookDownloadTask extends Task<Void> {
                 bookModel.setImagePath(imagePath);
                 BooksRepo.insertBook(bookModel);
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            failed();
-            return null;
         }
         return null;
     }
@@ -73,14 +71,18 @@ public class BookDownloadTask extends Task<Void> {
 
     @Override
     protected void failed() {
+        var bookTitle = bookModel.getTitle();
+        Platform.runLater(() -> Notifications.create()
+                .title("Operation failed")
+                .text("Downloading book: " + bookTitle.substring(bookTitle.length() / 2) + " has failed")
+                .showError());
         operationVbox.getChildren().remove(1);
         operationVbox.getChildren().get(0).setDisable(false);
         operationVbox.getChildren().get(1).setDisable(false);
-        var fileName = bookModel.getTitle().replace(' ', '_');
-        var fileExt = bookModel.getFileFormat();
+        var fileName = bookUtils.getFileName(bookModel);
 
         try {
-            var file = new File(Configs.getSaveLocation() + File.separator + fileName + "." + fileExt);
+            var file = new File(Configs.getSaveLocation() + File.separator + fileName);
             if (file.exists())
                 Files.delete(Paths.get(file.getPath()));
         } catch (IOException ex) {

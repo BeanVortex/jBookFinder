@@ -19,7 +19,7 @@
         <HBox prefWidth="430" alignment="CENTER">
             <Label styleClass="settingDescription" text="Image caches: " fx:id="labelImageCache"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="clear" onAction="#clearCache" fx:id="btnClear"/>
+            <Button text="clear image cache" onAction="#clearCache" fx:id="btnClear"/>
         </HBox>
     </VBox>
 
@@ -39,12 +39,22 @@
     <Line endX="450" stroke="lightgray" fx:id="line2"/>
 
     <VBox prefWidth="270" spacing="10">
-        <Label styleClass="settingTile" text="Download"/>
-        <VBox>
+        <Label styleClass="settingTile" text="Search/Download"/>
+        <VBox spacing="10">
             <HBox alignment="CENTER">
-                <Label styleClass="settingDescription" text="download book even leaving the search area"/>
+                <Label styleClass="settingDescription" text="Download book even leaving the search area"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <CheckBox fx:id="downCheck"/>
+            </HBox>
+            <HBox>
+                <Label styleClass="settingDescription" text="Results per search"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="resultsCombo" onAction="#onResultComboChanged"/>
+            </HBox>
+            <HBox>
+                <Label styleClass="settingDescription" text="Search filter"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="filterCombo" onAction="#onFilterComboChanged"/>
             </HBox>
         </VBox>
     </VBox>

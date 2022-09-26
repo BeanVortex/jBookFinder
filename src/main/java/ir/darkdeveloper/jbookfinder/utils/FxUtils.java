@@ -132,6 +132,7 @@ public class FxUtils {
             }
             stage.setScene(scene);
             stage.setWidth(800);
+            stage.setTitle(bookModel.getTitle());
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();

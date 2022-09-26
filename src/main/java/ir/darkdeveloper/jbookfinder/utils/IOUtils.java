@@ -19,7 +19,6 @@ public class IOUtils {
     private static final Logger log = Logger.getLogger(IOUtils.class.getName());
 
 
-
     public static void deleteCachedImages(List<BookModel> notToDeleteBooks) {
         var path = getBookCoverLocation();
         if (notToDeleteBooks == null)
@@ -77,17 +76,8 @@ public class IOUtils {
             log.info("not created dir: " + dirPath);
     }
 
-    /**
-     * @param savePath new location for saving books, pass null for other setting updates
-     * */
-    public static void saveConfigs(String savePath) {
+    public static void saveConfigs() {
         try {
-            var prevSaveLocation = getSaveLocation();
-            var prevBookCoverLocation = getBookCoverLocation();
-            var prevUnrecordedLocation = getUnrecordedLocation();
-            if (savePath != null)
-                setSaveLocation(savePath);
-
             var file = new File(getConfigLocation() + "config.cfg");
             if (!file.exists())
                 file.createNewFile();
@@ -97,16 +87,19 @@ public class IOUtils {
                     .append("\n")
                     .append("theme=").append(getTheme())
                     .append("\n")
-                    .append("background_download=").append(String.valueOf(isBackgroundDownload()));
+                    .append("background_download=").append(String.valueOf(isBackgroundDownload()))
+                    .append("\n")
+                    .append("result_count=").append(getResultCount())
+                    .append("\n")
+                    .append("filter_result=").append(getFilterResult());
             writer.flush();
             writer.close();
-            moveAndDeletePreviousData(prevBookCoverLocation, getBookCoverLocation());
-            moveAndDeletePreviousData(prevUnrecordedLocation, getUnrecordedLocation());
-            moveAndDeletePreviousData(prevSaveLocation, getSaveLocation());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     public static void readConfig() {
         try {
@@ -121,6 +114,8 @@ public class IOUtils {
                         case "save_location" -> setSaveLocation(value);
                         case "theme" -> setTheme(value);
                         case "background_download" -> setBackgroundDownload(Boolean.parseBoolean(value));
+                        case "result_count" -> setResultCount(value);
+                        case "filter_result" -> setFilterResult(value);
                     }
                 }
             }
@@ -150,9 +145,21 @@ public class IOUtils {
         }
     }
 
+
+    public static void moveAndDeletePreviousData(String savePath) {
+        if (savePath != null) {
+            var prevSaveLocation = getSaveLocation();
+            var prevBookCoverLocation = getBookCoverLocation();
+            var prevUnrecordedLocation = getUnrecordedLocation();
+            setSaveLocation(savePath);
+            moveAndDeletePreviousData(prevBookCoverLocation, getBookCoverLocation());
+            moveAndDeletePreviousData(prevUnrecordedLocation, getUnrecordedLocation());
+            moveAndDeletePreviousData(prevSaveLocation, getSaveLocation());
+        }
+    }
+
+
     private static void moveAndDeletePreviousData(String prevSaveLocation, String nextSaveLocation) {
-        if (prevSaveLocation.equals(nextSaveLocation))
-            return;
         var nextDir = new File(nextSaveLocation);
         if (!nextDir.exists())
             nextDir.mkdir();

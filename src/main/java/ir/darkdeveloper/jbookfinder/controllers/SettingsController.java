@@ -8,10 +8,7 @@ import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
@@ -27,6 +24,10 @@ import java.util.List;
 
 public class SettingsController implements FXMLController, ThemeObserver {
 
+    @FXML
+    private ComboBox<String> filterCombo;
+    @FXML
+    private ComboBox<String> resultsCombo;
     @FXML
     private CheckBox downCheck;
     @FXML
@@ -62,28 +63,16 @@ public class SettingsController implements FXMLController, ThemeObserver {
 
         updateTheme(Configs.getTheme());
 
-        circleTheme.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            if (Configs.getTheme().equals("light")) {
-                circleTheme.setFill(Paint.valueOf("#fff"));
-                circleTheme.setStroke(Paint.valueOf("#333"));
-                parent.setBackground(Background.fill(Paint.valueOf("#333")));
-                labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
-                Configs.setTheme("dark");
-            } else {
-                circleTheme.setFill(Paint.valueOf("#333"));
-                circleTheme.setStroke(Paint.valueOf("#fff"));
-                parent.setBackground(Background.fill(Paint.valueOf("#fff")));
-                labels.forEach(label -> label.setTextFill(Paint.valueOf("#111")));
-                Configs.setTheme("light");
-            }
-            IOUtils.saveConfigs(null);
-        });
+        resultsCombo.getItems().addAll("25", "50", "100");
+        resultsCombo.setValue(Configs.getResultCount());
+        filterCombo.getItems().addAll("All files", "pdf,rar,epub");
+        filterCombo.setValue(Configs.getFilterResult());
+
 
         downCheck.setSelected(Configs.isBackgroundDownload());
-
         downCheck.setOnAction(event -> {
             Configs.setBackgroundDownload(downCheck.isSelected());
-            IOUtils.saveConfigs(null);
+            IOUtils.saveConfigs();
         });
 
     }
@@ -119,8 +108,11 @@ public class SettingsController implements FXMLController, ThemeObserver {
         if (selectedDir != null) {
             var files = selectedDir.listFiles();
             if (files != null && files.length == 0) {
+                var path = selectedDir.getPath();
+                Configs.setSaveLocation(path);
                 IOUtils.createSaveLocation();
-                IOUtils.saveConfigs(selectedDir.getPath());
+                IOUtils.saveConfigs();
+                IOUtils.moveAndDeletePreviousData(path);
                 labelLocation.setText(Configs.getSaveLocation());
                 BooksRepo.updateBooksPath(Configs.getSaveLocation());
             } else {
@@ -154,6 +146,23 @@ public class SettingsController implements FXMLController, ThemeObserver {
             labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
         }
 
+        circleTheme.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            if (Configs.getTheme().equals("light")) {
+                circleTheme.setFill(Paint.valueOf("#fff"));
+                circleTheme.setStroke(Paint.valueOf("#333"));
+                parent.setBackground(Background.fill(Paint.valueOf("#333")));
+                labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
+                Configs.setTheme("dark");
+            } else {
+                circleTheme.setFill(Paint.valueOf("#333"));
+                circleTheme.setStroke(Paint.valueOf("#fff"));
+                parent.setBackground(Background.fill(Paint.valueOf("#fff")));
+                labels.forEach(label -> label.setTextFill(Paint.valueOf("#111")));
+                Configs.setTheme("light");
+            }
+            IOUtils.saveConfigs();
+        });
+
         FxUtils.updateButtonTheme(List.of(btnChangeDir, btnClear));
     }
 
@@ -161,5 +170,17 @@ public class SettingsController implements FXMLController, ThemeObserver {
     private void openGithubPage(ActionEvent e) {
         var hyperlink = (Hyperlink) e.getSource();
         Configs.getHostServices().showDocument(hyperlink.getText());
+    }
+
+    @FXML
+    private void onResultComboChanged() {
+        Configs.setResultCount(resultsCombo.getSelectionModel().getSelectedItem());
+        IOUtils.saveConfigs();
+    }
+
+    @FXML
+    private void onFilterComboChanged() {
+        Configs.setFilterResult(filterCombo.getSelectionModel().getSelectedItem());
+        IOUtils.saveConfigs();
     }
 }

@@ -8,6 +8,9 @@ import java.io.File;
 public class Configs {
 
     private static boolean backgroundDownload = false;
+    private static String filterResult = "pdf,rar,epub";
+    private static String resultCount = "25";
+
 
     private static String saveLocation = System.getProperty("user.home")
             + File.separator + "Downloads"
@@ -95,5 +98,21 @@ public class Configs {
 
     public static boolean isBackgroundDownload() {
         return backgroundDownload;
+    }
+
+    public static String getFilterResult() {
+        return filterResult;
+    }
+
+    public static void setFilterResult(String filterResult) {
+        Configs.filterResult = filterResult;
+    }
+
+    public static String getResultCount() {
+        return resultCount;
+    }
+
+    public static void setResultCount(String resultCount) {
+        Configs.resultCount = resultCount;
     }
 }
