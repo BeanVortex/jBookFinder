@@ -1,11 +1,11 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
+import ir.darkdeveloper.jbookfinder.JBookFinder;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
-import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -137,11 +137,6 @@ public class BooksController implements FXMLController, ThemeObserver {
 
 
     @FXML
-    private void clearImageCache() {
-        IOUtils.deleteCachedImages(booksList);
-    }
-
-    @FXML
     private void newSearch() {
         fieldSearch.setText("");
         fieldSearch.requestFocus();
@@ -163,5 +158,10 @@ public class BooksController implements FXMLController, ThemeObserver {
         FxUtils.updateThemeForBooks(theme, booksContainer, contentVbox, itemParents);
         var allButtons = FxUtils.getAllNodes(rootPane, Button.class);
         FxUtils.updateButtonTheme(allButtons);
+    }
+
+    @FXML
+    private void showAbout() {
+        JBookFinder.showAbout();
     }
 }

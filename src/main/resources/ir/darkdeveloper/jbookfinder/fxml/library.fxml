@@ -13,6 +13,8 @@
             <MenuItem mnemonicParsing="false" text="Home" onAction="#getBack"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem mnemonicParsing="false" text="Settings" onAction="#showSettings"/>
+            <MenuItem mnemonicParsing="false" text="About" onAction="#showAbout"/>
+
         </Menu>
     </MenuBar>
 

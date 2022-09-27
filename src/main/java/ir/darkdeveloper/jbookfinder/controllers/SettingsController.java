@@ -62,6 +62,7 @@ public class SettingsController implements FXMLController, ThemeObserver {
         labelLocation.setText(Configs.getSaveLocation());
 
         updateTheme(Configs.getTheme());
+        onCircleThemeClicked();
 
         resultsCombo.getItems().addAll("25", "50", "100");
         resultsCombo.setValue(Configs.getResultCount());
@@ -75,6 +76,25 @@ public class SettingsController implements FXMLController, ThemeObserver {
             IOUtils.saveConfigs();
         });
 
+    }
+
+    public void onCircleThemeClicked() {
+        circleTheme.setOnMouseClicked(e -> {
+            if (Configs.getTheme().equals("light")) {
+                circleTheme.setFill(Paint.valueOf("#fff"));
+                circleTheme.setStroke(Paint.valueOf("#333"));
+                parent.setBackground(Background.fill(Paint.valueOf("#333")));
+                labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
+                Configs.setTheme("dark");
+            } else {
+                circleTheme.setFill(Paint.valueOf("#333"));
+                circleTheme.setStroke(Paint.valueOf("#fff"));
+                parent.setBackground(Background.fill(Paint.valueOf("#fff")));
+                labels.forEach(label -> label.setTextFill(Paint.valueOf("#111")));
+                Configs.setTheme("light");
+            }
+            IOUtils.saveConfigs();
+        });
     }
 
     @Override
@@ -146,30 +166,8 @@ public class SettingsController implements FXMLController, ThemeObserver {
             labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
         }
 
-        circleTheme.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            if (Configs.getTheme().equals("light")) {
-                circleTheme.setFill(Paint.valueOf("#fff"));
-                circleTheme.setStroke(Paint.valueOf("#333"));
-                parent.setBackground(Background.fill(Paint.valueOf("#333")));
-                labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
-                Configs.setTheme("dark");
-            } else {
-                circleTheme.setFill(Paint.valueOf("#333"));
-                circleTheme.setStroke(Paint.valueOf("#fff"));
-                parent.setBackground(Background.fill(Paint.valueOf("#fff")));
-                labels.forEach(label -> label.setTextFill(Paint.valueOf("#111")));
-                Configs.setTheme("light");
-            }
-            IOUtils.saveConfigs();
-        });
 
         FxUtils.updateButtonTheme(List.of(btnChangeDir, btnClear));
-    }
-
-    @FXML
-    private void openGithubPage(ActionEvent e) {
-        var hyperlink = (Hyperlink) e.getSource();
-        Configs.getHostServices().showDocument(hyperlink.getText());
     }
 
     @FXML

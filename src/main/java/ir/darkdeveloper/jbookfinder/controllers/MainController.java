@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
+import ir.darkdeveloper.jbookfinder.JBookFinder;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
@@ -67,5 +68,10 @@ public class MainController implements FXMLController {
             controller.resizeListViewByStage();
             Configs.getThemeSubject().addObserver(controller);
         }
+    }
+
+    @FXML
+    private void showAbout() {
+        JBookFinder.showAbout();
     }
 }

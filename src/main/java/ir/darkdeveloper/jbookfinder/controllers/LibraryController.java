@@ -1,10 +1,12 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
+import ir.darkdeveloper.jbookfinder.JBookFinder;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
@@ -106,5 +108,10 @@ public class LibraryController implements FXMLController, ThemeObserver {
     @Override
     public void updateTheme(String theme) {
         FxUtils.updateThemeForBooks(theme, booksContainer, contentVbox, itemParents);
+    }
+
+    @FXML
+    private void showAbout() {
+        JBookFinder.showAbout();
     }
 }

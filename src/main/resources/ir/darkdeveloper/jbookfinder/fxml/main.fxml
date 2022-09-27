@@ -18,6 +18,7 @@
         <VBox alignment="CENTER" minHeight="-Infinity" spacing="10">
             <Button alignment="CENTER" text="Library" onAction="#openLibrary"/>
             <Button alignment="CENTER" text="Settings" onAction="#showSettings"/>
+            <Button alignment="CENTER" text="About" onAction="#showAbout"/>
         </VBox>
     </VBox>
 </StackPane>

@@ -64,9 +64,5 @@
 
     <Region VBox.vgrow="ALWAYS"/>
 
-    <VBox alignment="CENTER">
-        <Label styleClass="settingDescription" text="Developed by DarkDeveloper 2022"/>
-        <Hyperlink text="https://github.com/DarkDeveloper-arch/jBookFinder" onAction="#openGithubPage"/>
-    </VBox>
 
 </VBox>
