@@ -1,7 +1,7 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
-import ir.darkdeveloper.jbookfinder.JBookFinder;
 import ir.darkdeveloper.jbookfinder.config.Configs;
+import ir.darkdeveloper.jbookfinder.utils.AppUtils;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.event.ActionEvent;
@@ -72,6 +72,6 @@ public class MainController implements FXMLController {
 
     @FXML
     private void showAbout() {
-        JBookFinder.showAbout();
+        AppUtils.showAbout();
     }
 }

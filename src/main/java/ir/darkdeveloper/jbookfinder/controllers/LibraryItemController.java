@@ -1,5 +1,6 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
+import ir.darkdeveloper.jbookfinder.JBookFinder;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
@@ -147,7 +148,7 @@ public class LibraryItemController implements FXMLController, ThemeObserver {
         } else {
             var alert = new Alert(Alert.AlertType.CONFIRMATION);
             var alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-            var logoPath = FxUtils.class.getClassLoader().getResource("images/logo.png");
+            var logoPath = JBookFinder.getResource("images/logo.png");
             if (logoPath != null)
                 alertStage.getIcons().add(new Image(logoPath.toExternalForm()));
             alert.setTitle("Book not found");

@@ -3,6 +3,7 @@ package ir.darkdeveloper.jbookfinder.controllers;
 import ir.darkdeveloper.jbookfinder.JBookFinder;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
+import ir.darkdeveloper.jbookfinder.utils.AppUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -72,5 +73,10 @@ public class AboutController implements FXMLController, ThemeObserver {
             labels.forEach(label -> label.setTextFill(Paint.valueOf("#fff")));
         }
         FxUtils.updateButtonTheme(List.of(updateBtn));
+    }
+
+    @FXML
+    private void checkForUpdates() {
+        AppUtils.checkUpdates(true);
     }
 }

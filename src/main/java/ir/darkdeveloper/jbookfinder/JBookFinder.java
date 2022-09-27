@@ -1,8 +1,8 @@
 package ir.darkdeveloper.jbookfinder;
 
 import ir.darkdeveloper.jbookfinder.config.Configs;
-import ir.darkdeveloper.jbookfinder.controllers.AboutController;
 import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
+import ir.darkdeveloper.jbookfinder.utils.AppUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.application.Application;
@@ -37,6 +37,7 @@ public class JBookFinder extends Application {
         BooksRepo.updateBookExistenceRecords();
         IOUtils.moveUnRecordedFiles();
         Configs.setHostServices(getHostServices());
+        AppUtils.checkUpdates(false);
     }
 
 
@@ -50,11 +51,5 @@ public class JBookFinder extends Application {
         return JBookFinder.class.getResource(path);
     }
 
-    public static void showAbout(){
-        var controller = (AboutController) FxUtils
-                .newStageAndReturnController("about.fxml", "About", 450, 350);
-        if (controller != null)
-            Configs.getThemeSubject().addObserver(controller);
-    }
 
 }

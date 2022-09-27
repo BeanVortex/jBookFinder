@@ -15,7 +15,7 @@
     <VBox alignment="CENTER" spacing="5">
         <Label text="JBookFinder" style="-fx-font-size: 18"/>
         <Label text="version" fx:id="versionLbl" styleClass="descText"/>
-        <Button text="check for updates" fx:id="updateBtn"/>
+        <Button text="check for updates" fx:id="updateBtn" onAction="#checkForUpdates"/>
     </VBox>
 
     <VBox alignment="CENTER">

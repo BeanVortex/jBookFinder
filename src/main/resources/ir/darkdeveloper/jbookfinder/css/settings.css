@@ -28,6 +28,10 @@
     -fx-effect: dropshadow(gaussian, rgba(101, 101, 101, 0.6), 9,0,0,2);
 }
 
+.button:hover{
+    -fx-cursor: hand;
+}
+
 .button-dark{
     -fx-background-color: #333;
     -fx-text-fill: white;

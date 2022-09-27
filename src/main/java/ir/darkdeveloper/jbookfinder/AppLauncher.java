@@ -5,6 +5,5 @@ public class AppLauncher {
         JBookFinder.main(args);
     }
 
-    // Todo: check for updates
     // Todo: next pages for search
 }

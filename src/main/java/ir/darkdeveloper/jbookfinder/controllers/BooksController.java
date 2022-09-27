@@ -1,9 +1,9 @@
 package ir.darkdeveloper.jbookfinder.controllers;
 
-import ir.darkdeveloper.jbookfinder.JBookFinder;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.config.ThemeObserver;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
+import ir.darkdeveloper.jbookfinder.utils.AppUtils;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.FxUtils;
 import javafx.concurrent.Task;
@@ -162,6 +162,6 @@ public class BooksController implements FXMLController, ThemeObserver {
 
     @FXML
     private void showAbout() {
-        JBookFinder.showAbout();
+        AppUtils.showAbout();
     }
 }
