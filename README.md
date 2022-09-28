@@ -25,7 +25,9 @@ Downloaded books are managed by the application, you can go to the library secti
 
 - If you need to change save location of book, you can go the settings and simply change it. once you have changed, books will be moved to that location.
 - If you need to clear books cover which you have searched, you can clear these caches
-- Also you can change theme(light/dark)
-- By default when you are downloading a book, if you search another book or leave the downloading section, downloading will stop, you can change this behaviour.
+- Also, you can change theme(light/dark)
+- By default, when you are downloading a book, if you search another book or leave the downloading section, downloading will stop, you can change this behaviour.
+- You can choose how many result to be shown in a single search
+- You can filter searching by book's format
 
 ![settings](imgs/settings.png "settings page")
