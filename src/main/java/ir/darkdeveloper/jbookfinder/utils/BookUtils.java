@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 
 import java.io.File;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -173,7 +174,7 @@ public class BookUtils {
         vbox.setAlignment(Pos.CENTER);
         rootBox.setDisable(true);
         stackPane.getChildren().add(vbox);
-
+        FxUtils.updateButtonTheme(List.of(btnCancel));
 
         var scrapper = new ScraperTask(trimmedText, pageNumber);
         scrapper.valueProperty().addListener((obs, old, booksFlux) -> {
@@ -184,7 +185,6 @@ public class BookUtils {
                 return;
             }
             Configs.getThemeSubject().addObserver(booksController);
-            booksController.setStage(stage);
             booksController.setPageNumber(pageNumber);
             booksController.showSearch(booksFlux, text);
             booksController.resizeListViewByStage(stage);

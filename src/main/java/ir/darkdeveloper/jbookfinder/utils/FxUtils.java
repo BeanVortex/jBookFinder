@@ -66,10 +66,20 @@ public class FxUtils {
         try {
             var loader = new FXMLLoader(getResource("fxml/" + fxmlFilename));
             Parent root = loader.load();
-            var scene = new Scene(root, stage.getWidth(), stage.getHeight());
+            var width = stage.getWidth();
+            var height = stage.getHeight();
+            var prevScene = stage.getScene();
+            if (prevScene != null) {
+                width = prevScene.getWidth();
+                height = prevScene.getHeight();
+            }
+
+            var scene = new Scene(root, width, height);
             stage.setScene(scene);
             stage.setTitle("JBookFinder - " + stageTitle);
-            return tClass.cast(loader.getController());
+            var controller = (FXMLController) loader.getController();
+            controller.setStage(stage);
+            return tClass.cast(controller);
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;

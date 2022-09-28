@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -30,9 +31,7 @@ import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 public class BooksController implements FXMLController, ThemeObserver {
 
     @FXML
-    private Hyperlink prevPage;
-    @FXML
-    private Hyperlink nextPage;
+    private TextField fieldPage;
     @FXML
     private ScrollPane scroll;
     @FXML
@@ -61,11 +60,28 @@ public class BooksController implements FXMLController, ThemeObserver {
             double deltaY = scrollEvent.getDeltaY() * SPEED;
             scroll.setVvalue(scroll.getVvalue() - deltaY);
         });
+
+        fieldPage.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*"))
+                fieldPage.setText(newValue.replaceAll("[^\\d]", ""));
+        });
+
+    }
+
+    public void initAfterStage(){
+        stage.getScene().setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER) &&
+                    ((fieldPage.isFocused() || fieldSearch.isFocused()) &&
+                            (!fieldSearch.getText().equals(searchText) || !fieldPage.getText().equals("" + pageNumber)))
+            )
+                searchTheBook();
+        });
     }
 
     @Override
     public void setStage(Stage stage) {
         this.stage = stage;
+        initAfterStage();
     }
 
     @Override
@@ -76,6 +92,7 @@ public class BooksController implements FXMLController, ThemeObserver {
     public void showSearch(Flux<BookModel> books, String text) {
         searchText = text;
         fieldSearch.setText(text);
+        fieldPage.setText("" + pageNumber);
         booksContainer.requestFocus();
         updateTheme(Configs.getTheme());
 
@@ -122,7 +139,7 @@ public class BooksController implements FXMLController, ThemeObserver {
     }
 
     @FXML
-    private void getBack() {
+    private void getHome() {
         FxUtils.switchSceneToMain(stage, "main.fxml");
     }
 
@@ -138,9 +155,10 @@ public class BooksController implements FXMLController, ThemeObserver {
     @FXML
     private void searchTheBook() {
         var text = fieldSearch.getText();
-        if (!text.isBlank())
+        if (text.equals(searchText))
+            bookUtils.createSearchUIAndSearch(text, rootPane, rootVbox, stage, Integer.parseInt(fieldPage.getText()));
+        else
             bookUtils.createSearchUIAndSearch(text, rootPane, rootVbox, stage, 1);
-        updateTheme(Configs.getTheme());
     }
 
 
@@ -191,7 +209,4 @@ public class BooksController implements FXMLController, ThemeObserver {
         this.pageNumber = pageNumber;
     }
 
-    public int getPageNumber() {
-        return pageNumber;
-    }
 }

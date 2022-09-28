@@ -38,7 +38,7 @@ public class LibraryController implements FXMLController, ThemeObserver {
     private List<BookModel> booksList;
 
     @FXML
-    private void getBack() {
+    private void getHome() {
         var stage = (Stage) menuBar.getScene().getWindow();
         FxUtils.switchSceneToMain(stage, "main.fxml");
     }

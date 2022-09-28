@@ -62,7 +62,8 @@ public class MainController implements FXMLController {
 
     @FXML
     private void openLibrary(ActionEvent e) {
-        var controller = FxUtils.switchSceneAndGetController(e, "library.fxml", "Library", LibraryController.class);
+        var controller = FxUtils.switchSceneAndGetController(e, "library.fxml",
+                "Library", LibraryController.class);
         if (controller != null) {
             controller.setStage(stage);
             controller.resizeListViewByStage();

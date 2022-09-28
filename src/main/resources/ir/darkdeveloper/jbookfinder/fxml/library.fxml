@@ -10,7 +10,7 @@
 
     <MenuBar prefHeight="9.0" prefWidth="794.0" fx:id="menuBar" >
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" text="Home" onAction="#getBack"/>
+            <MenuItem mnemonicParsing="false" text="Home" onAction="#getHome"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
             <MenuItem mnemonicParsing="false" text="Settings" onAction="#showSettings"/>
             <MenuItem mnemonicParsing="false" text="About" onAction="#showAbout"/>

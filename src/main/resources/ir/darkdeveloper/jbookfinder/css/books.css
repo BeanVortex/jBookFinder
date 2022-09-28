@@ -1,9 +1,4 @@
 
-#fieldSearch {
-    -fx-padding: 10;
-    -fx-font-size: 13;
-}
-
 
 .button:hover {
     -fx-cursor: hand;
@@ -36,4 +31,9 @@
 .button-light:pressed {
     -fx-background-color: #e6e6e6;
     -fx-text-fill: #333;
+}
+
+.field {
+    -fx-padding: 10;
+    -fx-font-size: 13;
 }
