@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
@@ -29,6 +30,10 @@ import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
 public class BooksController implements FXMLController, ThemeObserver {
 
     @FXML
+    private Hyperlink prevPage;
+    @FXML
+    private Hyperlink nextPage;
+    @FXML
     private ScrollPane scroll;
     @FXML
     private VBox contentVbox;
@@ -46,6 +51,8 @@ public class BooksController implements FXMLController, ThemeObserver {
     private final BookUtils bookUtils = BookUtils.getInstance();
 
     private Stage stage;
+    private int pageNumber;
+    private String searchText;
 
     @Override
     public void initialize() {
@@ -67,6 +74,7 @@ public class BooksController implements FXMLController, ThemeObserver {
     }
 
     public void showSearch(Flux<BookModel> books, String text) {
+        searchText = text;
         fieldSearch.setText(text);
         booksContainer.requestFocus();
         updateTheme(Configs.getTheme());
@@ -128,10 +136,10 @@ public class BooksController implements FXMLController, ThemeObserver {
     }
 
     @FXML
-    private void searchTheBook(ActionEvent e) {
+    private void searchTheBook() {
         var text = fieldSearch.getText();
         if (!text.isBlank())
-            bookUtils.createSearchUIAndSearch(text, rootPane, rootVbox, e);
+            bookUtils.createSearchUIAndSearch(text, rootPane, rootVbox, stage, 1);
         updateTheme(Configs.getTheme());
     }
 
@@ -163,5 +171,27 @@ public class BooksController implements FXMLController, ThemeObserver {
     @FXML
     private void showAbout() {
         AppUtils.showAbout();
+    }
+
+    @FXML
+    private void goPrevPage() {
+        if (pageNumber == 1)
+            return;
+        pageNumber--;
+        bookUtils.createSearchUIAndSearch(searchText, rootPane, rootVbox, stage, pageNumber);
+    }
+
+    @FXML
+    private void goNextPage() {
+        pageNumber++;
+        bookUtils.createSearchUIAndSearch(searchText, rootPane, rootVbox, stage, pageNumber);
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
     }
 }

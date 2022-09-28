@@ -33,7 +33,7 @@ public class MainController implements FXMLController {
     public void searchTheBook(Stage stage) {
         var text = fieldSearch.getText();
         if (!text.isBlank())
-            bookUtils.createSearchUIAndSearch(text, rootPane, rootVbox, stage);
+            bookUtils.createSearchUIAndSearch(text, rootPane, rootVbox, stage, 1);
 
     }
 

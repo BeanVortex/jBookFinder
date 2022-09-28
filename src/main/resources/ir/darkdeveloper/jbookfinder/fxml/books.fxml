@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import org.controlsfx.control.HyperlinkLabel?>
 <StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/16"
            stylesheets="@../css/books.css"
            xmlns:fx="http://javafx.com/fxml/1"
@@ -28,9 +29,13 @@
                 <Button text="Library" alignment="BASELINE_RIGHT" onAction="#openLibrary"/>
             </HBox>
 
-            <ScrollPane hbarPolicy="NEVER" minWidth="850" fx:id="scroll">
+            <ScrollPane hbarPolicy="NEVER" minWidth="850" fx:id="scroll" StackPane.alignment="CENTER">
                 <FlowPane fx:id="booksContainer" alignment="TOP_CENTER" hgap="15" prefWidth="850" vgap="25"/>
             </ScrollPane>
+            <HBox alignment="CENTER" minWidth="850" spacing="20" style="-fx-padding: 5">
+                <Hyperlink text="Previous" fx:id="prevPage" onAction="#goPrevPage"/>
+                <Hyperlink text="Next" fx:id="nextPage" onAction="#goNextPage"/>
+            </HBox>
         </VBox>
     </VBox>
 </StackPane>

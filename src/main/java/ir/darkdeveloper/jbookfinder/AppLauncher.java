@@ -5,5 +5,5 @@ public class AppLauncher {
         JBookFinder.main(args);
     }
 
-    // Todo: next pages for search
+    // Todo: bugs in next,prev page
 }

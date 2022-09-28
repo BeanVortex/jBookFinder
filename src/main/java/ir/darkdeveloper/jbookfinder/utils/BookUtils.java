@@ -7,7 +7,6 @@ import ir.darkdeveloper.jbookfinder.task.BookDownloadTask;
 import ir.darkdeveloper.jbookfinder.task.ImageFetchTask;
 import ir.darkdeveloper.jbookfinder.task.ScraperTask;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -30,7 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static ir.darkdeveloper.jbookfinder.JBookFinder.getResource;
-import static ir.darkdeveloper.jbookfinder.utils.FxUtils.getStageFromEvent;
 
 
 public class BookUtils {
@@ -158,11 +156,7 @@ public class BookUtils {
     }
 
 
-    public void createSearchUIAndSearch(String text, StackPane stackPane, Parent rootBox, ActionEvent e) {
-        createSearchUIAndSearch(text, stackPane, rootBox, getStageFromEvent(e));
-    }
-
-    public void createSearchUIAndSearch(String text, StackPane stackPane, Parent rootBox, Stage stage) {
+    public void createSearchUIAndSearch(String text, StackPane stackPane, Parent rootBox, Stage stage, int pageNumber) {
         var trimmedText = text.trim();
         var trimmedAllText = text.replaceAll("\\s+", "");
         if (trimmedAllText.length() <= 2) {
@@ -181,7 +175,7 @@ public class BookUtils {
         stackPane.getChildren().add(vbox);
 
 
-        var scrapper = new ScraperTask(trimmedText, 1);
+        var scrapper = new ScraperTask(trimmedText, pageNumber);
         scrapper.valueProperty().addListener((obs, old, booksFlux) -> {
             var booksController = FxUtils.
                     switchSceneAndGetController(stage, "books.fxml", "Book Search", BooksController.class);
@@ -191,6 +185,7 @@ public class BookUtils {
             }
             Configs.getThemeSubject().addObserver(booksController);
             booksController.setStage(stage);
+            booksController.setPageNumber(pageNumber);
             booksController.showSearch(booksFlux, text);
             booksController.resizeListViewByStage(stage);
         });
