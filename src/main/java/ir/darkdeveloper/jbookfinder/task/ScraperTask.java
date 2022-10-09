@@ -56,7 +56,7 @@ public class ScraperTask extends Task<Flux<BookModel>> {
         for (int i = 0; i < listOfData.size(); i += 13) {
             if (i < listOfData.size() + 10) {
                 var fileFormat = listOfData.get(i + 8).text();
-                    switch (Configs.getFilterResult()) {
+                switch (Configs.getFilterResult()) {
                     case "pdf,rar,epub" -> {
                         switch (fileFormat) {
                             case "pdf", "rar", "epub" -> addBooks(listOfData, i, books);
@@ -105,7 +105,10 @@ public class ScraperTask extends Task<Flux<BookModel>> {
                 if (downloadDiv != null) link = downloadDiv.select("h2 > a").attr("href");
                 book.setMirror(link);
                 var imageUrl = downloadPage.select("img").attr("src");
-                book.setImageUrl(baseURL + imageUrl);
+                if (!imageUrl.startsWith("http"))
+                    book.setImageUrl(baseURL + imageUrl);
+                else
+                    book.setImageUrl(imageUrl);
                 fluxSink.next(book);
             } catch (IOException e) {
                 e.printStackTrace();
