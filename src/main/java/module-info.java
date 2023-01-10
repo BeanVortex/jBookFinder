@@ -7,7 +7,7 @@ module ir.darkdeveloper.jbookfinder {
     requires java.logging;
     requires java.sql;
     requires reactor.core;
-    requires org.apache.commons.io;
+    requires commons.io;
     requires org.controlsfx.controls;
     requires org.jsoup;
     requires java.desktop;
