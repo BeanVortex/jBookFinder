@@ -38,7 +38,7 @@ javafx {
 
 dependencies {
     implementation 'org.controlsfx:controlsfx:11.1.2'
-    implementation 'commons-io:commons-io:20030203.000550'
+    implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'org.xerial:sqlite-jdbc:3.40.0.0'
     implementation 'io.projectreactor:reactor-core:3.4.24'
