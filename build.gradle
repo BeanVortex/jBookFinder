@@ -6,9 +6,9 @@ plugins {
 }
 
 group = 'ir.darkdeveloper'
-version = '1.1.1'
-sourceCompatibility = '17'
-targetCompatibility = '17'
+version = '1.1.2'
+sourceCompatibility = '19'
+targetCompatibility = '19'
 
 configurations {
     compileOnly {
@@ -31,17 +31,17 @@ application {
 }
 
 javafx {
-    version = "18-ea+6"
+    version = "19"
     modules = ['javafx.controls', 'javafx.fxml', "javafx.graphics"]
 }
 
 
 dependencies {
-    implementation 'org.controlsfx:controlsfx:11.1.1'
-    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'org.controlsfx:controlsfx:11.1.2'
+    implementation 'commons-io:commons-io:20030203.000550'
     implementation 'org.jsoup:jsoup:1.15.3'
-    implementation 'org.xerial:sqlite-jdbc:3.39.3.0'
-    implementation 'io.projectreactor:reactor-core:3.4.23'
+    implementation 'org.xerial:sqlite-jdbc:3.40.0.0'
+    implementation 'io.projectreactor:reactor-core:3.4.24'
     implementation 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
@@ -52,7 +52,7 @@ tasks.named('test') {
 }
 
 jlink {
-    imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
+    imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip") as RegularFile
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
     launcher {
         name = 'JBookFinder'

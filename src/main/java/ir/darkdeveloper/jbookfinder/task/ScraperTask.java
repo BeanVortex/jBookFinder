@@ -53,7 +53,7 @@ public class ScraperTask extends Task<Flux<BookModel>> {
                 .stream().skip(11).toList();
         var books = new ArrayList<BookModel>();
 
-        for (int i = 0; i < listOfData.size(); i += 13) {
+        for (int i = 0; i < listOfData.size(); i += 12) {
             if (i < listOfData.size() + 10) {
                 var fileFormat = listOfData.get(i + 8).text();
                 switch (Configs.getFilterResult()) {
