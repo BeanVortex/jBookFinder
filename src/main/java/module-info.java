@@ -6,6 +6,7 @@ module ir.darkdeveloper.jbookfinder {
     requires lombok;
     requires java.logging;
     requires java.sql;
+    requires org.xerial.sqlitejdbc;
     requires reactor.core;
     requires org.controlsfx.controls;
     requires org.jsoup;
