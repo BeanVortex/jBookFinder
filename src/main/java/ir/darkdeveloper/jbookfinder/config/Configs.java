@@ -7,7 +7,7 @@ import java.io.File;
 
 public class Configs {
 
-    public static final String version = "1.1.2";
+    public static final String version = "1.1.3";
 
     private static boolean backgroundDownload = false;
     private static String filterResult = "pdf,rar,epub";

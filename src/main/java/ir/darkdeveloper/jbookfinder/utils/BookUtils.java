@@ -60,7 +60,7 @@ public class BookUtils {
             addProgressAndCancel(operationVbox, downTask);
             stage.sceneProperty().addListener((obs, old, newV) -> {
                 if (!Configs.isBackgroundDownload())
-                    downTask.cancel();
+                    downTask.cancel(true);
             });
             var taskT = new Thread(downTask);
             taskT.setDaemon(true);

@@ -1,3 +1,5 @@
+import org.gradle.internal.os.OperatingSystem
+
 plugins {
     id 'java'
     id 'application'
@@ -6,7 +8,7 @@ plugins {
 }
 
 group = 'ir.darkdeveloper'
-version = '1.1.2'
+version = '1.1.3'
 sourceCompatibility = '19'
 targetCompatibility = '19'
 
@@ -31,7 +33,7 @@ application {
 }
 
 javafx {
-    version = "19"
+    version = "19.0.2.1"
     modules = ['javafx.controls', 'javafx.fxml', "javafx.graphics"]
 }
 
@@ -58,7 +60,7 @@ jlink {
         name = 'JBookFinder'
     }
     jpackage {
-        if (org.gradle.internal.os.OperatingSystem.current().windows) {
+        if (OperatingSystem.current().windows) {
             appVersion = version
             installerName = 'JBookFinder'
             installerOptions = ['--win-menu', '--win-shortcut', '--icon', 'src/main/resources/ir/darkdeveloper/jbookfinder/icons/logo.ico']
