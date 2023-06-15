@@ -6,7 +6,6 @@ import ir.darkdeveloper.jbookfinder.repo.BooksRepo;
 import ir.darkdeveloper.jbookfinder.utils.BookUtils;
 import ir.darkdeveloper.jbookfinder.utils.IOUtils;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.Notifications;
 
@@ -18,81 +17,73 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BookDownloadTask extends Task<Void> {
+public class BookDownloadTask extends DownloadTask {
 
 
-    private final BookModel bookModel;
     private final VBox operationVbox;
     private final String fileName;
     private final BookUtils bookUtils = BookUtils.getInstance();
 
     private FileChannel fileChannel;
+    private ExecutorService executor;
+    private volatile boolean paused;
+    private Path filePath;
+    private long fileSize;
+
     private static final Logger log = Logger.getLogger(IOUtils.class.getName());
 
 
-    public BookDownloadTask(BookModel bookModel, VBox operationVbox, String fileName) {
-        this.bookModel = bookModel;
+    public BookDownloadTask(BookModel bm, VBox operationVbox, String fileName) {
+        super(bm, fileName);
         this.operationVbox = operationVbox;
         this.fileName = fileName;
     }
 
     @Override
-    protected Void call() throws Exception {
-        var mirror = bookModel.getMirror();
+    protected Long call() throws Exception {
+        var mirror = bm.getMirror();
 
         var urlConnection = (HttpURLConnection) new URL(mirror).openConnection();
         urlConnection.setConnectTimeout(8000);
-        var fileSize = urlConnection.getContentLength();
-        var filePath = Paths.get(Configs.getSaveLocation() + File.separator + fileName);
+        fileSize = urlConnection.getContentLength();
+        filePath = Paths.get(Configs.getSaveLocation() + File.separator + fileName);
         var file = new File(String.valueOf(filePath));
-        fileChannel = new FileOutputStream(file, file.exists()).getChannel();
+        var out = new FileOutputStream(file, file.exists());
+        fileChannel = out.getChannel();
         var in = urlConnection.getInputStream();
 
-        new Thread(() -> {
-            try {
-                while (fileChannel.isOpen()) {
-                    var currentFileSize = Files.size(filePath);
-                    updateProgress(currentFileSize, fileSize);
-                    Thread.sleep(100);
-                }
-                if (file.exists()){
-                    var currentFileSize = Files.size(Path.of(file.getPath()));
-                    if (currentFileSize == fileSize)
-                        updateProgress(currentFileSize, fileSize);
-                }
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        initProgress();
 
         var readableFileChannel = Channels.newChannel(in);
         fileChannel.transferFrom(readableFileChannel, 0, Long.MAX_VALUE);
+        out.close();
         fileChannel.close();
-
-        if (!isCancelled()) {
-            var imagePath = Configs.getBookCoverLocation() +
-                    bookUtils.getImageFileName(bookModel.getImageUrl(), bookModel.getTitle());
-            bookModel.setFilePath(filePath.toString());
-            bookModel.setImagePath(imagePath);
-            BooksRepo.insertBook(bookModel);
-        }
-
-        return null;
+        return fileSize;
     }
 
     @Override
     protected void succeeded() {
-        bookUtils.completeDownload(operationVbox, bookModel.getTitle());
+        if (!isCancelled()) {
+            var imagePath = Configs.getBookCoverLocation() +
+                    bookUtils.getImageFileName(bm.getImageUrl(), bm.getTitle());
+            bm.setFilePath(filePath.toString());
+            bm.setImagePath(imagePath);
+            BooksRepo.insertBook(bm);
+        }
+        executor.shutdownNow();
     }
 
     @Override
     protected void failed() {
-        var bookTitle = bookModel.getTitle();
+        paused = true;
+        var bookTitle = bm.getTitle();
         Platform.runLater(() -> Notifications.create()
                 .title("Operation failed")
                 .text("Downloading book: " + bookTitle.substring(bookTitle.length() / 2) + " has failed")
@@ -112,11 +103,42 @@ public class BookDownloadTask extends Task<Void> {
         try {
             if (fileChannel != null)
                 fileChannel.close();
-            var file = new File(Configs.getSaveLocation() + File.separator + fileName);
+            var file = new File(filePath.toString());
             if (file.exists())
                 Files.delete(Paths.get(file.getPath()));
         } catch (IOException e) {
             log.log(Level.WARNING, e.getMessage());
         }
+    }
+
+    private void initProgress() {
+        executor.submit(() -> {
+            Thread.currentThread().setName("calculator: " + Thread.currentThread().getName());
+            try {
+                while (!paused) {
+                    var currentFileSize = Files.size(filePath);
+                    updateProgress(currentFileSize, fileSize);
+                    Thread.sleep(1000);
+                }
+            } catch (InterruptedException | NoSuchFileException ignore) {
+            } catch (IOException e) {
+                log.severe(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    @Override
+    public void setExecutor(ExecutorService executor) {
+        this.executor = executor;
+    }
+
+    @Override
+    public boolean isPaused() {
+        return paused;
+    }
+
+    @Override
+    public void pause() {
+       failed();
     }
 }

@@ -6,7 +6,11 @@ import org.apache.commons.io.FileUtils;
 import org.controlsfx.control.Notifications;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -18,6 +22,10 @@ public class IOUtils {
     private static final BookUtils bookUtils = BookUtils.getInstance();
     private static final Logger log = Logger.getLogger(IOUtils.class.getName());
 
+
+    public static int maxChunks() {
+        return Runtime.getRuntime().availableProcessors() * 2;
+    }
 
     public static void deleteCachedImages(List<BookModel> notToDeleteBooks) {
         var path = getBookCoverLocation();
@@ -100,6 +108,13 @@ public class IOUtils {
         }
     }
 
+    public static long getFileSize(File file) throws IOException {
+        return getFileSize(Path.of(file.getPath()));
+    }
+
+    public static long getFileSize(Path path) throws IOException {
+        return Files.size(path);
+    }
 
     public static void readConfig() {
         try {
@@ -174,5 +189,63 @@ public class IOUtils {
         }
         prevDir.delete();
     }
+
+    public static HttpURLConnection connect(String uri, int connectTimeout, int readTimeout) {
+        try {
+            if (uri.isBlank())
+                throw new IllegalArgumentException("URL is blank");
+            var url = new URL(uri);
+            var conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(connectTimeout);
+            conn.setReadTimeout(readTimeout);
+            conn.setRequestProperty("User-Agent", userAgent);
+            return conn;
+        } catch (IOException e) {
+            var msg = "Connection or read timeout. Connect to the internet or check the url";
+            log.severe(msg);
+            Notifications.create()
+                    .title("Bad Connection")
+                    .text(msg)
+                    .showError();
+            throw new RuntimeException(msg);
+        }
+    }
+
+    public static boolean canResume(HttpURLConnection connection) {
+        var rangeSupport = connection.getHeaderField("Accept-Ranges");
+        return rangeSupport != null && !rangeSupport.equals("none");
+    }
+
+    public static boolean mergeFiles(long fileSize, int chunks, String fileName, List<Path> filePaths) throws IOException {
+        var currentFileSize = 0L;
+        for (int i = 0; i < chunks; i++)
+            currentFileSize += Files.size(filePaths.get(i));
+        if (filePaths.stream().allMatch(path -> path.toFile().exists())
+                && currentFileSize == fileSize) {
+            var firstFile = filePaths.get(0).toFile();
+            for (int i = 1; i < chunks; i++) {
+                var nextFile = filePaths.get(i).toFile();
+                try (
+                        var in = new FileInputStream(nextFile);
+                        var out = new FileOutputStream(firstFile, firstFile.exists());
+                        var inputChannel = in.getChannel();
+                        var outputChannel = out.getChannel()
+                ) {
+                    var buffer = ByteBuffer.allocateDirect(1048576);
+                    while (inputChannel.read(buffer) != -1) {
+                        buffer.flip();
+                        outputChannel.write(buffer);
+                        buffer.clear();
+                    }
+                }
+                if (nextFile.exists())
+                    nextFile.delete();
+            }
+            var pathToMove = filePaths.get(0).getParent().getParent() + File.separator + fileName;
+            return firstFile.renameTo(new File(pathToMove));
+        }
+        return false;
+    }
+
 
 }

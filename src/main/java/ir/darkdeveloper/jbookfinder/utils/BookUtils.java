@@ -3,9 +3,7 @@ package ir.darkdeveloper.jbookfinder.utils;
 import ir.darkdeveloper.jbookfinder.config.Configs;
 import ir.darkdeveloper.jbookfinder.controllers.BooksController;
 import ir.darkdeveloper.jbookfinder.model.BookModel;
-import ir.darkdeveloper.jbookfinder.task.BookDownloadTask;
-import ir.darkdeveloper.jbookfinder.task.ImageFetchTask;
-import ir.darkdeveloper.jbookfinder.task.ScraperTask;
+import ir.darkdeveloper.jbookfinder.task.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -26,6 +24,7 @@ import org.controlsfx.control.Notifications;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,22 +52,41 @@ public class BookUtils {
         var fileName = getFileName(bookModel);
         var file = new File(Configs.getSaveLocation() + File.separator + fileName);
         if (file.exists()) {
-            addProgressAndCancel(operationVbox, null);
+            addProgressAndCancel(operationVbox, null, null);
             completeDownload(operationVbox, bookModel.getTitle());
         } else {
-            var downTask = new BookDownloadTask(bookModel, operationVbox, fileName);
-            addProgressAndCancel(operationVbox, downTask);
+            var connection = IOUtils.connect(bookModel.getMirror(), 3000, 3000);
+            bookModel.setFileSize(connection.getContentLength());
+            bookModel.setResumable(IOUtils.canResume(connection));
+            DownloadTask downTask;
+            var executor = Executors.newCachedThreadPool();
+            if (bookModel.isResumable()){
+                downTask = new DownloadInChunksTask(bookModel, fileName);
+                downTask.setOnFailed(e -> {
+                    var bookTitle = bookModel.getTitle();
+                    Platform.runLater(() -> Notifications.create()
+                            .title("Operation failed")
+                            .text("Downloading book: " + bookTitle.substring(bookTitle.length() / 2) + " has failed")
+                            .showError());
+                    operationVbox.getChildren().remove(1);
+                    operationVbox.getChildren().get(0).setDisable(false);
+                    operationVbox.getChildren().get(1).setDisable(false);
+                });
+            }
+            else
+                downTask = new BookDownloadTask(bookModel, operationVbox, fileName);
+            downTask.setExecutor(executor);
+
+            addProgressAndCancel(operationVbox, downTask, bookModel);
             stage.sceneProperty().addListener((obs, old, newV) -> {
                 if (!Configs.isBackgroundDownload())
-                    downTask.cancel(true);
+                    downTask.pause();
             });
-            var taskT = new Thread(downTask);
-            taskT.setDaemon(true);
-            taskT.start();
+            executor.submit(downTask);
         }
     }
 
-    private void addProgressAndCancel(VBox operationVbox, BookDownloadTask downTask) {
+    private void addProgressAndCancel(VBox operationVbox, DownloadTask downTask, BookModel bm) {
         try {
             var loader = new FXMLLoader(getResource("fxml/download_ui.fxml"));
             HBox progressBox = loader.load();
@@ -99,11 +117,12 @@ public class BookUtils {
                 operationVbox.getChildren().get(2).setDisable(true);
 
             if (downTask != null) {
-                progressBar.progressProperty().bind(downTask.progressProperty());
-                progressBar.progressProperty().addListener((o, ol, newVal) -> {
-                    var percentage = (int) (newVal.doubleValue() * 100);
+                downTask.progressProperty().addListener((ob, o, n) -> {
+                    var percentage = (int) (n.doubleValue() * 100);
                     progressLabel.setText(percentage + " %");
+                    progressBar.setProgress(n.doubleValue());
                 });
+                downTask.setOnSucceeded(event -> bookUtils.completeDownload(operationVbox, bm.getTitle()));
             }
 
         } catch (Exception e) {

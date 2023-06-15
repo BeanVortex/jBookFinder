@@ -23,6 +23,8 @@ public class BookModel {
     private String mirror;
     private String imagePath;
     private String filePath;
+    private boolean resumable;
+    private long fileSize;
 
     public BookModel(String bookId, String author, String title, String publisher, String year,
                      String pages, String language, String size, String fileFormat,
@@ -39,4 +41,23 @@ public class BookModel {
         this.mirror = mirror;
     }
 
+    public BookModel(int id, String bookId, String author, String title,
+                     String publisher, String year, String pages, String language,
+                     String size, String fileFormat, String imageUrl, String mirror,
+                     String imagePath, String filePath) {
+        this.id = id;
+        this.bookId = bookId;
+        this.author = author;
+        this.title = title;
+        this.publisher = publisher;
+        this.year = year;
+        this.pages = pages;
+        this.language = language;
+        this.size = size;
+        this.fileFormat = fileFormat;
+        this.mirror = mirror;
+        this.imageUrl = imageUrl;
+        this.imagePath = imagePath;
+        this.filePath = filePath;
+    }
 }
